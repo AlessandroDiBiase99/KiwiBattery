@@ -13,17 +13,11 @@ Ragg=[];%inizializzazione lista
 %OTTENUTA CON PIPE (VEDI FILE I.png)
 %--------------------------------------------------------------------
 
-
-m_ini=[1 0	0	0	0	0	6	3	3	0	0	0	1	3	0	0	1]; % marcatura iniziale di pipe
-
+[Pre,Post,Combinazione,Inibizione,M0]=ImportaDati('MatriciCalcolate.xlsx','7_T_S');
 
 %ordine transizioni: t0 t1 t2 t3 t4 t5 t6 t7 t8 t9 t10
 maschera_trans=[0 0 0 0 0 1 1 1 1 1 1 1 0]; % maschera transizioni immediate di 
 % pipe (1 immediate, 0 temporizzate)
-
-    
-matrici_pre_I %script con matrici Pre e Incidenza
-
 
 % 19 posti e 11 transizioni
 
