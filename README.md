@@ -1,2 +1,2 @@
 # KiwiBattery
-Description of a battery prodution sistem
+Description of a battery production system
