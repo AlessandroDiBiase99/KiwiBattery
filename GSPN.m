@@ -16,13 +16,13 @@ NomiTransizioniTemporizzate = ["M1 Lavorazione" "M2 lavorazione" ...
     "Pulizia" "Etichettatura"];
 
 % Probabilità delle transizioni
-q = table();
-q.TP1OK=0.7;
-q.TP1KO=0.3;
-q.TP2OK=0.7;
-q.TP2KO=0.3;
+q = table("",0,'VariableNames',["Transizioni" "Probabilità"]);
+q(1,:)=table("TP1 OK",0.7);
+q(2,:)=table("TP1 KO",0.3);
+q(3,:)=table("TP2 OK",0.7);
+q(4,:)=table("TP2 KO",0.3);
 
-% Rates delle transizioni temporizzate
+% Rates delle transizioni
 u = [];
 
 %% CARICAMENTO DATI =======================================================
@@ -47,7 +47,7 @@ end
 % u9=50; % rate 
 % u10=20; %rate 
 
-%% CALCOLO GRAFO RAGGIUNGIBILITÄÅÃÂ
+%% CALCOLO GRAFO RAGGIUNGIBILITÁ ==========================================
 % Inizializzazione lista marcature
 list=[];
 % Inizializzazione lista
@@ -85,8 +85,7 @@ for i=1:ns
     end
 end
 
-%%
-%Calcolo Matrice U
+%% Calcolo Matrice U ======================================================
 U=zeros(ns,ns);
 
 for i=1:ns%costruzione della matrice U
