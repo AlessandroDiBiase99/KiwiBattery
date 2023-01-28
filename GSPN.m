@@ -1,49 +1,64 @@
-
-%% Programma principale %%
+%% PREPPARAZIONE WORKSPACE ================================================
 clear;
 clc;
 format short;
-%%Inizializzazione
 
-list=[];%inizializzazione lista marcature
-Ragg=[];%inizializzazione lista
+%% PARAMETRI
+% Percorso del file excel contenente le matrici e foglio di lavoro
+File.Path  = 'MatriciCalcolate.xlsx';
+File.Sheet = '7_T_S';
 
-%--------------------------------------------------------------------
-%L'ORDINE CON CUI ANALIZZO POSTI E TRANSIZIONI E' DATO DALLA MATRICE I
-%OTTENUTA CON PIPE (VEDI FILE I.png)
-%--------------------------------------------------------------------
+% Nomi delle transizioni temporizzate
+NomiTransizioniTemporizzate = ["M1 Lavorazione" "M2 lavorazione" ...
+    "M3 lavorazione" "M4 lavorazione" "M5 test" "M6_1 lavorazione"...
+    "M6_2 lavorazione" "Scaricamento M7" "R1" "R2" "R3" "R4" "R5" "R6" "R7"...
+    "M9_1 lavorazione" "M9_2 lavorazione" "M10 lavorazione" "M11 test"...
+    "Pulizia" "Etichettatura"];
 
-[Pre,Post,Combinazione,Inibizione,M0]=ImportaDati('MatriciCalcolate.xlsx','7_T_S');
+% Probabilità delle transizioni
+q = table();
+q.TP1OK=0.7;
+q.TP1KO=0.3;
+q.TP2OK=0.7;
+q.TP2KO=0.3;
 
-%ordine transizioni: t0 t1 t2 t3 t4 t5 t6 t7 t8 t9 t10
-maschera_trans=[0 0 0 0 0 1 1 1 1 1 1 1 0]; % maschera transizioni immediate di 
-% pipe (1 immediate, 0 temporizzate)
+% Rates delle transizioni temporizzate
+u = [];
 
-% 19 posti e 11 transizioni
+%% CARICAMENTO DATI =======================================================
+PN = ImportaDati(File.Path,File.Sheet);
 
-%probabilità
-q7=0.7; %prob t7   t7 (tOK) e t6 (tFAIL) in conflitto (test)
-q6=1-q7; %prob t6
-q2=1;
+fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
+% Transizioni immediate: 1
+% Transizioni temporizzate: 0
+TransizioniImmediate = ones(size(PN.T));
+for nome=NomiTransizioniTemporizzate
+    TransizioniImmediate(PN.T==nome)=0;
+    clear nome;
+end
 
-%rates
-u0=10;  %rate t0 
-u1=9;  %rate t1 
-u3=16; %rate- 
-u4=16; %rate 
-u5=24; %rate 
-u8=14; %rate 
-u9=50; % rate 
-u10=20; %rate 
+% % Rates
+% u0=10;  %rate t0 
+% u1=9;  %rate t1 
+% u3=16; %rate- 
+% u4=16; %rate 
+% u5=24; %rate 
+% u8=14; %rate 
+% u9=50; % rate 
+% u10=20; %rate 
 
-[list,Ragg]=Calcola_Marc_Ragg(m_ini,list,Ragg,I,maschera_trans,pre); %genera la lista 
-%degli stati raggiungibili a partire dalla marcatura iniziale m0
+%% CALCOLO GRAFO RAGGIUNGIBILITÄÅÃÂ
+% Inizializzazione lista marcature
+list=[];
+% Inizializzazione lista
+Ragg=[];
+% Genera la lista degli stati raggiungibili dalla marcatura iniziale M0
+[list,Ragg]=Calcola_Marc_Ragg(PN.M0,list,Ragg,PN.C,TransizioniImmediate,PN.Pre);
 [ns, k]=size(Ragg); %il numero degli stati è dato dalle righe della lista 
 %delle marcature raggiungibili
 
 mr=zeros(ns,19);
-n_multiple=1; 
-
+n_multiple=1;
 
 for i=1:ns
     mr(i,:)=Ragg(i).value; %lista delle marcature raggiungibili ordinata 
@@ -52,7 +67,6 @@ end
 
 A=zeros(ns,ns);%inizializzazione matrice adiacenze per gli stati
 v=zeros(ns,1);%Inizializzazione vettore degli stati vanishing
-
 
 for i=1:ns
     [a, b]=size(Ragg(i).abi);%numero transizioni attivate
@@ -70,7 +84,6 @@ for i=1:ns
         end
     end
 end
-
 
 %%
 %Calcolo Matrice U
