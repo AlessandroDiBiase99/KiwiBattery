@@ -3,16 +3,16 @@ clear;
 clc;
 format short;
 
-%% PARAMETRI
+%% PARAMETRI ==============================================================
 % Percorso del file excel contenente le matrici e foglio di lavoro
 File.Path  = 'MatriciCalcolate.xlsx';
 File.Sheet = '7_T_S';
 
 % Nomi delle transizioni temporizzate
-NomiTransizioniTemporizzate = ["M1 Lavorazione" "M2 lavorazione" ...
-    "M3 lavorazione" "M4 lavorazione" "M5 test" "M6_1 lavorazione"...
-    "M6_2 lavorazione" "Scaricamento M7" "R1" "R2" "R3" "R4" "R5" "R6" "R7"...
-    "M9_1 lavorazione" "M9_2 lavorazione" "M10 lavorazione" "M11 test"...
+NomiTransizioniTemporizzate = ["M1Lavorazione" "M2Lavorazione" ...
+    "M3Lavorazione" "M4Lavorazione" "M5Test" "M6_1Lavorazione"...
+    "M6_2Lavorazione" "ScaricamentoM7" "R1" "R2" "R3" "R4" "R5" "R6" "R7"...
+    "M9_1Lavorazione" "M9_2Lavorazione" "M10Lavorazione" "M11Test"...
     "Pulizia" "Etichettatura"];
 
 % Probabilit‡ delle transizioni
@@ -24,19 +24,6 @@ q(4,:)=table("TP2 KO",0.3);
 
 % Rates delle transizioni
 u = [];
-
-%% CARICAMENTO DATI =======================================================
-PN = ImportaDati(File.Path,File.Sheet);
-
-fprintf("La rete di petri Ë composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
-% Transizioni immediate: 1
-% Transizioni temporizzate: 0
-TransizioniImmediate = ones(size(PN.T));
-for nome=NomiTransizioniTemporizzate
-    TransizioniImmediate(PN.T==nome)=0;
-    clear nome;
-end
-
 % % Rates
 % u0=10;  %rate t0 
 % u1=9;  %rate t1 
@@ -47,44 +34,71 @@ end
 % u9=50; % rate 
 % u10=20; %rate 
 
+Transizioni=["ScaricamentoM7","CaricamentoM8","ScaricamentoM8","R1", "R2", "R3", "R4", "R5", "R6", "R7"];
+Posti=["Capacit‡N7", "BatterieCariche su N7", "M8_Cella0P", "M8_Cella1", "M8_Cella2", "M8_Cella3", "M8_Cella0V"];
+
+%% CARICAMENTO DATI =======================================================
+PN1 = ImportaDati(File.Path,File.Sheet);
+
+for i=1:length(Transizioni)
+    idxT(i)=find(strcmp(PN1.T,Transizioni(i)));
+end
+for i=1:length(Posti)
+    idxP(i)=find(strcmp(PN1.P,Posti(i)));
+end
+PN.M0 = PN1.M0(idxP);
+PN.H = PN1.H(idxP,idxT);
+PN.C = PN1.C(idxP,idxT);
+PN.Pre = PN1.Pre(idxP,idxT);
+PN.Post = PN1.Post(idxP,idxT);
+PN.T=PN1.T(idxT);
+PN.P=PN1.P(idxP);
+
+fprintf("La rete di petri Ë composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
+% Transizioni immediate: 1
+% Transizioni temporizzate: 0
+TransizioniImmediate = ones(size(PN.T));
+for nome=NomiTransizioniTemporizzate
+    TransizioniImmediate(PN.T==nome)=0;
+    clear nome;
+end
+fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n",sum(TransizioniImmediate==1),sum(TransizioniImmediate==0))
+
 %% CALCOLO GRAFO RAGGIUNGIBILIT¡ ==========================================
 % Inizializzazione lista marcature
 list=[];
 % Inizializzazione lista
-Ragg=[];
+Ragg=struct('Iniziale',[],'Raggiungibili',table());
+
+
+[list,Grafo]=CalcolaGrafo(PN.M0,PN.M0,Ragg,PN.C,TransizioniImmediate,PN.Pre,PN.H);
+VisualizzaGrafo1(Grafo,PN.T);
+return;
 % Genera la lista degli stati raggiungibili dalla marcatura iniziale M0
-[list,Ragg]=Calcola_Marc_Ragg(PN.M0,list,Ragg,PN.C,TransizioniImmediate,PN.Pre);
-[ns, k]=size(Ragg); %il numero degli stati Ë dato dalle righe della lista 
-%delle marcature raggiungibili
+[list,Ragg]=Calcola_Marc_Ragg(PN.M0,list,Ragg,PN.C,TransizioniImmediate,PN.Pre,PN.H);
 
-mr=zeros(ns,19);
-n_multiple=1;
-
-for i=1:ns
-    mr(i,:)=Ragg(i).value; %lista delle marcature raggiungibili ordinata 
-    %come l'uscita della funzione Calcola_Marc_Ragg
-end
+% Il numero degli stati raggiunti Ë pari al numero di righe della lista
+% delle strutture dati Ragg
+[ns, k]=size(Ragg); 
 
 A=zeros(ns,ns);%inizializzazione matrice adiacenze per gli stati
-v=zeros(ns,1);%Inizializzazione vettore degli stati vanishing
+% v=zeros(ns,1);%Inizializzazione vettore degli stati vanishing
 
 for i=1:ns
-    [a, b]=size(Ragg(i).abi);%numero transizioni attivate
-    [aa, bb]=size(Ragg(i).out.value);%numero stati uscenti
-    abiIndex=find(Ragg(i).abi); %Ho tutti gli indici delle transizioni 
-    %abilitate
-    for k=1:aa;%per ogni stato uscente
-        for j=1:ns
-            if strmatch(Ragg(i).out.value(k,:),Ragg(j).value)%controlla 
-                %la posizione nella lista nel k-esimo stato uscente dallo 
-                %stato i-esimo se Ë presente nella Ragg
-                A(i,j)=Ragg(i).abi(abiIndex(k));%Assegna alla matrice il 
-                %numero della transizione che collega i due stati
-            end
-        end
+    % Il numero di transizioni abilitate
+    n_t_abilitate=length(Ragg(i).T_fin);
+    % L'indice della colonna relativa alla marcatura iniziale nella lista 
+    [~,id1]=ismember(Ragg(i).M_ini',list',"rows");
+    % Per ogni transizione abilitata
+    for k=1:n_t_abilitate
+        % L'indice della colonna relativa alla marcatura finale nella lista
+        [~,id2]=ismember(Ragg(i).M_fin(:,k)',list',"rows");
+        A(id1,id2)=Ragg(i).T_fin(:,k);
     end
 end
 
+% Siamo arrivati a sistemare il file fino qui
+return
 %% Calcolo Matrice U ======================================================
 U=zeros(ns,ns);
 
