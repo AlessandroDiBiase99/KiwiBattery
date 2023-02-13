@@ -4,8 +4,6 @@ alert=0;
 
 for l=1:10
     switch Ragg(i).abi(l)
-        
-        
         % Si calcola il denominatore da associare al calcolo del U(i,j)
         % scorrendo le varie transizioni con i case che sono in numero pari
         % al numero di transizioni, mentre sono ordinati secondo
@@ -40,6 +38,5 @@ end
 
 if alert==1
     den=0;
-    
 end
 end

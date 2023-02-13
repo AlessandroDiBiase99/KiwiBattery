@@ -1,26 +1,60 @@
-function VisualizzaGrafo(Grafo)
+function VisualizzaGrafo1(Grafo,T)
 figure;
-disponibile=[0];
-printed=table(0,0,0,'VariableNames',[{'Nodo'},{'x'},{'y'}]);
-printNodo(0,disponibile,1,Grafo,printed);
-
-plot(0,0,'o');
-
-
-Grafo(1).Raggiungibili.Marcatura
-for i=1:length(Grafo)
-    for j=1:height(Grafo(i).Raggiungibili)
-        
+plot(1,-1,'o','Color','black');
+text(1.02,-1+0.2,array2string(Grafo(1).Iniziale));
+hold on;
+almeno1=true;
+printed=[1];
+y=2;
+xMax=0;
+while almeno1
+    thislevel=printed(y-1,:);
+    almeno1=false;
+    x=1;
+    for j=1:length(thislevel)
+        nodo=thislevel(j);
+        if nodo>0
+            if x<j
+                x=j;
+            end
+            for i=1:height(Grafo(nodo).Raggiungibili)
+                if ~ismember(Grafo(nodo).Raggiungibili.Marcatura(i),printed)
+                    plot(x,-y,'o','Color','black');
+                    plot([j x],[-y+1 -y],'-','Color','black');
+                    text(x + 0.02,-y+ 0.7,T(Grafo(nodo).Raggiungibili.Transizione(i)));
+                    txt=array2string(Grafo(Grafo(nodo).Raggiungibili.Marcatura(i)).Iniziale);
+                    text(x + 0.02,-y+ 0.2,txt);
+                    printed(y,x)=Grafo(nodo).Raggiungibili.Marcatura(i);
+                    x=x+1;
+                    if x>xMax
+                        xMax=x;
+                    end
+                    almeno1=true;
+                else
+                    [r,c]=find(printed==Grafo(nodo).Raggiungibili.Marcatura(i));
+                    x1=j; y1=-y+1;
+                    x2=c; y2=-r;
+                    %if x1==x2
+                        %x1=x1-0.05;
+                        x2=x2-0.1;
+                   % end
+                   % if y1==y2
+                        %y1=y1-0.05;
+                        y2=y2+0.05;
+                   % end
+                    %quiver(x1,y1,x2-x1,y2-y1,1,'Color','red');
+                    plot([x1 x2],[y1 y2],'Color','red');
+                    plot(x2,y2,'>r');
+                    txt=T(Grafo(nodo).Raggiungibili.Transizione(i));
+                    text((3*x1+x2)/4 + 0.2,(3*y1+y2)/4+ 0.2,txt,'Color','red');
+                end
+            end
+        end
     end
+    y=y+1;
 end
-
-treeplot(p);
-[x,y] = treelayout(p);
-texts=[array2string(Grafo(p(1)+1).Iniziale)];
-for i=2:length(p)
-    texts=[texts {array2string(Grafo(p(i)+1).Iniziale)}];
-end
-text(x + 0.002,y,texts);
+xlim([0 xMax]);
+ylim([-y 1]);
 end
 
 function s=array2string(array)
@@ -29,22 +63,4 @@ function s=array2string(array)
         s=[s,' ',num2str(array(i)),','];
     end
     s=[s,' ',num2str(array(end)), ']'];
-end
-
-function printNodo(livello, disponibile, nodo, grafo,printed)
-temp=table2array(printed);
-if ~ismember(nodo,temp(:,1))
-    if length(disponibile)<livello+1
-        disponibile(livello+1)=0;
-    end
-    x=disponibile(livello+1);
-    disponibile(livello+1)=x+1;
-    fprintf('x: %i; y:%i;\n',x,livello);
-    plot(x,-livello,'o','Color','black');
-    hold on;
-    printed(height(printed)+1,:)=table(nodo,x,-livello);
-    for i=1:height(grafo(nodo).Raggiungibili)
-        printNodo(livello+1,disponibile,grafo(nodo).Raggiungibili.Marcatura(i),grafo,printed);
-    end
-end
 end

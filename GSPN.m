@@ -16,23 +16,35 @@ NomiTransizioniTemporizzate = ["M1Lavorazione" "M2Lavorazione" ...
     "Pulizia" "Etichettatura"];
 
 % Probabilità delle transizioni
-q = table("",0,'VariableNames',["Transizioni" "Probabilità"]);
+q = table("",0,'VariableNames',["Transizione" "Probabilita"]);
 q(1,:)=table("TP1 OK",0.7);
 q(2,:)=table("TP1 KO",0.3);
 q(3,:)=table("TP2 OK",0.7);
 q(4,:)=table("TP2 KO",0.3);
 
 % Rates delle transizioni
-u = [];
-% % Rates
-% u0=10;  %rate t0 
-% u1=9;  %rate t1 
-% u3=16; %rate- 
-% u4=16; %rate 
-% u5=24; %rate 
-% u8=14; %rate 
-% u9=50; % rate 
-% u10=20; %rate 
+u = table("",0,'VariableNames',["Transizione" "Rate"]);
+u(1,:)=table("M1Lavorazione",10);
+u(2,:)=table("M2Lavorazione",10);
+u(3,:)=table("M3Lavorazione",10);
+u(4,:)=table("M4Lavorazione",10);
+u(5,:)=table("M5Test",10);
+u(6,:)=table("M6_1Lavorazione",10);
+u(7,:)=table("M6_2Lavorazione",10);
+u(8,:)=table("ScaricamentoM7",10);
+u(9,:)=table("R1",10);
+u(10,:)=table("R2",10);
+u(11,:)=table("R3",10);
+u(12,:)=table("R4",10);
+u(13,:)=table("R5",10);
+u(14,:)=table("R6",10);
+u(15,:)=table("R7",10);
+u(16,:)=table("M9_1Lavorazione",10);
+u(17,:)=table("M9_2Lavorazione",10);
+u(18,:)=table("M10Lavorazione",10);
+u(19,:)=table("M11Test",10);
+u(20,:)=table("Pulizia",10);
+u(21,:)=table("Etichettatura",10);
 
 Transizioni=["ScaricamentoM7","CaricamentoM8","ScaricamentoM8","R1", "R2", "R3", "R4", "R5", "R6", "R7"];
 Posti=["CapacitàN7", "BatterieCariche su N7", "M8_Cella0P", "M8_Cella1", "M8_Cella2", "M8_Cella3", "M8_Cella0V"];
@@ -53,6 +65,7 @@ PN.Pre = PN1.Pre(idxP,idxT);
 PN.Post = PN1.Post(idxP,idxT);
 PN.T=PN1.T(idxT);
 PN.P=PN1.P(idxP);
+clear i idxT idxP;
 
 fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
 % Transizioni immediate: 1
@@ -65,175 +78,191 @@ end
 fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n",sum(TransizioniImmediate==1),sum(TransizioniImmediate==0))
 
 %% CALCOLO GRAFO RAGGIUNGIBILITÁ ==========================================
-% Inizializzazione lista marcature
-list=[];
-% Inizializzazione lista
-Ragg=struct('Iniziale',[],'Raggiungibili',table());
+init=struct('Iniziale',[],'Raggiungibili',table());
 
-
-[list,Grafo]=CalcolaGrafo(PN.M0,PN.M0,Ragg,PN.C,TransizioniImmediate,PN.Pre,PN.H);
-VisualizzaGrafo1(Grafo,PN.T);
-return;
 % Genera la lista degli stati raggiungibili dalla marcatura iniziale M0
-[list,Ragg]=Calcola_Marc_Ragg(PN.M0,list,Ragg,PN.C,TransizioniImmediate,PN.Pre,PN.H);
+[list,Grafo]=CalcolaGrafo(PN.M0,PN.M0,init,PN.C,TransizioniImmediate,PN.Pre,PN.H);
+clear init;
+% Visualizzo in una figura il grafo di raggiungibilità
+VisualizzaGrafo(Grafo,PN.T);
 
-% Il numero degli stati raggiunti è pari al numero di righe della lista
-% delle strutture dati Ragg
-[ns, k]=size(Ragg); 
+% Il numero degli stati raggiunti è pari al numero di righe del Grafo
+[~,num_stati]=size(Grafo); 
 
-A=zeros(ns,ns);%inizializzazione matrice adiacenze per gli stati
-% v=zeros(ns,1);%Inizializzazione vettore degli stati vanishing
+% Inizializzazione matrice adiacenze per gli stati
+A=zeros(num_stati,num_stati);
 
-for i=1:ns
-    % Il numero di transizioni abilitate
-    n_t_abilitate=length(Ragg(i).T_fin);
-    % L'indice della colonna relativa alla marcatura iniziale nella lista 
-    [~,id1]=ismember(Ragg(i).M_ini',list',"rows");
-    % Per ogni transizione abilitata
-    for k=1:n_t_abilitate
-        % L'indice della colonna relativa alla marcatura finale nella lista
-        [~,id2]=ismember(Ragg(i).M_fin(:,k)',list',"rows");
-        A(id1,id2)=Ragg(i).T_fin(:,k);
+for id1=1:num_stati
+    for k=1:height(Grafo(id1).Raggiungibili)
+        id2=Grafo(id1).Raggiungibili.Marcatura(k);
+        A(id1,id2)=Grafo(id1).Raggiungibili.Transizione(k);
     end
 end
+clear id1 k id2;
 
-% Siamo arrivati a sistemare il file fino qui
-return
-%% Calcolo Matrice U ======================================================
-U=zeros(ns,ns);
+%% CALCOLO MATRICE U ======================================================
+U=zeros(num_stati,num_stati);
 
-for i=1:ns%costruzione della matrice U
-    for j=1:ns
-        switch A(i,j)%si analizza ogni elemento della matrice A
-            
-            %si scorrono le varie transizioni (secondo l'ordine della I di
-            %Pipe) e si calcola l'elemento U(i,j) corrispondente dividendo
-            %il rate della transizione considerata, per la somma delle
-            %transizioni uscenti da quel posto (per il calcolo del
-            %denominatore si usa la funzione apposita)
-            case 1 %la transizione T0, ha rate u0
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                    U(i,j)=u0/den;
-                else
-                    U(i,j)=0;
-                end 
-                
-            case 2 %la transizione T1, ha rate u1
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                    U(i,j)=u1/den;
-                else
-                    U(i,j)=0;
-                end 
-                
-            case 3 %la transizione T2 è immediata
-              
-                U(i,j)=q2;     
-              
-            case 4 %la transizione 'caricamento' ha rate u3
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                    U(i,j)=u3*min([Ragg(i).value(8),Ragg(i).value(10),n_multiple])/den;
-                else
-                    U(i,j)=0;
-                end   
-                
-            case 5 % la transizione 'lavorazione' ha rate u4
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                     U(i,j)=u4*min([Ragg(i).value(9),Ragg(i).value(12),n_multiple])/den;
-                else
-                    U(i,j)=0;
-                end   
-                
-            case 6 %la transizione 'test' ha rate u5
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                    U(i,j)=u5*min([Ragg(i).value(11),Ragg(i).value(13),n_multiple])/den;
-                else
-                    U(i,j)=0;
-                end  
-                
-            case 7 % la transizione T6 è immediata
-               for h=1:ns
-                    if A(i,h)== 3 
-                        U(i,j)=0;
-                        break
-                    else
-                        U(i,j)=q6; %la probabilitˆ ? data da q1
+%costruzione della matrice U
+for i=1:num_stati
+    for j=1:num_stati
+        % Se è presente una transizione che porta dallo stato i a j
+        if A(i,j)>0
+            % Se è una transizione immediata
+            if TransizioniImmediate(A(i,j))==1
+                % La probabilità è equa
+                U(i,j)=1/height(Grafo(i).Raggiungibili);
+
+                % A meno che la transizione non abbia altre probabilità in
+                % conflitto con altre transizioni
+                if ismember(q.Transizione,PN.T(A(i,j)))
+                    % Determino il numero di transizioni con probabilità
+                    % cambiata in caso di conflitto, e la somma delle
+                    % probabilità presenti. Determino il numero di
+                    % transizioni abilitate che appartengono alla tabella e
+                    % calcolo il peso totale.
+                    num=0;
+                    peso_tot=0;
+                    for h=1:height(Grafo(i).Raggiungibili)
+                        if ismember(q.Transizione,PN.T(Grafo(i).Raggiungibili.Transizione(h)))
+                            num=num+1;
+                            peso_tot=peso_tot+q.Probabilita(q.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
+                        end
+                    end
+                    % La probabilità della transizione è pari alla somma
+                    % delle probabilità interessate, pesata con il rapporto
+                    % tra il peso assegnato alla transizione e le altre
+                    % transizioni in conflitto nella tabella q
+                    probabilita_tot = num/height(Grafo(i).Raggiungibili);
+                    peso = q.Probabilita(q.Transizione==PN.T(A(i,j)));
+                    U(i,j)=probabilita_tot*peso/peso_tot;
+                end
+            % Se è una transizione temporizzata
+            else
+                % La probabilità è pari al rate della transizione diviso la
+                % somma di tutti i rate delle transizioni abilitate
+                rate=u.Rate(u.Transizione==PN.T(A(i,j)));
+                rate_tot=0;
+                for h=1:height(Grafo(i).Raggiungibili)
+                    if any(ismember(u.Transizione,PN.T(Grafo(i).Raggiungibili.Transizione(h))))
+                        rate_tot=rate_tot+u.Rate(u.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
                     end
                 end
-         
-            case 8 % la transizione T7 è immediata
-                 for h=1:ns
-                    if A(i,h)== 3 
-                        U(i,j)=0;
-                        break
-                    else
-                        U(i,j)=q7; %la probabilitˆ ? data da q1
-                    end
-                end
-                
-            case 9 %la transizione T8, ha rate u8
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                    U(i,j)=u8/den;
-                else
-                    U(i,j)=0;
-                end  
-                
-            case 10 %la transizione T9, ha rate u9
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                    U(i,j)=u9/den;
-                else
-                    U(i,j)=0;
-                end  
-        
-             case 11 %la transizione T10, ha rate u10
-                den=denominatore(Ragg,i,u0,u1,u3,u4,u5,u8,u9,u10,n_multiple);
-                if den~=0
-                    U(i,j)=u10*min([Ragg(i).value(7),Ragg(i).value(18)])/den;
-                else
-                    U(i,j)=0;
-                end 
+                U(i,j)=rate/rate_tot;
+            end
         end
     end
 end
+clear i j h num probabilita_tot peso peso_tot rate rate_tot;
 
-%%somma per righe della U (devono essere pari a 1)
-% sum=0;
-% for i=1:1:ns
-%     zum(i)=sum;
-%     sum=0;
-%     for j=1:1:ns
-%         sum=sum+U(i,j);
-%     end
-% end
-% zums=sym(zum)
+% Controllo che ogni riga abbia sommatoria pari a 1. U deve essere
+% stocastica
+for i=1:num_stati
+    sum=0;
+    for j=1:num_stati
+        sum=sum+U(i,j);
+    end
+    if sum~=1
+        fprintf("!=== ERRORE ===!\nLa riga %i non ha sommatoria pari a 1.\n",i);
+    end
+end
+clear i j sum;
 
+%% TRASFORMAZIONE DI COORDINATE ===========================================
+for i=1:num_stati
+    if ~isempty(Grafo(i).Raggiungibili.Transizione) && TransizioniImmediate(Grafo(i).Raggiungibili.Transizione(1))
+        v(i)=1;
+    end
+end
+% Ricavo gli indici degli stati tangible 
+Index=find(v==1); 
+% Inizializzo la matrice di cambio di base
+T=zeros(num_stati,num_stati);
+% Ordino il vettore degli stati mettendo prima quelli vanishing al fine di trovare la matrice di trasformazione di base
+[v1,In]=sort(v,'descend');
+% Ricavo la matrice di trasformazione di base
+for i=1:num_stati
+    T(i,In(i))=1;
+end
+clear i
 
-%%TRASFORMAZIONE DI COORDINATE
-for i=1:ns
-    [aa, nabi]=size(Ragg(i).abi);
-    for k=1:nabi
-        if Ragg(i).abi(k)==7||Ragg(i).abi(k)==8 || Ragg(i).abi(k)== 3
-            v(i)=1;% se allo stato i-esimo è abilitata almeno una transizione immediata tale stato è vanishing
+%% CALCOLO U' =============================================================
+temp=U*T;
+num_stati_vanishing=sum(v1);
+%    V T
+% V |C D|
+% T |E F|;
+C = temp(1:num_stati_vanishing,1:num_stati_vanishing);
+D = temp(1:num_stati_vanishing,num_stati_vanishing+1:end);
+E = temp(num_stati_vanishing+1:end,1:num_stati_vanishing);
+F = temp(num_stati_vanishing+1:end,num_stati_vanishing+1:end);
+
+% trovare loop
+C_temp=eye(num_stati_vanishing,num_stati_vanishing);
+G_temp=C_temp;
+loop=true;
+for k=1:num_stati_vanishing
+   C_temp = C_temp*C;
+   if C_temp==zeros(num_stati_vanishing,num_stati_vanishing)
+       loop=false;
+       fprintf("Non è presente alcun loop all'interno del sistema. Il" + ...
+           "calcolo di G viene effettuatto attraverso la sommatoria.\n");
+       G=G_temp;
+       break;
+   end
+   G_temp=G_temp+C^k;
+end
+if loop
+    fprintf("È presente un loop all'interno del sistema. Il calcolo di" + ...
+        " G viene effettuato attraverso l'inversione di matrice\n");
+    G=inv(eye(num_stati_vanishing,num_stati_vanishing)-C);
+end
+
+U1=F+E*G*D;
+
+%% CALCOLO TEMPI DI SOGGIORNO =============================================
+% Verifico che il sistema sia irriducibile
+U_temp=eye(num_stati);
+connesso_a_M0=zeros(num_stati,1);
+for i=1:num_stati
+    U_temp=U_temp*U;
+    connesso_a_M0(U_temp(:,1)~=0)=1;
+end
+if sum(connesso_a_M0)==num_stati
+    fprintf("Il sistema è irriducibile.\n");
+end
+
+% Da perfezionare: devo evitare di calcolare gli arrivi in passi successivi
+f_i=zeros(num_stati,1);
+f_ok=false(num_stati,1);
+U_temp=eye(num_stati);
+while ~all(f_ok)
+    U_temp=U_temp*U;
+    for j=1:num_stati
+        if ~f_ok(j)
+            f_i(j)=f_i(j)+U_temp(j,j);
+            if f_i(j)>=1
+                f_ok(j)=true;
+            end
         end
     end
 end
-Index=find(v==1); % utilizzato per ricavare i soli stati tangible 
-T=zeros(ns,ns);%inizializzazione matrice di cambio di base
-[v1,In]=sort(v,'descend');%ordina il vettore degli stati mettendo prima quelli vanishing al fine di trovare la matrice di trasformazione di base
-for i=1:ns
-    T(i,In(i))=1;%Routine per ricavare la matrice di trasformazione di base
+if all(f_i==1)
+    fprintf("Tutti gli stati del sistema sono ricorrenti.\n");
+else
+    fprintf("Non tutti gli stati del sistema sono ricorrenti.\n");
 end
 
+% Se il sistema è irriducibile e riccorrente positivo allora esiste la
+% probabilità a regime
+Y1 = sym('y1_',[1 num_stati-num_stati_vanishing],'real');
+equations= Y1==Y1*U1; 
 
-%% CALCOLO U'
+clear eq
+for i=1:num_stati-num_stati_vanishing
+eq(i,1) = Y1(i)==Y1*U1(:,i);
+end
+eq(31,1)= Y1(1)>0;
+eq(32,1)= Y1(3)>0;
 
-
-%%
-% %CALCOLO TEMPI DI SOGGIORNO
-% 
+Y2=solve(eq)
