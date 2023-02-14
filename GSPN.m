@@ -8,49 +8,21 @@ format short;
 File.Path  = 'MatriciCalcolate.xlsx';
 File.Sheet = '7_T_S';
 
-% Nomi delle transizioni temporizzate
-NomiTransizioniTemporizzate = ["M1Lavorazione" "M2Lavorazione" ...
-    "M3Lavorazione" "M4Lavorazione" "M5Test" "M6_1Lavorazione"...
-    "M6_2Lavorazione" "ScaricamentoM7" "R1" "R2" "R3" "R4" "R5" "R6" "R7"...
-    "M9_1Lavorazione" "M9_2Lavorazione" "M10Lavorazione" "M11Test"...
-    "Pulizia" "Etichettatura"];
-
-% Probabilità delle transizioni
-q = table("",0,'VariableNames',["Transizione" "Probabilita"]);
-q(1,:)=table("TP1 OK",0.7);
-q(2,:)=table("TP1 KO",0.3);
-q(3,:)=table("TP2 OK",0.7);
-q(4,:)=table("TP2 KO",0.3);
-
-% Rates delle transizioni
-u = table("",0,'VariableNames',["Transizione" "Rate"]);
-u(1,:)=table("M1Lavorazione",10);
-u(2,:)=table("M2Lavorazione",10);
-u(3,:)=table("M3Lavorazione",10);
-u(4,:)=table("M4Lavorazione",10);
-u(5,:)=table("M5Test",10);
-u(6,:)=table("M6_1Lavorazione",10);
-u(7,:)=table("M6_2Lavorazione",10);
-u(8,:)=table("ScaricamentoM7",10);
-u(9,:)=table("R1",10);
-u(10,:)=table("R2",10);
-u(11,:)=table("R3",10);
-u(12,:)=table("R4",10);
-u(13,:)=table("R5",10);
-u(14,:)=table("R6",10);
-u(15,:)=table("R7",10);
-u(16,:)=table("M9_1Lavorazione",10);
-u(17,:)=table("M9_2Lavorazione",10);
-u(18,:)=table("M10Lavorazione",10);
-u(19,:)=table("M11Test",10);
-u(20,:)=table("Pulizia",10);
-u(21,:)=table("Etichettatura",10);
-
 Transizioni=["ScaricamentoM7","CaricamentoM8","ScaricamentoM8","R1", "R2", "R3", "R4", "R5", "R6", "R7"];
 Posti=["CapacitàN7", "BatterieCariche su N7", "M8_Cella0P", "M8_Cella1", "M8_Cella2", "M8_Cella3", "M8_Cella0V"];
 
 %% CARICAMENTO DATI =======================================================
 PN1 = ImportaDati(File.Path,File.Sheet);
+
+k=ProbERates(PN1.T);
+ while size(findobj(k))>0
+    pause(1);
+ end
+info=load('sistema.mat');
+
+q=info.sistema.Probabilita;
+u=info.sistema.Rate;
+TransizioniImmediate1=info.sistema.maschera;
 
 for i=1:length(Transizioni)
     idxT(i)=find(strcmp(PN1.T,Transizioni(i)));
@@ -65,16 +37,13 @@ PN.Pre = PN1.Pre(idxP,idxT);
 PN.Post = PN1.Post(idxP,idxT);
 PN.T=PN1.T(idxT);
 PN.P=PN1.P(idxP);
-clear i idxT idxP;
+TransizioniImmediate=zeros(size(PN.T));
+for i=1:length(PN.T)
+    TransizioniImmediate(i)=TransizioniImmediate1(PN.T(i)==PN1.T);
+end
+clear i idxT idxP info;
 
 fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
-% Transizioni immediate: 1
-% Transizioni temporizzate: 0
-TransizioniImmediate = ones(size(PN.T));
-for nome=NomiTransizioniTemporizzate
-    TransizioniImmediate(PN.T==nome)=0;
-    clear nome;
-end
 fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n",sum(TransizioniImmediate==1),sum(TransizioniImmediate==0))
 
 %% CALCOLO GRAFO RAGGIUNGIBILITÁ ==========================================
