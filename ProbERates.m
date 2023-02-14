@@ -1,4 +1,4 @@
-classdef ProbERates_exported < matlab.apps.AppBase
+classdef ProbERates < matlab.apps.AppBase
     %PROBERATES_EXPORTED L'applicazione permette di gestire facilmente le
     %transizioni del sistema, identificando se sono temporizzate o
     %immediate, le probabilità e i rates.
