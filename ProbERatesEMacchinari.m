@@ -1,19 +1,29 @@
 classdef ProbERatesEMacchinari < matlab.apps.AppBase
     %PROBERATESEMACCHINARI L'applicazione permette di gestire facilmente le
-    %transizioni del sistema, identificando se sono temporizzate o
-    %immediate, le probabilità e i rates.
+    %transizioni e i posti del sistema, identificandone suddivisione in
+    %macchinari, tipologia (temporizzate/immediate), probabilità e rates.
     %   L'applicazione richiede in ingresso un'array di stringhe dei nomi
-    %   delle transizioni. Questi sono mostrati a schermo affiancati dai
-    %   comandi che permettono di classificarla e caratterizzarla. Nella
-    %   prima colonna sono presenti i nomi delle transizioni, nella seconda
-    %   la classificazione (immediata/temporizzata), nella terza la
-    %   probabilità e nella quarta il rate. L'ultima colonna risulta
-    %   abilitata solo per le transizioni temporizzate. Completata la
-    %   trattazione, il bottone salva permette di salvare il file
-    %   sistema.mat contenente tutte le informazioni inserite riguardanti
-    %   le transizioni del sistema. Qualora il file sistema.mat sia già
-    %   presente, verifica i dati precedenti per mantenere i dati
-    %   preesistenti e non sovrascriverli.
+    %   delle transizioni, e uno dei nomi dei posti.
+    %   La prima schermata mostra i nomi dei macchinari con i quali i posti
+    %   e le transizioni sono raggruppabili. Ogni macchinario è affiancato
+    %   da una gruppo di bottoni per selezionare la sua analisi.
+    %   La seconda schermata mostra le transizioni presenti, affiancata da
+    %   bottoni per selezionare la tipologia (immediata/temporizzata), la
+    %   probabilità qualora siano in conflitto più transizioni. Se la
+    %   transizione è temporizzata si può specificare anche il rate. Le
+    %   transizioni, cosi come i posti nell'ultima schermata, possono
+    %   essere raggrupati selezionando il macchinario di appartenenza. 
+    %   Cliccando il bottone 'SALVA' viene salvato il file sistema.mat
+    %   contenente tutte le informazioni inserite nell'applicazione
+    %   relative al sistema. 
+    %   Se al momento dell'apertura dell'applicazione il file sistema.mat è
+    %   già presente, i dati presenti all'interno sono verificati per
+    %   rappresentare sull'interfaccia e preservare i dati preesistenti.
+    %   
+    %   Input
+    %      - Transizioni: array di stringhe
+    %      - Posti: array di stringhe
+    %   
     %   
     %   Autori
     %      - Caponi Luca
@@ -78,8 +88,8 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
         colore_Temporizzata = [0.5 0.5 1.0];
         colore_disabilitata = [0.9 0.9 0.9];
         colore_abilitata    = [1.0 1.0 1.0];
-        colore_AnalizzareSi = [0.0 1.0 0.0];
-        colore_AnalizzareNo = [1.0 0.5 0.0];
+        colore_AnalizzareSi = [0.3 1.0 0.3];
+        colore_AnalizzareNo = [1.0 0.7 0.3];
 
         % Tab posti
         Posti_nomi                  matlab.ui.control.EditField
