@@ -12,9 +12,9 @@ File.Sheet = '7_T_S';
 PN1 = ImportaDati(File.Path,File.Sheet);
 
 k=ProbERatesEMacchinari(PN1.T,PN1.P);
- while size(findobj(k))>0
+while size(findobj(k))>0
     pause(1);
- end
+end
 info=load('sistema.mat');
 
 q=info.sistema.Probabilita;

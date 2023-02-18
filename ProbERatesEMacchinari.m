@@ -160,7 +160,6 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
         end
 
         function AggiungiButtonPushed(app, ~)
-            
             n = length(app.NomeMacchinario)+1;
             app.GrigliaMacchinari.RowHeight(n)={50};
 
@@ -247,6 +246,63 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
             app.GrigliaMacchinari.RowHeight=ones(1,length(app.NomeMacchinario)+1)*50;
             
             CorreggiMacchinariScelti(app,app.Macchinari)
+        end
+
+        function Salvataggio(app)
+            sistema.Transizioni=app.Transizioni;
+            sistema.Posti = app.Posti;
+            sistema.Macchinari = table(); 
+            sistema.Probabilita=table();
+            sistema.Rate=table();
+
+            for i=1:length(app.Macchinari)
+                val=app.DaAnalizzare(i).SelectedObject.Text=="Si";
+                sistema.Macchinari(i,:)=table(app.Macchinari(i),{[]},{[]},val,'VariableNames',["Macchinario","Transizioni","Posti","DaAnalizzare"]);
+            end
+            for i=1:length(app.Transizioni_nomi)
+                % Nome della transizione
+                nome = string(app.Transizioni_nomi(i).Value);
+                % 1 o 0 per transizione immediata o temporizzata
+                sistema.maschera(i)=app.Scelta_tipo(i).SelectedObject.Text=="Immediata";
+                % Probabilità della transizione, salvata solo se maggiore
+                % di 0
+                prob=app.Transizioni_Prob(i).Value;
+                if prob>0
+                    sistema.Probabilita(height(sistema.Probabilita)+1,:)=table(string(nome),prob);
+                end
+                % Rate della transizione, salvata solo se è temporizzata
+                rate=app.Transizioni_Rate(i).Value;
+                if sistema.maschera(i)==0
+                    sistema.Rate(height(sistema.Rate)+1,:)=table(string(nome),rate);
+                end
+                % Inserimento nella tabella macchinario
+                macc=string(app.Transizioni_Macc(i).Value);
+                if ~isempty(app.Macchinari)
+                    id=find(macc==app.Macchinari);
+                    if ~isempty(id)
+                        sistema.Macchinari.Transizioni(id)={[sistema.Macchinari.Transizioni{id},nome]};
+                    end
+                end
+            end
+            for i=1:length(app.Posti_nomi)
+                % Nome del posto
+                nome = string(app.Posti_nomi(i).Value);
+                % Inserimento nella tabella macchinario
+                macc=string(app.Posti_Macc(i).Value);
+                if ~isempty(app.Macchinari)
+                    id=find(macc==app.Macchinari);
+                    if ~isempty(id)
+                        sistema.Macchinari.Posti(id)={[sistema.Macchinari.Posti{id},nome]};
+                    end
+                end
+            end
+            if height(sistema.Probabilita)>=1
+                sistema.Probabilita.Properties.VariableNames = ["Transizione" "Probabilita"];
+            end
+            if height(sistema.Rate)>=1
+                sistema.Rate.Properties.VariableNames = ["Transizione" "Rate"];
+            end
+            save("sistema.mat","sistema");
         end
     end
     
@@ -481,60 +537,7 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
 
         % Button pushed function: SALVAButton
         function SALVAButtonPushed(app, event)
-            sistema.Transizioni=app.Transizioni;
-            sistema.Posti = app.Posti;
-            sistema.Macchinari = table(); 
-            sistema.Probabilita=table();
-            sistema.Rate=table();
-
-            for i=1:length(app.Macchinari)
-                val=app.DaAnalizzare(i).SelectedObject.Text=="Si";
-                sistema.Macchinari(i,:)=table(app.Macchinari(i),{[]},{[]},val,'VariableNames',["Macchinario","Transizioni","Posti","DaAnalizzare"]);
-            end
-            for i=1:length(app.Transizioni_nomi)
-                % Nome della transizione
-                nome = string(app.Transizioni_nomi(i).Value);
-                % 1 o 0 per transizione immediata o temporizzata
-                sistema.maschera(i)=app.Scelta_tipo(i).SelectedObject.Text=="Immediata";
-                % Probabilità della transizione, salvata solo se maggiore
-                % di 0
-                prob=app.Transizioni_Prob(i).Value;
-                if prob>0
-                    sistema.Probabilita(height(sistema.Probabilita)+1,:)=table(string(nome),prob);
-                end
-                % Rate della transizione, salvata solo se è temporizzata
-                rate=app.Transizioni_Rate(i).Value;
-                if sistema.maschera(i)==0
-                    sistema.Rate(height(sistema.Rate)+1,:)=table(string(nome),rate);
-                end
-                % Inserimento nella tabella macchinario
-                macc=string(app.Transizioni_Macc(i).Value);
-                if ~isempty(app.Macchinari)
-                    id=find(macc==app.Macchinari);
-                    if ~isempty(id)
-                        sistema.Macchinari.Transizioni(id)={[sistema.Macchinari.Transizioni{id},nome]};
-                    end
-                end
-            end
-            for i=1:length(app.Posti_nomi)
-                % Nome del posto
-                nome = string(app.Posti_nomi(i).Value);
-                % Inserimento nella tabella macchinario
-                macc=string(app.Posti_Macc(i).Value);
-                if ~isempty(app.Macchinari)
-                    id=find(macc==app.Macchinari);
-                    if ~isempty(id)
-                        sistema.Macchinari.Posti(id)={[sistema.Macchinari.Posti{id},nome]};
-                    end
-                end
-            end
-            if height(sistema.Probabilita)>=1
-                sistema.Probabilita.Properties.VariableNames = ["Transizione" "Probabilita"];
-            end
-            if height(sistema.Rate)>=1
-                sistema.Rate.Properties.VariableNames = ["Transizione" "Rate"];
-            end
-            save("sistema.mat","sistema");
+            Salvataggio(app);
         end
 
         % Callback function
@@ -567,6 +570,12 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
                 end
             end
         end
+
+        % Close request function: Figura
+        function ChiusuraApp(app, event)
+            Salvataggio(app);
+            delete(app)
+        end
     end
 
     % Component initialization
@@ -579,6 +588,7 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
             app.Figura = uifigure('Visible', 'off');
             app.Figura.Position = [100 100 662 566];
             app.Figura.Name = 'MATLAB App';
+            app.Figura.CloseRequestFcn = createCallbackFcn(app, @ChiusuraApp, true);
 
             % Create GridLayout2
             app.GridLayout2 = uigridlayout(app.Figura);
