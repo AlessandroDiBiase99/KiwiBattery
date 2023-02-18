@@ -36,12 +36,6 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
         GridLayout2         matlab.ui.container.GridLayout
         SALVAButton         matlab.ui.control.Button
         TabGroup            matlab.ui.container.TabGroup
-        PostiTab            matlab.ui.container.Tab
-        GridLayout8         matlab.ui.container.GridLayout
-        GridLayout9         matlab.ui.container.GridLayout
-        MACCHINARIOLabel_5  matlab.ui.control.Label
-        POSTOLabel          matlab.ui.control.Label
-        GrigliaPosti        matlab.ui.container.GridLayout
         MacchinariTab       matlab.ui.container.Tab
         GridLayout3         matlab.ui.container.GridLayout
         GridLayout5         matlab.ui.container.GridLayout
@@ -57,6 +51,12 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
         TIPOLabel           matlab.ui.control.Label
         TRANSIZIONELabel    matlab.ui.control.Label
         GrigliaTransizioni  matlab.ui.container.GridLayout
+        PostiTab            matlab.ui.container.Tab
+        GridLayout8         matlab.ui.container.GridLayout
+        GridLayout9         matlab.ui.container.GridLayout
+        MACCHINARIOLabel_5  matlab.ui.control.Label
+        POSTOLabel          matlab.ui.control.Label
+        GrigliaPosti        matlab.ui.container.GridLayout
     end
 
     
@@ -341,24 +341,24 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
 
                 % Create Rimuovi
                 app.Rimuovi(i) = uibutton(app.GrigliaMacchinari, 'push');
-                app.Rimuovi(i).Icon = fullfile(app.pathToMLAPP, 'remove.png');
                 app.Rimuovi(i).ButtonPushedFcn = createCallbackFcn(app, @RimuoviButtonPushed, true);
                 app.Rimuovi(i).BackgroundColor = [0.6902 0.8392 1];
                 app.Rimuovi(i).Layout.Row = i;
                 app.Rimuovi(i).Layout.Column = 4;
-                app.Rimuovi(i).Text = '';
+                app.Rimuovi(i).Text = '-';
+                app.Rimuovi(i).FontSize = 18;
                 app.Rimuovi(i).Tag = num2str(i);
             end
 
             % Create Aggiungi
             app.Aggiungi = uibutton(app.GrigliaMacchinari, 'push');
-            app.Aggiungi.Icon = fullfile(app.pathToMLAPP, 'add.png');
             app.Aggiungi.ButtonPushedFcn = createCallbackFcn(app, @AggiungiButtonPushed, true);
             app.Aggiungi.BackgroundColor = [0.6902 0.8392 1];
             app.GrigliaMacchinari.RowHeight(length(app.NomeMacchinario)+1)={50};
             app.Aggiungi.Layout.Row = length(app.NomeMacchinario)+1;
             app.Aggiungi.Layout.Column = 1;
-            app.Aggiungi.Text = '';
+            app.Aggiungi.Text = '+';
+            app.Aggiungi.FontSize = 18;
 
 %% TRANSIZIONI ============================================================
             for i=1:length(Transizioni)
@@ -421,7 +421,7 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
                 app.Transizioni_Macc(i).Tag = string(['T',num2str(i)]);
                 app.Transizioni_Macc(i).BackgroundColor=app.colore_disabilitata;
                 for j=1:height(Tabella_Macchinari)
-                    if ~isempty(Tabella_Macchinari.Posti{j}) && ismember(app.Transizioni(i),Tabella_Macchinari.Transizioni{j})
+                    if ~isempty(Tabella_Macchinari.Transizioni{j}) && ismember(app.Transizioni(i),Tabella_Macchinari.Transizioni{j})
                         app.Transizioni_Macc(i).Value=Tabella_Macchinari.Macchinario(j);
                         if Tabella_Macchinari.DaAnalizzare(j)
                             app.Transizioni_Macc(i).BackgroundColor = app.colore_AnalizzareSi;
@@ -537,11 +537,10 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
             save("sistema.mat","sistema");
         end
 
-        % Callback function: not associated with a component
+        % Callback function
         function DropDownValueChanged(app, event)
             caratteri=char(event.Source.Tag);
             id=str2num(caratteri(2:end));
-            fprintf("Tag: %s;",event.Source.Tag);
             if caratteri(1)=='T'
                 value = app.Transizioni_Macc(id).Value;
                 if value~=""
@@ -567,7 +566,6 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
                     app.Posti_Macc(id).BackgroundColor=app.colore_disabilitata;
                 end
             end
-            fprintf("\n");
         end
     end
 

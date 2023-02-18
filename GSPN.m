@@ -8,13 +8,10 @@ format short;
 File.Path  = 'MatriciCalcolate.xlsx';
 File.Sheet = '7_T_S';
 
-Transizioni=["ScaricamentoM7","CaricamentoM8","ScaricamentoM8","R1", "R2", "R3", "R4", "R5", "R6", "R7"];
-Posti=["CapacitàN7", "BatterieCariche su N7", "M8_Cella0P", "M8_Cella1", "M8_Cella2", "M8_Cella3", "M8_Cella0V"];
-
 %% CARICAMENTO DATI =======================================================
 PN1 = ImportaDati(File.Path,File.Sheet);
 
-k=ProbERates(PN1.T);
+k=ProbERatesEMacchinari(PN1.T,PN1.P);
  while size(findobj(k))>0
     pause(1);
  end
@@ -23,13 +20,23 @@ info=load('sistema.mat');
 q=info.sistema.Probabilita;
 u=info.sistema.Rate;
 TransizioniImmediate1=info.sistema.maschera;
+TabellaMacchinari = info.sistema.Macchinari;
 
-for i=1:length(Transizioni)
-    idxT(i)=find(strcmp(PN1.T,Transizioni(i)));
+idxT=[];
+idxP=[];
+for i=1:height(TabellaMacchinari)
+    if TabellaMacchinari.DaAnalizzare(i)
+        Transizioni=TabellaMacchinari.Transizioni{i};
+        for j=1:length(Transizioni)
+            idxT=[idxT;find(strcmp(PN1.T,Transizioni(j)))];
+        end
+        Posti=TabellaMacchinari.Posti{i};
+        for j=1:length(Posti)
+            idxP=[idxP;find(strcmp(PN1.P,Posti(j)))];
+        end
+    end
 end
-for i=1:length(Posti)
-    idxP(i)=find(strcmp(PN1.P,Posti(i)));
-end
+
 PN.M0 = PN1.M0(idxP);
 PN.H = PN1.H(idxP,idxT);
 PN.C = PN1.C(idxP,idxT);
@@ -210,6 +217,7 @@ while ~all(f_ok)
     for j=1:num_stati
         if ~f_ok(j)
             f_i(j)=f_i(j)+U_temp(j,j);
+            U_temp(j,j)=0;
             if f_i(j)>=1
                 f_ok(j)=true;
             end
