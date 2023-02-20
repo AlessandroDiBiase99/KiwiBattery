@@ -1,5 +1,5 @@
-classdef ProbERatesEMacchinari < matlab.apps.AppBase
-    %PROBERATESEMACCHINARI L'applicazione permette di gestire facilmente le
+classdef GestoreAnalisiPN < matlab.apps.AppBase
+    %GESTOREANALISIPN L'applicazione permette di gestire facilmente le
     %transizioni e i posti del sistema, identificandone suddivisione in
     %macchinari, tipologia (temporizzate/immediate), probabilità e rates.
     %   L'applicazione richiede in ingresso un'array di stringhe dei nomi
@@ -587,7 +587,7 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
             % Create Figura and hide until all components are created
             app.Figura = uifigure('Visible', 'off');
             app.Figura.Position = [100 100 662 566];
-            app.Figura.Name = 'MATLAB App';
+            app.Figura.Name = 'GestoreAnalisiPN';
             app.Figura.CloseRequestFcn = createCallbackFcn(app, @ChiusuraApp, true);
 
             % Create GridLayout2
@@ -800,7 +800,7 @@ classdef ProbERatesEMacchinari < matlab.apps.AppBase
     methods (Access = public)
 
         % Construct app
-        function app = ProbERatesEMacchinari(varargin)
+        function app = GestoreAnalisiPN(varargin)
 
             % Create UIFigure and components
             createComponents(app)
