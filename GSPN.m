@@ -49,7 +49,6 @@ else
     PN.P=PN1.P(idxP);
 end
 
-
 TransizioniImmediate=zeros(size(PN.T));
 for i=1:length(PN.T)
     TransizioniImmediate(i)=TransizioniImmediate1(PN.T(i)==PN1.T);
@@ -218,19 +217,22 @@ end
 f_i=zeros(num_stati,1);
 f_ok=false(num_stati,1);
 U_temp=eye(num_stati);
-while ~all(f_ok)
-    U_temp=U_temp*U;
-    for j=1:num_stati
-        if ~f_ok(j)
-            f_i(j)=f_i(j)+U_temp(j,j);
-            U_temp(j,j)=0;
-            if f_i(j)>=1
-                f_ok(j)=true;
-            end
+
+for i=1:num_stati
+    contatore=0;
+    while ~f_ok(i)
+        U_temp=U_temp*U;
+        contatore=contatore+1;
+        f_i(i)=f_i(i)+U_temp(i,i);
+        U_temp(i,i)=0;
+        if f_i(i)>=0.9999
+            f_ok(i)=true;
+            fprintf("Lo stato %i ha certezza di tornare in %i in esattamente %i passi.\n",i,i,contatore);
         end
     end
 end
-if all(f_i==1)
+
+if all(f_ok==true)
     fprintf("Tutti gli stati del sistema sono ricorrenti.\n");
 else
     fprintf("Non tutti gli stati del sistema sono ricorrenti.\n");
