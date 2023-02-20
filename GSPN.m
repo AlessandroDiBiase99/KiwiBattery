@@ -1,4 +1,4 @@
-%% PREPPARAZIONE WORKSPACE ================================================
+%% PREPARAZIONE WORKSPACE ================================================
 clear;
 clc;
 format short;
@@ -24,26 +24,32 @@ TabellaMacchinari = info.sistema.Macchinari;
 
 idxT=[];
 idxP=[];
-for i=1:height(TabellaMacchinari)
-    if TabellaMacchinari.DaAnalizzare(i)
-        Transizioni=TabellaMacchinari.Transizioni{i};
-        for j=1:length(Transizioni)
-            idxT=[idxT;find(strcmp(PN1.T,Transizioni(j)))];
-        end
-        Posti=TabellaMacchinari.Posti{i};
-        for j=1:length(Posti)
-            idxP=[idxP;find(strcmp(PN1.P,Posti(j)))];
+
+if height(TabellaMacchinari)==0
+    PN=PN1;
+else
+    for i=1:height(TabellaMacchinari)
+        if TabellaMacchinari.DaAnalizzare(i)
+            Transizioni=TabellaMacchinari.Transizioni{i};
+            for j=1:length(Transizioni)
+                idxT=[idxT;find(strcmp(PN1.T,Transizioni(j)))];
+            end
+            Posti=TabellaMacchinari.Posti{i};
+            for j=1:length(Posti)
+                idxP=[idxP;find(strcmp(PN1.P,Posti(j)))];
+            end
         end
     end
+    PN.M0 = PN1.M0(idxP);
+    PN.H = PN1.H(idxP,idxT);
+    PN.C = PN1.C(idxP,idxT);
+    PN.Pre = PN1.Pre(idxP,idxT);
+    PN.Post = PN1.Post(idxP,idxT);
+    PN.T=PN1.T(idxT);
+    PN.P=PN1.P(idxP);
 end
 
-PN.M0 = PN1.M0(idxP);
-PN.H = PN1.H(idxP,idxT);
-PN.C = PN1.C(idxP,idxT);
-PN.Pre = PN1.Pre(idxP,idxT);
-PN.Post = PN1.Post(idxP,idxT);
-PN.T=PN1.T(idxT);
-PN.P=PN1.P(idxP);
+
 TransizioniImmediate=zeros(size(PN.T));
 for i=1:length(PN.T)
     TransizioniImmediate(i)=TransizioniImmediate1(PN.T(i)==PN1.T);
