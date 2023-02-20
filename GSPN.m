@@ -11,7 +11,7 @@ File.Sheet = '7_T_S';
 %% CARICAMENTO DATI =======================================================
 PN1 = ImportaDati(File.Path,File.Sheet);
 
-k=ProbERatesEMacchinari(PN1.T,PN1.P);
+k=GestoreAnalisiPN(PN1.T,PN1.P);
 while size(findobj(k))>0
     pause(1);
 end
