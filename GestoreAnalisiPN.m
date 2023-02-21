@@ -207,12 +207,12 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
             app.AnalizzareNo.Position = [10 2 100 22];
 
             app.Rimuovi(n) = uibutton(app.GrigliaMacchinari, 'push');
-            app.Rimuovi(n).Icon = fullfile(app.pathToMLAPP, 'remove.png');
             app.Rimuovi(n).ButtonPushedFcn = createCallbackFcn(app, @RimuoviButtonPushed, true);
             app.Rimuovi(n).BackgroundColor = [0.6902 0.8392 1];
             app.Rimuovi(n).Layout.Row = n;
             app.Rimuovi(n).Layout.Column = 4;
-            app.Rimuovi(n).Text = '';
+            app.Rimuovi(n).Text = '-';
+            app.Rimuovi(i).FontSize = 18;
             app.Rimuovi(n).Tag = num2str(n);
 
             app.GrigliaMacchinari.RowHeight(n+1)={50};

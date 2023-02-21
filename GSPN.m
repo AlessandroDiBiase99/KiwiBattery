@@ -7,7 +7,7 @@ addpath("Functions\")
 %% PARAMETRI ==============================================================
 % Percorso del file excel contenente le matrici e foglio di lavoro
 File.Path  = 'MatriciCalcolate.xlsx';
-File.Sheet = '7_T_S';
+File.Sheet = '7_T_S (2)';
 % File.Path  = 'SistemaPeriodico_prova.xlsx';
 % File.Sheet = 'Foglio3';
 
@@ -156,7 +156,7 @@ clear i j sum;
 
 %% TRASFORMAZIONE DI COORDINATE ===========================================
 for i=1:num_stati
-    if ~isempty(Grafo(i).Raggiungibili.Transizione) && TransizioniImmediate(Grafo(i).Raggiungibili.Transizione(1))
+    if ~isempty(Grafo(i).Raggiungibili) && TransizioniImmediate(Grafo(i).Raggiungibili.Transizione(1))
         v(i)=1;
     else
         v(i)=0;
@@ -240,6 +240,8 @@ for i=1:num_stati
 end
 if sum(connesso_a_M0)==num_stati
     fprintf("Il sistema è irriducibile.\n\n");
+else
+    fprintf("Il sistema è riducibile, sono presenti almeno 2 classi di comunicazione.\n\n");
 end
 
 % Da perfezionare: devo evitare di calcolare gli arrivi in passi successivi

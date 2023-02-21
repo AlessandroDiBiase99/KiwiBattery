@@ -48,7 +48,7 @@ if size(list_todo,2)>0
     k=1;
 
     Marcatura.Iniziale=M_ini;
-    Marcatura.Raggiungibili=table(0,0,'VariableNames',[{'Transizione'} {'Marcatura'}]);
+    Marcatura.Raggiungibili=table();
 
     % Per ogni transizione abilitata calcolo le marcature a seguito dello
     % scatto della transizione stessa.
@@ -64,7 +64,9 @@ if size(list_todo,2)>0
             k=k+1;
         end
     end
-    Marcatura.Raggiungibili=Marcatura.Raggiungibili;
+    if height(Marcatura.Raggiungibili)>0
+        Marcatura.Raggiungibili.Properties.VariableNames=[{'Transizione'} {'Marcatura'}];
+    end
     Grafo(ismember(list',M_ini',"rows"))=Marcatura;
 
     if size(list_todo,2)>=2
