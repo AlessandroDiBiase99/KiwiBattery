@@ -443,14 +443,16 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
                 app.Transizioni_Prob(i) = uieditfield(app.GrigliaTransizioni, 'numeric');
                 app.Transizioni_Prob(i).Layout.Row = i;
                 app.Transizioni_Prob(i).Layout.Column = 3;
-                if ismember(app.Transizioni(i),Prob.Transizione)
+                if ~isempty(Prob) && ismember(app.Transizioni(i),Prob.Transizione)
                     app.Transizioni_Prob(i).Value=Prob.Probabilita(Prob.Transizione==app.Transizioni(i));
                 end
 
                 app.Transizioni_Rate(i) = uieditfield(app.GrigliaTransizioni, 'numeric');
                 app.Transizioni_Rate(i).Layout.Row = i;
                 app.Transizioni_Rate(i).Layout.Column = 4;
-                if ismember(app.Transizioni(i),Rate.Transizione)
+                app.Transizioni_Rate(i).Limits=[0 inf];
+                app.Transizioni_Rate(i).LowerLimitInclusive = 'off';
+                if ~isempty(Rate) && ismember(app.Transizioni(i),Rate.Transizione)
                     app.Transizioni_Rate(i).Value=Rate.Rate(Rate.Transizione==app.Transizioni(i));
                 end
    

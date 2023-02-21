@@ -34,23 +34,23 @@ function PN = ImportaDati(file,sheet)
     riga6 = find(string(T.PetriNetIncidenceAndMarking)=='Enabled transitions');
 
     % Importo le tabelle delle singole matrici
-    Post        = readtable('MatriciCalcolate.xlsx','sheet','7_T_S','DataRange',[num2str(riga1+1),':',num2str(riga2-1)]);
+    Post        = readtable(file,'sheet',sheet,'DataRange',[num2str(riga1+1),':',num2str(riga2-1)]);
     Post        = SistemaTabella(Post);
     PN.Post     = table2array(Post(:,2:end));
 
-    Pre         = readtable('MatriciCalcolate.xlsx','sheet','7_T_S','DataRange',[num2str(riga2+1),':',num2str(riga3-1)]);
+    Pre         = readtable(file,'sheet',sheet,'DataRange',[num2str(riga2+1),':',num2str(riga3-1)]);
     Pre         = SistemaTabella(Pre);
     PN.Pre      = table2array(Pre(:,2:end));
 
-    Combinazione= readtable('MatriciCalcolate.xlsx','sheet','7_T_S','DataRange',[num2str(riga3+1),':',num2str(riga4-1)]);
+    Combinazione= readtable(file,'sheet',sheet,'DataRange',[num2str(riga3+1),':',num2str(riga4-1)]);
     Combinazione= SistemaTabella(Combinazione);
     PN.C        = table2array(Combinazione(:,2:end));
     
-    Inibizione  = readtable('MatriciCalcolate.xlsx','sheet','7_T_S','DataRange',[num2str(riga4+1),':',num2str(riga5-1)]);
+    Inibizione  = readtable(file,'sheet',sheet,'DataRange',[num2str(riga4+1),':',num2str(riga5-1)]);
     Inibizione  = SistemaTabella(Inibizione);
     PN.H        = table2array(Inibizione(:,2:end));
     
-    M0          = readtable('MatriciCalcolate.xlsx','sheet','7_T_S','DataRange',[num2str(riga5+1),':',num2str(riga6-1)]);
+    M0          = readtable(file,'sheet',sheet,'DataRange',[num2str(riga5+1),':',num2str(riga6-1)]);
     M0          = SistemaTabella(M0);
     PN.M0       = table2array(M0(1,2:end))';
 

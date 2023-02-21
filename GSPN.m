@@ -2,11 +2,16 @@
 clear;
 clc;
 format short;
+addpath("Functions\")
 
 %% PARAMETRI ==============================================================
 % Percorso del file excel contenente le matrici e foglio di lavoro
 File.Path  = 'MatriciCalcolate.xlsx';
 File.Sheet = '7_T_S';
+% File.Path  = 'SistemaPeriodico_prova.xlsx';
+% File.Sheet = 'Foglio3';
+
+precisione_ricorrenza=0.9999;
 
 %% CARICAMENTO DATI =======================================================
 PN1 = ImportaDati(File.Path,File.Sheet);
@@ -56,7 +61,7 @@ end
 clear i idxT idxP info;
 
 fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
-fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n",sum(TransizioniImmediate==1),sum(TransizioniImmediate==0))
+fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n\n",sum(TransizioniImmediate==1),sum(TransizioniImmediate==0))
 
 %% CALCOLO GRAFO RAGGIUNGIBILITÁ ==========================================
 init=struct('Iniziale',[],'Raggiungibili',table());
@@ -96,7 +101,7 @@ for i=1:num_stati
 
                 % A meno che la transizione non abbia altre probabilità in
                 % conflitto con altre transizioni
-                if ismember(q.Transizione,PN.T(A(i,j)))
+                if ~isempty(q) && ismember(PN.T(A(i,j)),q.Transizione)
                     % Determino il numero di transizioni con probabilità
                     % cambiata in caso di conflitto, e la somma delle
                     % probabilità presenti. Determino il numero di
@@ -105,7 +110,7 @@ for i=1:num_stati
                     num=0;
                     peso_tot=0;
                     for h=1:height(Grafo(i).Raggiungibili)
-                        if ismember(q.Transizione,PN.T(Grafo(i).Raggiungibili.Transizione(h)))
+                        if ismember(PN.T(Grafo(i).Raggiungibili.Transizione(h)),q.Transizione)
                             num=num+1;
                             peso_tot=peso_tot+q.Probabilita(q.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
                         end
@@ -153,9 +158,11 @@ clear i j sum;
 for i=1:num_stati
     if ~isempty(Grafo(i).Raggiungibili.Transizione) && TransizioniImmediate(Grafo(i).Raggiungibili.Transizione(1))
         v(i)=1;
+    else
+        v(i)=0;
     end
 end
-% Ricavo gli indici degli stati tangible 
+% Ricavo gli indici degli stati tangible
 Index=find(v==1); 
 % Inizializzo la matrice di cambio di base
 T=zeros(num_stati,num_stati);
@@ -187,7 +194,7 @@ for k=1:num_stati_vanishing
    if C_temp==zeros(num_stati_vanishing,num_stati_vanishing)
        loop=false;
        fprintf("Non è presente alcun loop all'interno del sistema. Il" + ...
-           "calcolo di G viene effettuatto attraverso la sommatoria.\n");
+           "calcolo di G viene effettuatto attraverso la sommatoria.\n\n");
        G=G_temp;
        break;
    end
@@ -195,13 +202,35 @@ for k=1:num_stati_vanishing
 end
 if loop
     fprintf("È presente un loop all'interno del sistema. Il calcolo di" + ...
-        " G viene effettuato attraverso l'inversione di matrice\n");
+        " G viene effettuato attraverso l'inversione di matrice\n\n");
     G=inv(eye(num_stati_vanishing,num_stati_vanishing)-C);
 end
 
 U1=F+E*G*D;
 
 %% CALCOLO TEMPI DI SOGGIORNO =============================================
+% Controllo se il sistema è periodico o aperiodico
+U_temp=eye(num_stati);
+for i=1:num_stati*2
+    U_temp=U_temp*U;
+    for j=1:size(U_temp,1)
+        if U_temp(j,j)>0
+            p_ric(j,i)=1;
+        end
+    end
+end
+for j=1:size(U_temp,1)
+    idxs = sym(find(p_ric(j,:)==1));
+    periodo(j) = gcd(idxs); 
+end
+if any(periodo==1)
+    fprintf("Il sistema è aperiodico.\n");
+else
+    temp = unique(periodo);
+    fprintf("Il sistema è periodico, il periodo degli stati è:%i\n",temp);
+end
+fprintf("\n");
+
 % Verifico che il sistema sia irriducibile
 U_temp=eye(num_stati);
 connesso_a_M0=zeros(num_stati,1);
@@ -210,7 +239,7 @@ for i=1:num_stati
     connesso_a_M0(U_temp(:,1)~=0)=1;
 end
 if sum(connesso_a_M0)==num_stati
-    fprintf("Il sistema è irriducibile.\n");
+    fprintf("Il sistema è irriducibile.\n\n");
 end
 
 % Da perfezionare: devo evitare di calcolare gli arrivi in passi successivi
@@ -225,17 +254,17 @@ for i=1:num_stati
         contatore=contatore+1;
         f_i(i)=f_i(i)+U_temp(i,i);
         U_temp(i,i)=0;
-        if f_i(i)>=0.9999
+        if f_i(i)>=precisione_ricorrenza
             f_ok(i)=true;
-            fprintf("Lo stato %i ha certezza di tornare in %i in esattamente %i passi.\n",i,i,contatore);
+            fprintf("Lo stato %i ha probabilità maggiore di %f di tornare in %i in esattamente %i passi.\n",i,precisione_ricorrenza,i,contatore);
         end
     end
 end
 
 if all(f_ok==true)
-    fprintf("Tutti gli stati del sistema sono ricorrenti.\n");
+    fprintf("Tutti gli stati del sistema sono ricorrenti.\n\n");
 else
-    fprintf("Non tutti gli stati del sistema sono ricorrenti.\n");
+    fprintf("Non tutti gli stati del sistema sono ricorrenti.\n\n");
 end
 
 % Se il sistema è irriducibile e riccorrente positivo allora esiste la
@@ -247,7 +276,4 @@ clear eq
 for i=1:num_stati-num_stati_vanishing
 eq(i,1) = Y1(i)==Y1*U1(:,i);
 end
-eq(31,1)= Y1(1)>0;
-eq(32,1)= Y1(3)>0;
-
-Y2=solve(eq)
+Y2=solve(eq,Y1);
