@@ -1,5 +1,6 @@
 %% PREPARAZIONE WORKSPACE ================================================
-clear;
+close all;
+clear all;
 clc;
 format short;
 addpath("Functions\")
@@ -22,8 +23,8 @@ while size(findobj(k))>0
 end
 info=load('sistema.mat');
 
-q=info.sistema.Probabilita;
-u=info.sistema.Rate;
+q=info.sistema.Pesi;
+u=info.sistema.Temporizzate;
 TransizioniImmediate1=info.sistema.maschera;
 TabellaMacchinari = info.sistema.Macchinari;
 
@@ -297,16 +298,23 @@ for i=1:length(Y1)
     sommatoria=sommatoria+Y1(i);
 end
 eq(end+1,1)=sommatoria==1;
-Y2=vpa(struct2cell(solve(eq,Y1)));
-fprintf("Le probabilità a regime sono:\n")
-for i=1:num_stati-num_stati_vanishing
-    fprintf("Lo stato %s (%i) ha probabilità a regime: %f;\n",array2string(list(:,In(i))),In(i),Y2(i));
+Y2=solve(eq,Y1);
+if isstruct(Y2)
+    PI=vpa(struct2cell(solve(eq,Y1)));
+elseif length(Y2)==1
+    PI=Y2;
+else
+    PI=[];
 end
-
+fprintf("Le probabilità a regime sono:\n")
+for i=1:length(PI)
+    fprintf("Lo stato %s (%i) ha probabilità a regime: %f;\n",array2string(list(:,In(i))),In(i),PI(i));
+end
 
 %%
 from=[];
 to=[];
+t=[];
 for i=1:length(Grafo)
     for j=1:height(Grafo(i).Raggiungibili)
         from=[from i];
@@ -315,4 +323,10 @@ for i=1:length(Grafo)
 end
 G=digraph(from,to);
 figure;
-plot(G);
+plot(G,'Layout','subspace');
+
+figure;
+plot(G,'Layout','auto');
+
+figure;
+plot(G,'Layout','layered');

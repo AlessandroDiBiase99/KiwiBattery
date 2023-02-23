@@ -6,7 +6,7 @@ hold on;
 almeno1=true;
 printed=[1];
 y=2;
-xMax=0;
+xMax=0.1;
 while almeno1
     thislevel=printed(y-1,:);
     almeno1=false;
