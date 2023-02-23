@@ -76,12 +76,11 @@ VisualizzaGrafo(Grafo,PN.T);
 [~,num_stati]=size(Grafo); 
 
 % Inizializzazione matrice adiacenze per gli stati
-A=zeros(num_stati,num_stati);
-
+A=cell(num_stati,num_stati);
 for id1=1:num_stati
     for k=1:height(Grafo(id1).Raggiungibili)
         id2=Grafo(id1).Raggiungibili.Marcatura(k);
-        A(id1,id2)=Grafo(id1).Raggiungibili.Transizione(k);
+        A(id1,id2)={[A{id1,id2} Grafo(id1).Raggiungibili.Transizione(k)]};
     end
 end
 clear id1 k id2;
@@ -93,48 +92,59 @@ U=zeros(num_stati,num_stati);
 for i=1:num_stati
     for j=1:num_stati
         % Se è presente una transizione che porta dallo stato i a j
-        if A(i,j)>0
-            % Se è una transizione immediata
-            if TransizioniImmediate(A(i,j))==1
-                % La probabilità è equa
-                U(i,j)=1/height(Grafo(i).Raggiungibili);
+        if ~isempty(A{i,j})
+            % Le transizioni sono:
+            a_i_j = A{i,j};
 
-                % A meno che la transizione non abbia altre probabilità in
-                % conflitto con altre transizioni
-                if ~isempty(q) && ismember(PN.T(A(i,j)),q.Transizione)
-                    % Determino il numero di transizioni con probabilità
-                    % cambiata in caso di conflitto, e la somma delle
-                    % probabilità presenti. Determino il numero di
-                    % transizioni abilitate che appartengono alla tabella e
-                    % calcolo il peso totale.
-                    num=0;
-                    peso_tot=0;
-                    for h=1:height(Grafo(i).Raggiungibili)
-                        if ismember(PN.T(Grafo(i).Raggiungibili.Transizione(h)),q.Transizione)
-                            num=num+1;
-                            peso_tot=peso_tot+q.Probabilita(q.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
+            % Se la prima transizione è immediata, allora tutte lo sono
+            if TransizioniImmediate(a_i_j(1))==1
+                for t=1:length(a_i_j)
+                    % La probabilità è equa
+                    u_temp(t)=1/height(Grafo(i).Raggiungibili);
+                    % A meno che la transizione non abbia altre probabilità in
+                    % conflitto con altre transizioni
+                    if ~isempty(q) && any(ismember(PN.T(a_i_j),q.Transizione))
+                        % Determino il numero di transizioni con probabilità
+                        % cambiata in caso di conflitto, e la somma delle
+                        % probabilità presenti. Determino il numero di
+                        % transizioni abilitate che appartengono alla tabella e
+                        % calcolo il peso totale.
+                        num=0;
+                        peso_tot=0;
+                        for h=1:height(Grafo(i).Raggiungibili)
+                            if ismember(PN.T(Grafo(i).Raggiungibili.Transizione(h)),q.Transizione)
+                                num=num+1;
+                                peso_tot=peso_tot+q.Probabilita(q.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
+                            end
                         end
+                        % La probabilità della transizione è pari alla somma
+                        % delle probabilità interessate, pesata con il rapporto
+                        % tra il peso assegnato alla transizione e le altre
+                        % transizioni in conflitto nella tabella q
+                        probabilita_tot = num/height(Grafo(i).Raggiungibili);
+                        peso = q.Probabilita(q.Transizione==PN.T(A(i,j)));
+                        u_temp(t)=probabilita_tot*peso/peso_tot;
                     end
-                    % La probabilità della transizione è pari alla somma
-                    % delle probabilità interessate, pesata con il rapporto
-                    % tra il peso assegnato alla transizione e le altre
-                    % transizioni in conflitto nella tabella q
-                    probabilita_tot = num/height(Grafo(i).Raggiungibili);
-                    peso = q.Probabilita(q.Transizione==PN.T(A(i,j)));
-                    U(i,j)=probabilita_tot*peso/peso_tot;
                 end
-            % Se è una transizione temporizzata
+                U(i,j)=sum(u_temp);
+                clear u_temp
+                % Se è una transizione temporizzata
             else
+
                 % La probabilità è pari al rate della transizione diviso la
                 % somma di tutti i rate delle transizioni abilitate
-                rate=u.Rate(u.Transizione==PN.T(A(i,j)));
-                rate_tot=0;
-                for h=1:height(Grafo(i).Raggiungibili)
-                    if any(ismember(u.Transizione,PN.T(Grafo(i).Raggiungibili.Transizione(h))))
-                        rate_tot=rate_tot+u.Rate(u.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
+                for t=1:length(a_i_j)
+                    rate=u.Rate(u.Transizione==PN.T(a_i_j(t)));
+                    rate_tot=0;
+                    for h=1:height(Grafo(i).Raggiungibili)
+                        if any(ismember(u.Transizione,PN.T(Grafo(i).Raggiungibili.Transizione(h))))
+                            rate_tot=rate_tot+u.Rate(u.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
+                        end
                     end
+                    u_temp(t)=rate/rate_tot;
                 end
-                U(i,j)=rate/rate_tot;
+                U(i,j)=sum(u_temp);
+                clear u_temp
             end
         end
     end
@@ -162,28 +172,32 @@ for i=1:num_stati
         v(i)=0;
     end
 end
+
+fprintf("Il sistema analizzato presenta %i stati vanishing e %i stati tangible.\n\n",sum(v),length(v)-sum(v))
+
 % Ricavo gli indici degli stati tangible
-Index=find(v==1); 
+Index=find(v==1);
 % Inizializzo la matrice di cambio di base
 T=zeros(num_stati,num_stati);
 % Ordino il vettore degli stati mettendo prima quelli vanishing al fine di trovare la matrice di trasformazione di base
 [v1,In]=sort(v,'descend');
-% Ricavo la matrice di trasformazione di base
-for i=1:num_stati
-    T(i,In(i))=1;
+
+U_riordinata=zeros(size(U));
+for i=1:size(U,1)
+    for j=1:size(U,2)
+        U_riordinata(i,j)=U(In(i),In(j));
+    end
 end
-clear i
 
 %% CALCOLO U' =============================================================
-temp=U*T;
 num_stati_vanishing=sum(v1);
 %    V T
 % V |C D|
 % T |E F|;
-C = temp(1:num_stati_vanishing,1:num_stati_vanishing);
-D = temp(1:num_stati_vanishing,num_stati_vanishing+1:end);
-E = temp(num_stati_vanishing+1:end,1:num_stati_vanishing);
-F = temp(num_stati_vanishing+1:end,num_stati_vanishing+1:end);
+C = U_riordinata(1:num_stati_vanishing,1:num_stati_vanishing);
+D = U_riordinata(1:num_stati_vanishing,num_stati_vanishing+1:end);
+E = U_riordinata(num_stati_vanishing+1:end,1:num_stati_vanishing);
+F = U_riordinata(num_stati_vanishing+1:end,num_stati_vanishing+1:end);
 
 % trovare loop
 C_temp=eye(num_stati_vanishing,num_stati_vanishing);
@@ -247,27 +261,27 @@ end
 % Da perfezionare: devo evitare di calcolare gli arrivi in passi successivi
 f_i=zeros(num_stati,1);
 f_ok=false(num_stati,1);
-U_temp=eye(num_stati);
 
-for i=1:num_stati
-    contatore=0;
-    while ~f_ok(i)
-        U_temp=U_temp*U;
-        contatore=contatore+1;
-        f_i(i)=f_i(i)+U_temp(i,i);
-        U_temp(i,i)=0;
-        if f_i(i)>=precisione_ricorrenza
-            f_ok(i)=true;
-            fprintf("Lo stato %i ha probabilità maggiore di %f di tornare in %i in esattamente %i passi.\n",i,precisione_ricorrenza,i,contatore);
-        end
-    end
-end
-
-if all(f_ok==true)
-    fprintf("Tutti gli stati del sistema sono ricorrenti.\n\n");
-else
-    fprintf("Non tutti gli stati del sistema sono ricorrenti.\n\n");
-end
+% for i=1:num_stati
+%     contatore=0;
+%     U_temp=eye(num_stati);
+%     while ~f_ok(i)
+%         U_temp=U_temp*U;
+%         contatore=contatore+1;
+%         f_i(i)=f_i(i)+U_temp(i,i);
+%         U_temp(i,i)=0;
+%         if f_i(i)>=precisione_ricorrenza
+%             f_ok(i)=true;
+%             fprintf("Lo stato %i ha probabilità maggiore di %f di tornare in %i in esattamente %i passi.\n",i,precisione_ricorrenza,i,contatore);
+%         end
+%     end
+% end
+% 
+% if all(f_ok==true)
+%     fprintf("Tutti gli stati del sistema sono ricorrenti.\n\n");
+% else
+%     fprintf("Non tutti gli stati del sistema sono ricorrenti.\n\n");
+% end
 
 % Se il sistema è irriducibile e riccorrente positivo allora esiste la
 % probabilità a regime
@@ -276,6 +290,29 @@ equations= Y1==Y1*U1;
 
 clear eq
 for i=1:num_stati-num_stati_vanishing
-eq(i,1) = Y1(i)==Y1*U1(:,i);
+    eq(i,1) = Y1(i)==Y1*U1(:,i);
 end
-Y2=solve(eq,Y1);
+sommatoria=0;
+for i=1:length(Y1)
+    sommatoria=sommatoria+Y1(i);
+end
+eq(end+1,1)=sommatoria==1;
+Y2=vpa(struct2cell(solve(eq,Y1)));
+fprintf("Le probabilità a regime sono:\n")
+for i=1:num_stati-num_stati_vanishing
+    fprintf("Lo stato %s (%i) ha probabilità a regime: %f;\n",array2string(list(:,In(i))),In(i),Y2(i));
+end
+
+
+%%
+from=[];
+to=[];
+for i=1:length(Grafo)
+    for j=1:height(Grafo(i).Raggiungibili)
+        from=[from i];
+        to=[to Grafo(i).Raggiungibili.Marcatura(j)];
+    end
+end
+G=digraph(from,to);
+figure;
+plot(G);
