@@ -22,8 +22,8 @@ while size(findobj(k))>0
 end
 info=load('sistema.mat');
 
-q=info.sistema.Probabilita;
-u=info.sistema.Rate;
+q=info.sistema.Pesi;
+u=info.sistema.Temporizzate;
 TransizioniImmediate1=info.sistema.maschera;
 TabellaMacchinari = info.sistema.Macchinari;
 
