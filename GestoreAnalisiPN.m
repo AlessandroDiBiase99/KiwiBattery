@@ -45,9 +45,10 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
         TransizioniTab      matlab.ui.container.Tab
         GridLayout6         matlab.ui.container.GridLayout
         GridLayout7         matlab.ui.container.GridLayout
+        SERVERLabel         matlab.ui.control.Label
         MACCHINARIOLabel_4  matlab.ui.control.Label
         RATELabel           matlab.ui.control.Label
-        PROBABILITLabel     matlab.ui.control.Label
+        PESOLabel           matlab.ui.control.Label
         TIPOLabel           matlab.ui.control.Label
         TRANSIZIONELabel    matlab.ui.control.Label
         GrigliaTransizioni  matlab.ui.container.GridLayout
@@ -80,9 +81,15 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
         Scelta_tipo                 matlab.ui.container.ButtonGroup
         Temporizzata                matlab.ui.control.RadioButton
         Immediata                   matlab.ui.control.RadioButton
-        Transizioni_Prob            matlab.ui.control.NumericEditField
+        Transizioni_Peso            matlab.ui.control.NumericEditField
         Transizioni_Rate            matlab.ui.control.NumericEditField
         Transizioni_Macc            matlab.ui.control.DropDown
+        
+        Scelta_server               matlab.ui.container.ButtonGroup
+        single_server               matlab.ui.control.RadioButton
+        multiple_server             matlab.ui.control.RadioButton
+        infinite_server             matlab.ui.control.RadioButton
+        transizioni_n_server        matlab.ui.control.NumericEditField
 
         colore_Immediata    = [1.0 1.0 0.3];
         colore_Temporizzata = [0.5 0.5 1.0];
@@ -90,6 +97,9 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
         colore_abilitata    = [1.0 1.0 1.0];
         colore_AnalizzareSi = [0.3 1.0 0.3];
         colore_AnalizzareNo = [1.0 0.7 0.3];
+        colore_single= [1.0 0.4 0.2];
+        colore_multi= [1.0 0.1 0.5];
+        colore_inf= [1.0 0.2 0.6];
 
         % Tab posti
         Posti_nomi                  matlab.ui.control.EditField
@@ -212,7 +222,7 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
             app.Rimuovi(n).Layout.Row = n;
             app.Rimuovi(n).Layout.Column = 4;
             app.Rimuovi(n).Text = '-';
-            app.Rimuovi(i).FontSize = 18;
+            app.Rimuovi(n).FontSize = 18;
             app.Rimuovi(n).Tag = num2str(n);
 
             app.GrigliaMacchinari.RowHeight(n+1)={50};
@@ -252,8 +262,8 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
             sistema.Transizioni=app.Transizioni;
             sistema.Posti = app.Posti;
             sistema.Macchinari = table(); 
-            sistema.Probabilita=table();
-            sistema.Rate=table();
+            sistema.Pesi=table();
+            sistema.Temporizzate=table();
 
             for i=1:length(app.Macchinari)
                 val=app.DaAnalizzare(i).SelectedObject.Text=="Si";
@@ -266,14 +276,16 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
                 sistema.maschera(i)=app.Scelta_tipo(i).SelectedObject.Text=="Immediata";
                 % Probabilità della transizione, salvata solo se maggiore
                 % di 0
-                prob=app.Transizioni_Prob(i).Value;
+                prob=app.Transizioni_Peso(i).Value;
                 if prob>0
-                    sistema.Probabilita(height(sistema.Probabilita)+1,:)=table(string(nome),prob);
+                    sistema.Pesi(height(sistema.Pesi)+1,:)=table(string(nome),prob);
                 end
                 % Rate della transizione, salvata solo se è temporizzata
                 rate=app.Transizioni_Rate(i).Value;
+                n_server=app.transizioni_n_server(i).Value;
                 if sistema.maschera(i)==0
-                    sistema.Rate(height(sistema.Rate)+1,:)=table(string(nome),rate);
+                    sistema.Temporizzate(height(sistema.Temporizzate)+1,:)=table(string(nome),rate,n_server);
+                    
                 end
                 % Inserimento nella tabella macchinario
                 macc=string(app.Transizioni_Macc(i).Value);
@@ -296,13 +308,39 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
                     end
                 end
             end
-            if height(sistema.Probabilita)>=1
-                sistema.Probabilita.Properties.VariableNames = ["Transizione" "Probabilita"];
+            if height(sistema.Pesi)>=1
+                sistema.Pesi.Properties.VariableNames = ["Transizione" "Pesi"];
             end
-            if height(sistema.Rate)>=1
-                sistema.Rate.Properties.VariableNames = ["Transizione" "Rate"];
+            if height(sistema.Temporizzate)>=1
+                sistema.Temporizzate.Properties.VariableNames = ["Transizione" "Rate" "N_Server"];
             end
             save("sistema.mat","sistema");
+        end
+        
+        function Gestionetipo(app,immediata,id)
+            if immediata
+                app.Transizioni_Rate(id).Editable='off';
+                app.Transizioni_Rate(id).BackgroundColor=app.colore_disabilitata;
+                app.Scelta_tipo(id).BackgroundColor=app.colore_Immediata; 
+                app.single_server(id).Enable='off';
+                app.multiple_server(id).Enable='off';
+                app.infinite_server(id).Enable='off';
+                app.transizioni_n_server(id).Editable='off';
+                app.transizioni_n_server(id).BackgroundColor=app.colore_disabilitata;
+            else
+                app.Transizioni_Rate(id).Editable='on';
+                app.Transizioni_Rate(id).BackgroundColor=app.colore_abilitata;
+                app.Scelta_tipo(id).BackgroundColor=app.colore_Temporizzata;
+                app.single_server(id).Enable='on';
+                app.multiple_server(id).Enable='on';
+                app.infinite_server(id).Enable='on';
+                app.transizioni_n_server(id).Editable="off";
+                app.transizioni_n_server(id).BackgroundColor=app.colore_disabilitata;
+                if app.multiple_server(id).Value==1
+                    app.transizioni_n_server(id).Editable='on';
+                    app.transizioni_n_server(id).BackgroundColor=app.colore_abilitata;
+                end
+            end
         end
     end
     
@@ -319,14 +357,14 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
             if exist("sistema.mat","file")
                 file=load("sistema.mat",'sistema');
                 try
-                    Prob = file.sistema.Probabilita;
+                    Pesi = file.sistema.Pesi;
                 catch
-                    Prob = table("",0,'VariableNames',["Transizione" "Probabilita"]);
+                    Pesi = table("",0,'VariableNames',["Transizione" "Pesi"]);
                 end
                 try
-                    Rate = file.sistema.Rate;
+                    Temporizzate = file.sistema.Temporizzate;
                 catch
-                    Rate = table("",0,'VariableNames',["Transizione" "Rate"]);
+                    Temporizzate = table("",0,0,'VariableNames',["Transizione" "Rate" "N_Server"]);
                 end
                 try
                     Transizioni_maschera = file.sistema.Transizioni;
@@ -348,8 +386,8 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
             else
                 Macchinari_=[];
                 Tabella_Macchinari = table("",{[]},{[]},1,'VariableNames',["Macchinario","Transizioni","Posti","DaAnalizzare"]);
-                Prob = table("",0,'VariableNames',["Transizione" "Probabilita"]);
-                Rate = table("",0,'VariableNames',["Transizione" "Rate"]);
+                Pesi = table("",0,'VariableNames',["Transizione" "Pesi"]);
+                Temporizzate = table("",0,0,'VariableNames',["Transizione" "Rate" "N_Server"]);
                 Transizioni_maschera = app.Transizioni;
                 maschera = ones(size(app.Transizioni));
             end
@@ -440,11 +478,11 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
                 app.Temporizzata.Text = 'Temporizzata';
                 app.Temporizzata.Position = [11 2 100 22];
                 
-                app.Transizioni_Prob(i) = uieditfield(app.GrigliaTransizioni, 'numeric');
-                app.Transizioni_Prob(i).Layout.Row = i;
-                app.Transizioni_Prob(i).Layout.Column = 3;
-                if ~isempty(Prob) && ismember(app.Transizioni(i),Prob.Transizione)
-                    app.Transizioni_Prob(i).Value=Prob.Probabilita(Prob.Transizione==app.Transizioni(i));
+                app.Transizioni_Peso(i) = uieditfield(app.GrigliaTransizioni, 'numeric');
+                app.Transizioni_Peso(i).Layout.Row = i;
+                app.Transizioni_Peso(i).Layout.Column = 3;
+                if ~isempty(Pesi) && ismember(app.Transizioni(i),Pesi.Transizione)
+                    app.Transizioni_Peso(i).Value=Pesi.Pesi(Pesi.Transizione==app.Transizioni(i));
                 end
 
                 app.Transizioni_Rate(i) = uieditfield(app.GrigliaTransizioni, 'numeric');
@@ -452,8 +490,9 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
                 app.Transizioni_Rate(i).Layout.Column = 4;
                 app.Transizioni_Rate(i).Limits=[0 inf];
                 app.Transizioni_Rate(i).LowerLimitInclusive = 'off';
-                if ~isempty(Rate) && ismember(app.Transizioni(i),Rate.Transizione)
-                    app.Transizioni_Rate(i).Value=Rate.Rate(Rate.Transizione==app.Transizioni(i));
+
+                if ~isempty(Temporizzate) && ismember(app.Transizioni(i),Temporizzate.Transizione)
+                    app.Transizioni_Rate(i).Value=Temporizzate.Rate(Temporizzate.Transizione==app.Transizioni(i));
                 end
    
                 if ismember(app.Transizioni(i),Transizioni_maschera)
@@ -461,20 +500,39 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
                 else
                     app.Immediata.Value = true;
                 end
-                if app.Immediata.Value
-                    app.Transizioni_Rate(i).Editable='off';
-                    app.Transizioni_Rate(i).BackgroundColor=app.colore_disabilitata;
-                    app.Scelta_tipo(i).BackgroundColor=app.colore_Immediata;
-                else
-                    app.Transizioni_Rate(i).Editable='on';
-                    app.Transizioni_Rate(i).BackgroundColor=app.colore_abilitata;
-                    app.Scelta_tipo(i).BackgroundColor=app.colore_Temporizzata;
-                end
+                
+                % Create ButtonGroup
+                app.Scelta_server(i) = uibuttongroup(app.GrigliaTransizioni);
+                app.Scelta_server(i).Tag = num2str(i);
+                app.Scelta_server(i).SelectionChangedFcn = createCallbackFcn(app, @ServerGroupSelectionChanged, true);
+                app.Scelta_server(i).Layout.Row = i;
+                app.Scelta_server(i).Layout.Column = 5;
+            
+                % Create Single_serverButton
+                app.single_server(i) = uiradiobutton(app.Scelta_server(i));
+                app.single_server(i).Text = 'Single server';
+                app.single_server(i).Position = [11 34 100 16];
+
+                % Create Multiple_serverButton
+                app.multiple_server(i) = uiradiobutton(app.Scelta_server(i));
+                app.multiple_server(i).Text = 'Multiple server';
+                app.multiple_server(i).Position = [11 18 100 16];
+
+                % Create Infinite_serverButton
+                app.infinite_server(i) = uiradiobutton(app.Scelta_server(i));
+                app.infinite_server(i).Text = 'Infinite server';
+                app.infinite_server(i).Position = [11 2 100 16];
+
+                %Create numero_server
+                app.transizioni_n_server(i) = uieditfield(app.GrigliaTransizioni, 'numeric');
+                app.transizioni_n_server(i).Layout.Row = i;
+                app.transizioni_n_server(i).Layout.Column = 6;
+                app.transizioni_n_server(i).LowerLimitInclusive = 'off';
 
                 app.Transizioni_Macc(i) = uidropdown(app.GrigliaTransizioni);
                 app.Transizioni_Macc(i).ValueChangedFcn = createCallbackFcn(app, @DropDownValueChanged, true);
                 app.Transizioni_Macc(i).Layout.Row = i;
-                app.Transizioni_Macc(i).Layout.Column = 5;
+                app.Transizioni_Macc(i).Layout.Column = 7;
                 app.Transizioni_Macc(i).Items = ["",app.Macchinari];
                 app.Transizioni_Macc(i).Tag = string(['T',num2str(i)]);
                 app.Transizioni_Macc(i).BackgroundColor=app.colore_disabilitata;
@@ -489,7 +547,10 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
                         break;
                     end
                 end
+               Gestionetipo(app, app.Immediata.Value, i); 
             end
+
+            
 
 %% POSTI ==================================================================
             for i=1:length(Posti)
@@ -526,15 +587,8 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
         function ButtonGroupSelectionChanged(app, event)
             id = str2num(event.Source.Tag);
             selectedButton = app.Scelta_tipo(id).SelectedObject.Text;
-            if selectedButton=="Immediata"
-                app.Transizioni_Rate(id).Editable='off';
-                app.Transizioni_Rate(id).BackgroundColor=app.colore_disabilitata;
-                app.Scelta_tipo(id).BackgroundColor=app.colore_Immediata;
-            elseif selectedButton=="Temporizzata"
-                app.Transizioni_Rate(id).Editable='on';
-                app.Transizioni_Rate(id).BackgroundColor=app.colore_abilitata;
-                app.Scelta_tipo(id).BackgroundColor=app.colore_Temporizzata;
-            end
+            Gestionetipo(app, selectedButton=="Immediata", id);
+            
         end
 
         % Button pushed function: SALVAButton
@@ -577,6 +631,32 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
         function ChiusuraApp(app, event)
             Salvataggio(app);
             delete(app)
+        end
+
+        % Callback function
+        function ServerGroupSelectionChanged(app, event)
+            position = app.TransizioniTab.Position;
+
+          id = str2num(event.Source.Tag);
+            selectedButton = app.Scelta_server(id).SelectedObject.Text;
+            if selectedButton~="Multiple server"
+                app.transizioni_n_server(id).Editable='off';
+                app.transizioni_n_server(id).BackgroundColor=app.colore_disabilitata;
+                %app.Scelta_server(id).BackgroundColor=app.colore_Immediata;
+            else
+                app.transizioni_n_server(id).Editable='on';
+                app.transizioni_n_server(id).Limits=[1 Inf];
+                app.transizioni_n_server(id).BackgroundColor=app.colore_abilitata;
+                %app.numero_server(id).BackgroundColor=app.colore_Temporizzata;
+            end  
+            if selectedButton=="Single server"
+                app.transizioni_n_server(id).Limits=[0 Inf];
+                app.transizioni_n_server(id).Value=1;
+            end
+
+            if selectedButton=="Infinite server"
+                app.transizioni_n_server(id).Value=Inf;
+            end
         end
     end
 
@@ -670,7 +750,7 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
 
             % Create GrigliaTransizioni
             app.GrigliaTransizioni = uigridlayout(app.GridLayout6);
-            app.GrigliaTransizioni.ColumnWidth = {'1x', '1x', '1x', '1x', '1x'};
+            app.GrigliaTransizioni.ColumnWidth = {'1x', '1x', '1x', '1x', '1x', '1x', '1x'};
             app.GrigliaTransizioni.RowHeight = {};
             app.GrigliaTransizioni.ColumnSpacing = 2;
             app.GrigliaTransizioni.RowSpacing = 2;
@@ -682,7 +762,7 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
 
             % Create GridLayout7
             app.GridLayout7 = uigridlayout(app.GridLayout6);
-            app.GridLayout7.ColumnWidth = {'1x', '1x', '1x', '1x', '1x'};
+            app.GridLayout7.ColumnWidth = {'1x', '1x', '1x', '1x', '1x', '1x', '1x'};
             app.GridLayout7.RowHeight = {50};
             app.GridLayout7.ColumnSpacing = 2;
             app.GridLayout7.Padding = [10 0 10 0];
@@ -708,14 +788,14 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
             app.TIPOLabel.Layout.Column = 2;
             app.TIPOLabel.Text = 'TIPO';
 
-            % Create PROBABILITLabel
-            app.PROBABILITLabel = uilabel(app.GridLayout7);
-            app.PROBABILITLabel.BackgroundColor = [0.6863 0.8353 1];
-            app.PROBABILITLabel.HorizontalAlignment = 'center';
-            app.PROBABILITLabel.FontWeight = 'bold';
-            app.PROBABILITLabel.Layout.Row = 1;
-            app.PROBABILITLabel.Layout.Column = 3;
-            app.PROBABILITLabel.Text = 'PROBABILITÀ';
+            % Create PESOLabel
+            app.PESOLabel = uilabel(app.GridLayout7);
+            app.PESOLabel.BackgroundColor = [0.6863 0.8353 1];
+            app.PESOLabel.HorizontalAlignment = 'center';
+            app.PESOLabel.FontWeight = 'bold';
+            app.PESOLabel.Layout.Row = 1;
+            app.PESOLabel.Layout.Column = 3;
+            app.PESOLabel.Text = 'PESO';
 
             % Create RATELabel
             app.RATELabel = uilabel(app.GridLayout7);
@@ -732,8 +812,17 @@ classdef GestoreAnalisiPN < matlab.apps.AppBase
             app.MACCHINARIOLabel_4.HorizontalAlignment = 'center';
             app.MACCHINARIOLabel_4.FontWeight = 'bold';
             app.MACCHINARIOLabel_4.Layout.Row = 1;
-            app.MACCHINARIOLabel_4.Layout.Column = 5;
+            app.MACCHINARIOLabel_4.Layout.Column = 7;
             app.MACCHINARIOLabel_4.Text = 'MACCHINARIO';
+
+            % Create SERVERLabel
+            app.SERVERLabel = uilabel(app.GridLayout7);
+            app.SERVERLabel.BackgroundColor = [0.6902 0.8392 1];
+            app.SERVERLabel.HorizontalAlignment = 'center';
+            app.SERVERLabel.FontWeight = 'bold';
+            app.SERVERLabel.Layout.Row = 1;
+            app.SERVERLabel.Layout.Column = [5 6];
+            app.SERVERLabel.Text = 'SERVER';
 
             % Create PostiTab
             app.PostiTab = uitab(app.TabGroup);

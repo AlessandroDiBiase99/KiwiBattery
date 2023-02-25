@@ -3,7 +3,7 @@ close all;
 clear all;
 clc;
 format short;
-addpath("Functions\")
+addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Percorso del file excel contenente le matrici e foglio di lavoro
@@ -17,9 +17,16 @@ precisione_ricorrenza=0.9999;
 %% CARICAMENTO DATI =======================================================
 PN1 = ImportaDati(File.Path,File.Sheet);
 
-k=GestoreAnalisiPN(PN1.T,PN1.P);
-while size(findobj(k))>0
+m=appmenu();
+while size(findobj(m))>0
     pause(1);
+end
+load('menuapp.mat');
+if checkbox(1)
+    k=GestoreAnalisiPN(PN1.T,PN1.P);
+    while size(findobj(k))>0
+        pause(1);
+    end
 end
 info=load('sistema.mat');
 
@@ -74,7 +81,7 @@ clear init;
 VisualizzaGrafo(Grafo,PN.T);
 
 % Il numero degli stati raggiunti è pari al numero di righe del Grafo
-[~,num_stati]=size(Grafo); 
+[~,num_stati]=size(Grafo);
 
 % Inizializzazione matrice adiacenze per gli stati
 A=cell(num_stati,num_stati);
