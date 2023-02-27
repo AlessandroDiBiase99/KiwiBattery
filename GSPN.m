@@ -12,7 +12,7 @@ File.Sheet = '7_T_S (2)';
 % File.Path  = 'SistemaPeriodico_prova.xlsx';
 % File.Sheet = 'Foglio3';
 
-precisione_ricorrenza=0.9999;
+precisione_ricorrenza=1;%0.9999;
 
 %% CARICAMENTO DATI =======================================================
 PN1 = ImportaDati(File.Path,File.Sheet);
@@ -30,7 +30,6 @@ if checkbox(1)
 end
 info=load('sistema.mat');
 return
-
 q=info.sistema.Pesi;
 u=info.sistema.Temporizzate;
 TransizioniImmediate1=info.sistema.maschera;
