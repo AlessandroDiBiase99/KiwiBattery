@@ -6,83 +6,31 @@ format short;
 addpath("Functions")
 
 %% PARAMETRI ==============================================================
-% Percorso del file excel contenente le matrici e foglio di lavoro
-File.Path  = 'MatriciCalcolate.xlsx';
-File.Sheet = '7_T_S (2)';
-% File.Path  = 'SistemaPeriodico_prova.xlsx';
-% File.Sheet = 'Foglio3';
+% Nome del file generato con GestoreAnalisiPN da caricare 
+dati_PN = "PN_valle.mat";
+dati_Grafo = "Grafo_valle.mat";
 
-precisione_ricorrenza=1;%0.9999;
+% Verificare che sia ricorrente positivo con precisione:
+precisione_ricorrenza=1; %0.9999;
 
 %% CARICAMENTO DATI =======================================================
-PN1 = ImportaDati(File.Path,File.Sheet);
+info_PN = load(dati_PN);
 
-m=appmenu();
-while size(findobj(m))>0
-    pause(1);
-end
-load('menuapp.mat');
-if checkbox(1)
-    k=GestoreAnalisiPN(PN1.T,PN1.P);
-    while size(findobj(k))>0
-        pause(1);
-    end
-end
-info=load('sistema.mat');
-return
-q=info.sistema.Pesi;
-u=info.sistema.Temporizzate;
-TransizioniImmediate1=info.sistema.maschera;
-TabellaMacchinari = info.sistema.Macchinari;
+PN = info_PN.PN.Ridotta;
 
-idxT=[];
-idxP=[];
+info_Grafo = load(dati_Grafo);
 
-if height(TabellaMacchinari)==0
-    PN=PN1;
-else
-    for i=1:height(TabellaMacchinari)
-        if TabellaMacchinari.DaAnalizzare(i)
-            Transizioni=TabellaMacchinari.Transizioni{i};
-            for j=1:length(Transizioni)
-                idxT=[idxT;find(strcmp(PN1.T,Transizioni(j)))];
-            end
-            Posti=TabellaMacchinari.Posti{i};
-            for j=1:length(Posti)
-                idxP=[idxP;find(strcmp(PN1.P,Posti(j)))];
-            end
-        end
-    end
-    PN.M0 = PN1.M0(idxP);
-    PN.H = PN1.H(idxP,idxT);
-    PN.C = PN1.C(idxP,idxT);
-    PN.Pre = PN1.Pre(idxP,idxT);
-    PN.Post = PN1.Post(idxP,idxT);
-    PN.T=PN1.T(idxT);
-    PN.P=PN1.P(idxP);
-end
+Grafo=info_Grafo.Grafo;
 
-TransizioniImmediate=zeros(size(PN.T));
-for i=1:length(PN.T)
-    TransizioniImmediate(i)=TransizioniImmediate1(PN.T(i)==PN1.T);
-end
-clear i idxT idxP info;
+clear info_PN info_Grafo
 
-fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
-fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n\n",sum(TransizioniImmediate==1),sum(TransizioniImmediate==0))
-
-%% CALCOLO GRAFO RAGGIUNGIBILITÁ ==========================================
-init=struct('Iniziale',[],'Raggiungibili',table());
-
-% Genera la lista degli stati raggiungibili dalla marcatura iniziale M0
-[list,Grafo]=CalcolaGrafo(PN.M0,PN.M0,init,PN.C,TransizioniImmediate,PN.Pre,PN.H);
-clear init;
-% Visualizzo in una figura il grafo di raggiungibilità
-VisualizzaGrafo(Grafo,PN.T);
-
-% Il numero degli stati raggiunti è pari al numero di righe del Grafo
 [~,num_stati]=size(Grafo);
 
+fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
+fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n\n",sum(PN.T.Maschera==1),sum(PN.T.Maschera==0))
+fprintf("Le marcature sono %i\n",num_stati);
+
+%% CALCOLO MATRICE ADIACENZA ==============================================
 % Inizializzazione matrice adiacenze per gli stati
 A=cell(num_stati,num_stati);
 for id1=1:num_stati
@@ -105,13 +53,13 @@ for i=1:num_stati
             a_i_j = A{i,j};
 
             % Se la prima transizione è immediata, allora tutte lo sono
-            if TransizioniImmediate(a_i_j(1))==1
+            if PN.T.Maschera(a_i_j(1))==1
                 for t=1:length(a_i_j)
                     % La probabilità è equa
                     u_temp(t)=1/height(Grafo(i).Raggiungibili);
                     % A meno che la transizione non abbia altre probabilità in
                     % conflitto con altre transizioni
-                    if ~isempty(q) && any(ismember(PN.T(a_i_j),q.Transizione))
+                    if PN.T.Peso(a_i_j)>0
                         % Determino il numero di transizioni con probabilità
                         % cambiata in caso di conflitto, e la somma delle
                         % probabilità presenti. Determino il numero di
@@ -120,9 +68,9 @@ for i=1:num_stati
                         num=0;
                         peso_tot=0;
                         for h=1:height(Grafo(i).Raggiungibili)
-                            if ismember(PN.T(Grafo(i).Raggiungibili.Transizione(h)),q.Transizione)
+                            if PN.T.Peso(Grafo(i).Raggiungibili.Transizione(h))>0
                                 num=num+1;
-                                peso_tot=peso_tot+q.Probabilita(q.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
+                                peso_tot=peso_tot+PN.T.Peso(Grafo(i).Raggiungibili.Transizione(h));
                             end
                         end
                         % La probabilità della transizione è pari alla somma
@@ -130,7 +78,7 @@ for i=1:num_stati
                         % tra il peso assegnato alla transizione e le altre
                         % transizioni in conflitto nella tabella q
                         probabilita_tot = num/height(Grafo(i).Raggiungibili);
-                        peso = q.Probabilita(q.Transizione==PN.T(A(i,j)));
+                        peso = PN.T.Peso(a_i_j);
                         u_temp(t)=probabilita_tot*peso/peso_tot;
                     end
                 end
@@ -142,11 +90,11 @@ for i=1:num_stati
                 % La probabilità è pari al rate della transizione diviso la
                 % somma di tutti i rate delle transizioni abilitate
                 for t=1:length(a_i_j)
-                    rate=u.Rate(u.Transizione==PN.T(a_i_j(t)));
+                    rate=PN.T.Rate(a_i_j(t));
                     rate_tot=0;
                     for h=1:height(Grafo(i).Raggiungibili)
-                        if any(ismember(u.Transizione,PN.T(Grafo(i).Raggiungibili.Transizione(h))))
-                            rate_tot=rate_tot+u.Rate(u.Transizione==PN.T(Grafo(i).Raggiungibili.Transizione(h)));
+                        if PN.T.Maschera(Grafo(i).Raggiungibili.Transizione(h))==0
+                            rate_tot=rate_tot+PN.T.Rate(Grafo(i).Raggiungibili.Transizione(h));
                         end
                     end
                     u_temp(t)=rate/rate_tot;
@@ -174,7 +122,7 @@ clear i j sum;
 
 %% TRASFORMAZIONE DI COORDINATE ===========================================
 for i=1:num_stati
-    if ~isempty(Grafo(i).Raggiungibili) && TransizioniImmediate(Grafo(i).Raggiungibili.Transizione(1))
+    if ~isempty(Grafo(i).Raggiungibili) && PN.T.Maschera(Grafo(i).Raggiungibili.Transizione(1))
         v(i)=1;
     else
         v(i)=0;
@@ -215,7 +163,7 @@ for k=1:num_stati_vanishing
    C_temp = C_temp*C;
    if C_temp==zeros(num_stati_vanishing,num_stati_vanishing)
        loop=false;
-       fprintf("Non è presente alcun loop all'interno del sistema. Il" + ...
+       fprintf("Non è presente alcun loop tra le marcature vanishing. Il" + ...
            "calcolo di G viene effettuatto attraverso la sommatoria.\n\n");
        G=G_temp;
        break;
@@ -223,7 +171,7 @@ for k=1:num_stati_vanishing
    G_temp=G_temp+C^k;
 end
 if loop
-    fprintf("È presente un loop all'interno del sistema. Il calcolo di" + ...
+    fprintf("È presente un loop  tra le marcature vanishing. Il calcolo di" + ...
         " G viene effettuato attraverso l'inversione di matrice\n\n");
     G=inv(eye(num_stati_vanishing,num_stati_vanishing)-C);
 end
@@ -318,22 +266,6 @@ for i=1:length(PI)
     fprintf("Lo stato %s (%i) ha probabilità a regime: %f;\n",array2string(list(:,In(i))),In(i),PI(i));
 end
 
-%%
-from=[];
-to=[];
-t=[];
-for i=1:length(Grafo)
-    for j=1:height(Grafo(i).Raggiungibili)
-        from=[from i];
-        to=[to Grafo(i).Raggiungibili.Marcatura(j)];
-    end
-end
-G=digraph(from,to);
-figure;
-plot(G,'Layout','subspace');
+%% INDICI DI PRESTAZIONE ==================================================
 
-figure;
-plot(G,'Layout','auto');
 
-figure;
-plot(G,'Layout','layered');
