@@ -7,8 +7,8 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare 
-dati_PN = "PN_valle.mat";
-dati_Grafo = "Grafo_valle.mat";
+dati_PN = "PN_svuotatrice.mat";
+dati_Grafo = "Grafo_svuotatrice.mat";
 
 % Verificare che sia ricorrente positivo con precisione:
 precisione_ricorrenza=1; %0.9999;
@@ -241,6 +241,10 @@ f_ok=false(num_stati,1);
 
 % Se il sistema è irriducibile e riccorrente positivo allora esiste la
 % probabilità a regime
+
+
+
+
 Y1 = sym('y1_',[1 num_stati-num_stati_vanishing],'real');
 equations= Y1==Y1*U1; 
 
@@ -263,9 +267,54 @@ else
 end
 fprintf("Le probabilità a regime sono:\n")
 for i=1:length(PI)
-    fprintf("Lo stato %s (%i) ha probabilità a regime: %f;\n",array2string(list(:,In(i))),In(i),PI(i));
+    fprintf("Lo stato [%s] (%i) ha probabilità a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),PI(i));
 end
 
 %% INDICI DI PRESTAZIONE ==================================================
+
+
+
+
+% THROUGHPUT
+% 
+% (Svuotatrice)
+% 64 stati: 64 marcature 
+% 1 marcatura iniziale M0
+% 
+% per i=1:stati_tangible
+% per j=1:N_transizioni 
+% se la transizione è abilitata:
+% r(i,j)=rate(i,j)
+% altrimenti
+% r(i,j)=0
+% end
+% 
+% f(j)=sum(r(:,j))*P(i)
+% end
+% end
+
+
+
+
+
+% INDICE DI PRESTAZIONE
+    %THROUGHPUT
+
+for k=1:height(PN.T)
+r=zeros(num_stati-num_stati_vanishing,1);
+    for i=1+num_stati_vanishing:(num_stati)
+        if ismember(k,Grafo(In(i)).Raggiungibili.Transizione)
+            r(i-num_stati_vanishing)=PN.T.Rate(k);
+        end
+    end
+    tp(k)=sum(r.*PI);
+end
+
+
+
+
+
+
+
 
 
