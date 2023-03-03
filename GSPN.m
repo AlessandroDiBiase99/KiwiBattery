@@ -297,7 +297,7 @@ end
 
 
 
-% INDICE DI PRESTAZIONE
+%% INDICE DI PRESTAZIONE
     %THROUGHPUT
 
 for k=1:height(PN.T)
@@ -309,6 +309,17 @@ r=zeros(num_stati-num_stati_vanishing,1);
     end
     tp(k)=sum(r.*PI);
 end
+
+    %WIP
+
+for k=1:length(PN.P)
+r=zeros(num_stati-num_stati_vanishing,1);
+    for i=1+num_stati_vanishing:(num_stati)
+            r(i-num_stati_vanishing)=Grafo(In(i)).Iniziale(k);
+    end
+    wip(k)=sum(r.*PI);
+end
+wip_t=sum(wip);
 
 
 
