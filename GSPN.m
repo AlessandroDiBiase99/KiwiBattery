@@ -7,8 +7,8 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare 
-dati_PN = "PN_svuotatrice.mat";
-dati_Grafo = "Grafo_svuotatrice.mat";
+dati_PN = "PN_svuotatrice1.mat";
+dati_Grafo = "Grafo_svuotatrice1.mat";
 
 % Verificare che sia ricorrente positivo con precisione:
 precisione_ricorrenza=1; %0.9999;
@@ -147,6 +147,7 @@ end
 
 %% CALCOLO U' =============================================================
 num_stati_vanishing=sum(v1);
+num_stati_tangible=num_stati- num_stati_vanishing;
 %    V T
 % V |C D|
 % T |E F|;
@@ -245,26 +246,42 @@ f_ok=false(num_stati,1);
 
 
 
-Y1 = sym('y1_',[1 num_stati-num_stati_vanishing],'real');
-equations= Y1==Y1*U1; 
+Y_sym = sym('y1_',[1 num_stati_tangible],'real');
+equations= Y_sym==Y_sym*U1; 
 
 clear eq
-for i=1:num_stati-num_stati_vanishing
-    eq(i,1) = Y1(i)==Y1*U1(:,i);
+for i=1:num_stati_tangible
+    eq(i,1) = Y_sym(i)==Y_sym*U1(:,i);
 end
 sommatoria=0;
-for i=1:length(Y1)
-    sommatoria=sommatoria+Y1(i);
+for i=1:length(Y_sym)
+    sommatoria=sommatoria+Y_sym(i);
 end
 eq(end+1,1)=sommatoria==1;
-Y2=solve(eq,Y1);
-if isstruct(Y2)
-    PI=vpa(struct2cell(solve(eq,Y1)));
-elseif length(Y2)==1
-    PI=Y2;
+Y_struct=solve(eq,Y_sym);
+if isstruct(Y_struct)
+    Y=vpa(struct2cell(solve(eq,Y_sym)));
+elseif length(Y_struct)==1
+    Y=Y_struct;
 else
-    PI=[];
+    Y=[];
 end
+
+%CALCOLO TEMPI DI SOGGIORNO
+
+for i=1:(num_stati_tangible)
+    lambda=0;
+    for k=1:height(Grafo(In(num_stati_vanishing+i)).Raggiungibili)
+     lambda=lambda+PN.T.Rate(Grafo(In(num_stati_vanishing+i)).Raggiungibili.Transizione(k));   
+    end
+m(i,1)=1/lambda;
+end
+
+for i=1:length(Y)
+    PI(i,1)=(Y(i)*m(i))/sum(Y.*m);
+end
+
+
 fprintf("Le probabilità a regime sono:\n")
 for i=1:length(PI)
     fprintf("Lo stato [%s] (%i) ha probabilità a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),PI(i));
@@ -301,7 +318,7 @@ end
     %THROUGHPUT
 
 for k=1:height(PN.T)
-r=zeros(num_stati-num_stati_vanishing,1);
+r=zeros(num_stati_tangible,1);
     for i=1+num_stati_vanishing:(num_stati)
         if ismember(k,Grafo(In(i)).Raggiungibili.Transizione)
             r(i-num_stati_vanishing)=PN.T.Rate(k);
@@ -313,13 +330,28 @@ end
     %WIP
 
 for k=1:length(PN.P)
-r=zeros(num_stati-num_stati_vanishing,1);
+r=zeros(num_stati_tangible,1);
     for i=1+num_stati_vanishing:(num_stati)
             r(i-num_stati_vanishing)=Grafo(In(i)).Iniziale(k);
     end
     wip(k)=sum(r.*PI);
 end
 wip_t=sum(wip);
+
+% MANUFACTURING LEAD TIME
+%MLT=
+
+
+
+% TEMPO MEDIO DI ATTESA NEL POSTO 
+
+
+
+
+
+
+%NUMERO MEDIO DI TOKEN
+
 
 
 
