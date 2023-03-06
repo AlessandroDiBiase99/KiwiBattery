@@ -7,8 +7,8 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare 
-dati_PN = "PN_svuotatrice1.mat";
-dati_Grafo = "Grafo_svuotatrice1.mat";
+dati_PN = "PN_Svuotatrice.mat";
+dati_Grafo = "Grafo_Svuotatrice.mat";
 
 % Verificare che sia ricorrente positivo con precisione:
 precisione_ricorrenza=1; %0.9999;
@@ -334,9 +334,8 @@ r=zeros(num_stati_tangible,1);
     for i=1+num_stati_vanishing:(num_stati)
             r(i-num_stati_vanishing)=Grafo(In(i)).Iniziale(k);
     end
-    wip(k)=sum(r.*PI);
+    numero_medio_token(k)=sum(r.*PI);
 end
-wip_t=sum(wip);
 
 % MANUFACTURING LEAD TIME
 %MLT=
