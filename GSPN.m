@@ -7,8 +7,8 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare 
-dati_PN = "PN_Svuotatrice.mat";
-dati_Grafo = "Grafo_Svuotatrice.mat";
+dati_PN = "PN_Monte.mat";
+dati_Grafo = "Grafo_Monte.mat";
 
 % Verificare che sia ricorrente positivo con precisione:
 precisione_ricorrenza=1; %0.9999;
@@ -27,7 +27,7 @@ clear info_PN info_Grafo
 
 [~,num_stati]=size(Grafo);
 
-fprintf("La rete di petri Ã¨ composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
+fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
 fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n\n",sum(PN.T.Maschera==1),sum(PN.T.Maschera==0))
 fprintf("Le marcature sono %i\n",num_stati);
 
@@ -48,22 +48,22 @@ U=zeros(num_stati,num_stati);
 %costruzione della matrice U
 for i=1:num_stati
     for j=1:num_stati
-        % Se Ã¨ presente una transizione che porta dallo stato i a j
+        % Se è presente una transizione che porta dallo stato i a j
         if ~isempty(A{i,j})
             % Le transizioni sono:
             a_i_j = A{i,j};
 
-            % Se la prima transizione Ã¨ immediata, allora tutte lo sono
+            % Se la prima transizione è immediata, allora tutte lo sono
             if PN.T.Maschera(a_i_j(1))==1
                 for t=1:length(a_i_j)
-                    % La probabilitÃ  Ã¨ equa
+                    % La probabilità è equa
                     u_temp(t)=1/height(Grafo(i).Raggiungibili);
-                    % A meno che la transizione non abbia altre probabilitÃ  in
+                    % A meno che la transizione non abbia altre probabilità in
                     % conflitto con altre transizioni
                     if PN.T.Peso(a_i_j)>0
-                        % Determino il numero di transizioni con probabilitÃ 
+                        % Determino il numero di transizioni con probabilità
                         % cambiata in caso di conflitto, e la somma delle
-                        % probabilitÃ  presenti. Determino il numero di
+                        % probabilità presenti. Determino il numero di
                         % transizioni abilitate che appartengono alla tabella e
                         % calcolo il peso totale.
                         num=0;
@@ -74,8 +74,8 @@ for i=1:num_stati
                                 peso_tot=peso_tot+PN.T.Peso(Grafo(i).Raggiungibili.Transizione(h));
                             end
                         end
-                        % La probabilitÃ  della transizione Ã¨ pari alla somma
-                        % delle probabilitÃ  interessate, pesata con il rapporto
+                        % La probabilità della transizione è pari alla somma
+                        % delle probabilità interessate, pesata con il rapporto
                         % tra il peso assegnato alla transizione e le altre
                         % transizioni in conflitto nella tabella q
                         probabilita_tot = num/height(Grafo(i).Raggiungibili);
@@ -85,10 +85,10 @@ for i=1:num_stati
                 end
                 U(i,j)=sum(u_temp);
                 clear u_temp
-                % Se Ã¨ una transizione temporizzata
+                % Se è una transizione temporizzata
             else
 
-                % La probabilitÃ  Ã¨ pari al rate della transizione diviso la
+                % La probabilità è pari al rate della transizione diviso la
                 % somma di tutti i rate delle transizioni abilitate
                 for t=1:length(a_i_j)
                     rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(a_i_j(t)),PN.Pre(:,a_i_j(t)));
@@ -166,7 +166,7 @@ for k=1:num_stati_vanishing
    C_temp = C_temp*C;
    if C_temp==zeros(num_stati_vanishing,num_stati_vanishing)
        loop=false;
-       fprintf("Non Ã¨ presente alcun loop tra le marcature vanishing. Il" + ...
+       fprintf("Non è presente alcun loop tra le marcature vanishing. Il" + ...
            "calcolo di G viene effettuatto attraverso la sommatoria.\n\n");
        G=G_temp;
        break;
@@ -174,7 +174,7 @@ for k=1:num_stati_vanishing
    G_temp=G_temp+C^k;
 end
 if loop
-    fprintf("Ãˆ presente un loop  tra le marcature vanishing. Il calcolo di" + ...
+    fprintf("È presente un loop  tra le marcature vanishing. Il calcolo di" + ...
         " G viene effettuato attraverso l'inversione di matrice\n\n");
     G=inv(eye(num_stati_vanishing,num_stati_vanishing)-C);
 end
@@ -182,7 +182,7 @@ end
 U1=F+E*G*D;
 
 %% CALCOLO TEMPI DI SOGGIORNO =============================================
-% Controllo se il sistema Ã¨ periodico o aperiodico
+% Controllo se il sistema è periodico o aperiodico
 U_temp=eye(num_stati);
 for i=1:num_stati*2
     U_temp=U_temp*U;
@@ -199,10 +199,10 @@ for j=1:size(U_temp,1)
     periodo(j) = gcd(idxs); 
 end
 if any(periodo==1)
-    fprintf("Il sistema Ã¨ aperiodico.\n");
+    fprintf("Il sistema è aperiodico.\n");
 else
     temp = unique(periodo);
-    fprintf("Il sistema Ã¨ periodico, il periodo degli stati Ã¨:%i\n",temp);
+    fprintf("Il sistema è periodico, il periodo degli stati è:%i\n",temp);
 end
 fprintf("\n");
 
@@ -214,9 +214,9 @@ for i=1:num_stati
     connesso_a_M0(U_temp(:,1)~=0)=1;
 end
 if sum(connesso_a_M0)==num_stati
-    fprintf("Il sistema Ã¨ irriducibile.\n\n");
+    fprintf("Il sistema è irriducibile.\n\n");
 else
-    fprintf("Il sistema Ã¨ riducibile, sono presenti almeno 2 classi di comunicazione.\n\n");
+    fprintf("Il sistema è riducibile, sono presenti almeno 2 classi di comunicazione.\n\n");
 end
 
 % Da perfezionare: devo evitare di calcolare gli arrivi in passi successivi
@@ -233,7 +233,7 @@ f_ok=false(num_stati,1);
 %         U_temp(i,i)=0;
 %         if f_i(i)>=precisione_ricorrenza
 %             f_ok(i)=true;
-%             fprintf("Lo stato %i ha probabilitÃ  maggiore di %f di tornare in %i in esattamente %i passi.\n",i,precisione_ricorrenza,i,contatore);
+%             fprintf("Lo stato %i ha probabilità maggiore di %f di tornare in %i in esattamente %i passi.\n",i,precisione_ricorrenza,i,contatore);
 %         end
 %     end
 % end
@@ -244,8 +244,8 @@ f_ok=false(num_stati,1);
 %     fprintf("Non tutti gli stati del sistema sono ricorrenti.\n\n");
 % end
 
-% Se il sistema Ã¨ irriducibile e riccorrente positivo allora esiste la
-% probabilitÃ  a regime
+% Se il sistema è irriducibile e riccorrente positivo allora esiste la
+% probabilità a regime
 
 
 
@@ -287,9 +287,9 @@ for i=1:length(Y)
     PI(i,1)=(Y(i)*m(i))/sum(Y.*m);
 end
 
-fprintf("Le probabilitÃ  a regime sono:\n")
+fprintf("Le probabilità a regime sono:\n")
 for i=1:length(PI)
-    fprintf("Lo stato [%s] (%i) ha probabilitÃ  a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),PI(i));
+    fprintf("Lo stato [%s] (%i) ha probabilità a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),PI(i));
 end
 
 %% INDICI DI PRESTAZIONE ==================================================
@@ -307,13 +307,7 @@ end
 % WIP _____________________________________________________________________
 
 
-
-% MANUFACTURING LEAD TIME _________________________________________________
-%MLT=
-
-
 % NUMERO MEDIO DI TOKEN ___________________________________________________
-
 for k=1:length(PN.P)
     r=zeros(num_stati_tangible,1);
     for i=1+num_stati_vanishing:(num_stati)
@@ -321,8 +315,11 @@ for k=1:length(PN.P)
     end
     numero_medio_token(k)=sum(r.*PI);
 end
+% MANUFACTURING LEAD TIME _________________________________________________
+MLT=sum(numero_medio_token)/min(tp(tp~=0));
+fprintf("\nIl Manifacturing Lead Time del sistema analizzato è pari a: %.10f h (%.3f min)\n",MLT,MLT*60);
 
- %MLT Transizione temporizzata
+%MLT Transizione temporizzata
  for k=1:length(PN.P)
      tp_posti=0;
      for j=1:height(PN.T)
@@ -333,8 +330,7 @@ end
      tempo_medio_attesa(k)=numero_medio_token(k)/tp_posti;
  end
 
-
-
+ %% Functions =============================================================
 function s_a = ServerAttivati(Marcatura,MaxServer,Input)
     s_a = min(Marcatura./Input);
     if s_a>MaxServer
