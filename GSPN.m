@@ -91,11 +91,12 @@ for i=1:num_stati
                 % La probabilità è pari al rate della transizione diviso la
                 % somma di tutti i rate delle transizioni abilitate
                 for t=1:length(a_i_j)
-                    rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(j),PN.Pre(:,j));
+                    rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(a_i_j(t)),PN.Pre(:,a_i_j(t)));
                     rate_tot=0;
                     for h=1:height(Grafo(i).Raggiungibili)
                         if PN.T.Maschera(Grafo(i).Raggiungibili.Transizione(h))==0
-                            rate_tot=rate_tot+PN.T.Rate(Grafo(i).Raggiungibili.Transizione(h))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(h),PN.Pre(:,h));
+                            id_t_temp=Grafo(i).Raggiungibili.Transizione(h);
+                            rate_tot=rate_tot+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
                         end
                     end
                     u_temp(t)=rate/rate_tot;
@@ -273,7 +274,8 @@ for i=1:(num_stati_tangible)
     lambda=0;
     for k=1:height(Grafo(In(num_stati_vanishing+i)).Raggiungibili)
         idMarcatura=In(num_stati_vanishing+i);
-        lambda=lambda+PN.T.Rate(Grafo(idMarcatura).Raggiungibili.Transizione(k))*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(k),PN.Pre(:,k));
+        id_t_temp=Grafo(idMarcatura).Raggiungibili.Transizione(k);
+        lambda=lambda+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
     end
     m(i,1)=1/lambda;
 end
@@ -294,7 +296,7 @@ for k=1:height(PN.T)
 r=zeros(num_stati_tangible,1);
     for i=1+num_stati_vanishing:(num_stati)
         if ismember(k,Grafo(In(i)).Raggiungibili.Transizione)
-            r(i-num_stati_vanishing)=PN.T.Rate(k)*ServerAttivati();
+            r(i-num_stati_vanishing)=PN.T.Rate(k)*ServerAttivati(Grafo(In(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
         end
     end
     tp(k)=sum(r.*PI);
