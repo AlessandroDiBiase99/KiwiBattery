@@ -7,8 +7,8 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare 
-dati_PN = "PN_svuotatrice1.mat";
-dati_Grafo = "Grafo_svuotatrice1.mat";
+dati_PN = "PN_monte.mat";
+dati_Grafo = "Grafo_monte.mat";
 
 % Verificare che sia ricorrente positivo con precisione:
 precisione_ricorrenza=1; %0.9999;
@@ -17,6 +17,7 @@ precisione_ricorrenza=1; %0.9999;
 info_PN = load(dati_PN);
 
 PN = info_PN.PN.Ridotta;
+PN.T.Rate=round(PN.T.Rate,1);
 
 info_Grafo = load(dati_Grafo);
 
@@ -90,11 +91,11 @@ for i=1:num_stati
                 % La probabilità è pari al rate della transizione diviso la
                 % somma di tutti i rate delle transizioni abilitate
                 for t=1:length(a_i_j)
-                    rate=PN.T.Rate(a_i_j(t));
+                    rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(j),PN.Pre(:,j));
                     rate_tot=0;
                     for h=1:height(Grafo(i).Raggiungibili)
                         if PN.T.Maschera(Grafo(i).Raggiungibili.Transizione(h))==0
-                            rate_tot=rate_tot+PN.T.Rate(Grafo(i).Raggiungibili.Transizione(h));
+                            rate_tot=rate_tot+PN.T.Rate(Grafo(i).Raggiungibili.Transizione(h))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(h),PN.Pre(:,h));
                         end
                     end
                     u_temp(t)=rate/rate_tot;
@@ -247,7 +248,7 @@ f_ok=false(num_stati,1);
 
 
 Y_sym = sym('y1_',[1 num_stati_tangible],'real');
-equations= Y_sym==Y_sym*U1; 
+equations= Y_sym==Y_sym*U1;
 
 clear eq
 for i=1:num_stati_tangible
@@ -268,19 +269,19 @@ else
 end
 
 %CALCOLO TEMPI DI SOGGIORNO
-
 for i=1:(num_stati_tangible)
     lambda=0;
     for k=1:height(Grafo(In(num_stati_vanishing+i)).Raggiungibili)
-     lambda=lambda+PN.T.Rate(Grafo(In(num_stati_vanishing+i)).Raggiungibili.Transizione(k));   
+        idMarcatura=In(num_stati_vanishing+i);
+        lambda=lambda+PN.T.Rate(Grafo(idMarcatura).Raggiungibili.Transizione(k))*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(k),PN.Pre(:,k));
     end
-m(i,1)=1/lambda;
+    m(i,1)=1/lambda;
 end
 
+PI=[];
 for i=1:length(Y)
     PI(i,1)=(Y(i)*m(i))/sum(Y.*m);
 end
-
 
 fprintf("Le probabilità a regime sono:\n")
 for i=1:length(PI)
@@ -288,57 +289,29 @@ for i=1:length(PI)
 end
 
 %% INDICI DI PRESTAZIONE ==================================================
-
-
-
-
-% THROUGHPUT
-% 
-% (Svuotatrice)
-% 64 stati: 64 marcature 
-% 1 marcatura iniziale M0
-% 
-% per i=1:stati_tangible
-% per j=1:N_transizioni 
-% se la transizione è abilitata:
-% r(i,j)=rate(i,j)
-% altrimenti
-% r(i,j)=0
-% end
-% 
-% f(j)=sum(r(:,j))*P(i)
-% end
-% end
-
-
-
-
-
-%% INDICE DI PRESTAZIONE
-    %THROUGHPUT
-
+% THROUGHPUT ______________________________________________________________
 for k=1:height(PN.T)
 r=zeros(num_stati_tangible,1);
     for i=1+num_stati_vanishing:(num_stati)
         if ismember(k,Grafo(In(i)).Raggiungibili.Transizione)
-            r(i-num_stati_vanishing)=PN.T.Rate(k);
+            r(i-num_stati_vanishing)=PN.T.Rate(k)*ServerAttivati();
         end
     end
     tp(k)=sum(r.*PI);
 end
 
-    %WIP
+% WIP _____________________________________________________________________
 
 for k=1:length(PN.P)
-r=zeros(num_stati_tangible,1);
+    r=zeros(num_stati_tangible,1);
     for i=1+num_stati_vanishing:(num_stati)
-            r(i-num_stati_vanishing)=Grafo(In(i)).Iniziale(k);
+        r(i-num_stati_vanishing)=Grafo(In(i)).Iniziale(k);
     end
     wip(k)=sum(r.*PI);
 end
 wip_t=sum(wip);
 
-% MANUFACTURING LEAD TIME
+% MANUFACTURING LEAD TIME _________________________________________________
 %MLT=
 
 
@@ -354,7 +327,12 @@ wip_t=sum(wip);
 
 
 
-
+function s_a = ServerAttivati(Marcatura,MaxServer,Input)
+    s_a = min(Marcatura./Input);
+    if s_a>MaxServer
+        s_a=MaxServer;
+    end
+end
 
 
 
