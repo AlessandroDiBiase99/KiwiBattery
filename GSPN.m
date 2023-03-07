@@ -7,8 +7,8 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare 
-dati_PN = "PN_Monte.mat";
-dati_Grafo = "Grafo_Monte.mat";
+dati_PN = "Dati\PN_{1,2,3}.mat";
+dati_Grafo = "Dati\Grafo_{1,2,3}.mat";
 
 % Verificare che sia ricorrente positivo con precisione:
 precisione_ricorrenza=1; %0.9999;
@@ -17,6 +17,7 @@ precisione_ricorrenza=1; %0.9999;
 info_PN = load(dati_PN);
 
 PN = info_PN.PN.Ridotta;
+Macchinari=info_PN.PN.Macchinari;
 PN.T.Rate=round(PN.T.Rate,1);
 
 info_Grafo = load(dati_Grafo);
@@ -166,7 +167,7 @@ for k=1:num_stati_vanishing
    C_temp = C_temp*C;
    if C_temp==zeros(num_stati_vanishing,num_stati_vanishing)
        loop=false;
-       fprintf("Non è presente alcun loop tra le marcature vanishing. Il" + ...
+       fprintf("Non è presente alcun loop tra le marcature vanishing. Il " + ...
            "calcolo di G viene effettuatto attraverso la sommatoria.\n\n");
        G=G_temp;
        break;
@@ -303,9 +304,10 @@ r=zeros(num_stati_tangible,1);
     end
     tp(k)=sum(r.*PI);
 end
-
-% WIP _____________________________________________________________________
-
+fprintf("\nNMT] Il throughput del sistema analizzato è pari a:\n");
+for i=1:height(PN.T)
+    fprintf("    %s%s%.4f\n",PN.T.Transizione{i},repmat(' ',1,25-length(char(PN.T.Transizione{i})),tp(i)));
+end
 
 % NUMERO MEDIO DI TOKEN ___________________________________________________
 for k=1:length(PN.P)
@@ -315,11 +317,19 @@ for k=1:length(PN.P)
     end
     numero_medio_token(k)=sum(r.*PI);
 end
-% MANUFACTURING LEAD TIME _________________________________________________
-MLT=sum(numero_medio_token)/min(tp(tp~=0));
-fprintf("\nIl Manifacturing Lead Time del sistema analizzato è pari a: %.10f h (%.3f min)\n",MLT,MLT*60);
+fprintf("\nNMT] Il numero medio di token è pari a:\n");
+for i=1:length(numero_medio_token)
+    fprintf("    %s%s%.4f\n",PN.P(i),repmat(' ',1,25-length(char(PN.P(i)))),numero_medio_token(i));
+end
+% WIP _____________________________________________________________________
+wip=sum(numero_medio_token);
+fprintf("\nWIP] Il Work In Progress del sistema analizzato è pari a: %.10f pezzi\n",wip);
 
-%MLT Transizione temporizzata
+% MANUFACTURING LEAD TIME _________________________________________________
+MLT=wip/min(tp(tp~=0));
+fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %.10f h (%.3f min)\n",MLT,MLT*60);
+
+% Tempo medio attesa ______________________________________________________
  for k=1:length(PN.P)
      tp_posti=0;
      for j=1:height(PN.T)
@@ -330,6 +340,26 @@ fprintf("\nIl Manifacturing Lead Time del sistema analizzato è pari a: %.10f h (
      tempo_medio_attesa(k)=numero_medio_token(k)/tp_posti;
  end
 
+% Efficenza _______________________________________________________________
+for i_macc=1:height(Macchinari)
+    if Macchinari.DaAnalizzare(i_macc)
+        posti_macc=Macchinari.Posti{i_macc};
+        for i_post=1:length(posti_macc)
+            p_tot=0;
+            for i_marc=num_stati_vanishing+1:num_stati
+                if Grafo(i_marc).Iniziale(find(posti_macc(i_post)==PN.P))>0
+                    p_tot=p_tot+PI(i_marc-num_stati_vanishing);
+                end
+            end
+        end
+        eff_mac(i_macc,:)=table(Macchinari.Macchinario(i_macc),p_tot,'VariableNames',["Macchinario","Efficenza"]);
+    end
+end
+fprintf("\nEFF] L'efficenza del sistema analizzato è pari a:\n");
+for i_eff=1:height(eff_mac)
+    nome=eff_mac{i_eff,1};
+    fprintf("    %s%s%.4f\n",nome,repmat(' ',1,25-length(char(nome))),eff_mac{i_eff,2});
+end
  %% Functions =============================================================
 function s_a = ServerAttivati(Marcatura,MaxServer,Input)
     s_a = min(Marcatura./Input);
