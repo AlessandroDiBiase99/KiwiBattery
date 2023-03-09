@@ -8,9 +8,12 @@ clc;
 addpath("Functions")
 
 %% PARAMETRI ==============================================================
-% Nome del file generato con GestoreAnalisiPN da caricare 
-dati_PN = "Dati\PN_{1,2,3,4}.mat";
-dati_Grafo = "Dati\Grafo_{1,2,3,4}.mat";
+% Nome del file generato con GestoreAnalisiPN da caricare
+macchinari='5,6,7';
+dati_PN = ['Dati\PN_{',macchinari,'}.mat'];
+dati_Grafo = ['Dati\Grafo_{',macchinari,'}.mat'];
+
+clear macchinari;
 
 %% CARICAMENTO DATI =======================================================
 % I dati relativi alla PN e al Grafo realizzati attraverso GestoreAnalisiPN
@@ -29,10 +32,9 @@ clear info_PN info_Grafo
 % l'utente
 fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,1),size(PN.T,1))
 fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n\n",sum(PN.T.Maschera==1),sum(PN.T.Maschera==0))
-fprintf("Le marcature sono %i\n",size(Grafo,2));
 
 % Arrotondiamo all'unità per evitare errori numerici nel calcolo di U
-PN.T.Rate=round(PN.T.Rate,1);
+PN.T.Rate=round(PN.T.Rate*100,2)/100;
 
 % Il numero di marcature raggiunte viene salvato
 n_stati=size(Grafo,2);
@@ -150,8 +152,8 @@ for i=1:n_stati
         v(i)=0;
     end
 end
-
-fprintf("Il sistema analizzato presenta %i stati vanishing e %i stati tangible.\n\n",sum(v),length(v)-sum(v))
+fprintf("Le marcature sono %i\n",n_stati);
+fprintf(" - %i stati sono vanishing;\n - %i stati sono tangible.\n\n",sum(v),length(v)-sum(v))
 
 % Ordino il vettore degli stati mettendo prima quelli vanishing al fine di
 % trovare la matrice di trasformazione di base
@@ -225,7 +227,7 @@ if any(periodo==1)
     fprintf("Il sistema tangible è aperiodico.\n");
 else
     temp = unique(periodo);
-    fprintf("Il sistema tangible è periodico, il periodo degli stati è:%i\n",temp);
+    fprintf("Il sistema tangible è periodico, il periodo degli stati è: %i\n",temp);
 end
 fprintf("\n");
 
@@ -274,10 +276,16 @@ equations= Y_sym==Y_sym*U1;
 Y_struct=solve([equations sum(Y_sym)==1],Y_sym);
 if isstruct(Y_struct)
     Y=vpa(struct2cell(Y_struct));
+    if isempty(Y)
+        fprintf("!=== ERRORE ===!\nImpossibile determinare la soluzione Y.\n");
+        return
+    end
 elseif length(Y_struct)==1
     Y=Y_struct;
 else
     Y=[];
+    fprintf("!=== ERRORE ===!\nImpossibile determinare la soluzione Y.\n");
+    return
 end
 
 %__TEMPI DI SOGGIORNO______________________________________________________
@@ -379,11 +387,11 @@ for i_macc=1:height(Macchinari)
         end
     end
 end
-eff_macc=rmmissing(eff_mac);
+eff_mac=rmmissing(eff_mac);
 fprintf("\nEFF] L'efficenza del sistema analizzato è pari a:\n");
-for i_eff=1:height(eff_macc)
-    nome=eff_macc{i_eff,1};
-    fprintf("    %s%s%.4f\n",nome,repmat(' ',1,25-length(char(nome))),eff_macc{i_eff,2});
+for i_eff=1:height(eff_mac)
+    nome=eff_mac{i_eff,1};
+    fprintf("    %s%s%.4f\n",nome,repmat(' ',1,25-length(char(nome))),eff_mac{i_eff,2});
 end
 
  %% Functions =============================================================
