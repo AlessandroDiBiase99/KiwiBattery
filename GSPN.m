@@ -9,7 +9,7 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
-macchinari='5,6,7';
+macchinari='1,2,3,4';
 dati_PN = ['Dati\PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati\Grafo_{',macchinari,'}.mat'];
 
@@ -34,7 +34,8 @@ fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,
 fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n\n",sum(PN.T.Maschera==1),sum(PN.T.Maschera==0))
 
 % Arrotondiamo all'unità per evitare errori numerici nel calcolo di U
-PN.T.Rate=round(PN.T.Rate*100,2)/100;
+PN.T.Rate=round(PN.T.Rate/10,1)*10;
+%PN.T.Rate(end)=1;
 
 % Il numero di marcature raggiunte viene salvato
 n_stati=size(Grafo,2);
@@ -225,7 +226,7 @@ for j=1:size(p_ric,1)
 end
 if any(periodo==1)
     fprintf("Il sistema tangible è aperiodico.\n");
-else
+elseif all(periodo~=0)
     temp = unique(periodo);
     fprintf("Il sistema tangible è periodico, il periodo degli stati è: %i\n",temp);
 end
