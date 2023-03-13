@@ -319,11 +319,11 @@ end
 %% INDICI DI PRESTAZIONE ==================================================
 fprintf("=========== INDICI DI PRESTAZIONE ============================================")
 %__THROUGHPUT______________________________________________________________
-%Il throughput è il reciproco del tempo di produzione per unità di
-%prodotto. La reward function r è ottenuta moltiplicando il rate della
-%transizione temporizzata per il numero di server attivati. Il throughput
-%della transizione k-esima è dato dalla somma delle reward function
-%moltiplicate per le probabilità a regime.
+% Il throughput è il reciproco del tempo di produzione per unità di
+% prodotto. La reward function r è ottenuta moltiplicando il rate della
+% transizione temporizzata per il numero di server attivati. Il throughput
+% della transizione k-esima è dato dalla somma delle reward function
+% moltiplicate per le probabilità a regime.
 for k=1:height(PN.T)
 r=zeros(num_stati_t,1);
     for i=1+num_stati_v:(n_stati)
@@ -339,10 +339,10 @@ for i=1:height(PN.T)
 end
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
-%Per ogni posto k-esimo viene calcolato il numero medio di token associato
-%al posto. Esso viene calcolato sommando il prodotto tra le probabilità a
-%regime che il sistema si trovi in quella marcatura e il numero di token
-%nel posto k-esimo
+% Per ogni posto k-esimo viene calcolato il numero medio di token associato
+% al posto. Esso viene calcolato sommando il prodotto tra le probabilità a
+% regime che il sistema si trovi in quella marcatura e il numero di token
+% nel posto k-esimo
 for k=1:length(PN.P)
     r=zeros(num_stati_t,1);
     for i=1+num_stati_v:(n_stati)
@@ -356,20 +356,20 @@ for i=1:length(numero_medio_token)
 end
 
 %__WIP_____________________________________________________________________
-%Il "WIP" (Work in Process) è dato dalla somma del numero medio di token
+% Il Work in Process è dato dalla somma del numero medio di token
 wip=sum(numero_medio_token);
 fprintf("\nWIP] Il Work In Process del sistema analizzato è pari a: %.10f pezzi\n",wip);
 
 %__MLT_____________________________________________________________________
-%"MLT" (Manufacturing Lead Time) è stato calcolando facendo il rapporto tra
-%il WIP e il throughput minimo (diverso da zero) del sistema
+% Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
+% WIP e il throughput minimo (diverso da zero) del sistema
 MLT=wip/min(tp(tp~=0));
 fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %.10f h (%.3f min)\n",MLT,MLT*60);
 
 %__TEMPO MEDIO ATTESA______________________________________________________
-%Il tempo medio di attesa relativo al k-esimo posto è dato dal rapporto tra
-%il numero medio di token del posto e la somma dei throughput relativi alle
-%transizioni che depositano token nel posto.
+% Il tempo medio di attesa relativo al k-esimo posto è dato dal rapporto 
+% tra il numero medio di token del posto e la somma dei throughput relativi
+% alle transizioni che depositano token nel posto.
  for k=1:length(PN.P)
      tp_posti=0;
      for j=1:height(PN.T)
@@ -381,9 +381,9 @@ fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %.10
  end
 
 %__EFFICENZA_______________________________________________________________
-%L'efficienza di un dato macchinario è dato dalla somma delle probabilità a
-%regime di ciascuna marcatura moltiplicate per il rapporto tra il numero di
-%server in lavorazione e i server totali.
+% L'efficienza di un dato macchinario è dato dalla somma delle probabilità
+% a regime di ciascuna marcatura moltiplicate per il rapporto tra il numero
+% di server in lavorazione e i server totali.
 for i_macc=1:height(Macchinari)
     if Macchinari.DaAnalizzare(i_macc)
         posti_macc=Macchinari.Posti{i_macc};
