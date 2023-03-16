@@ -13,6 +13,8 @@ macchinari='1,2,3,4';
 dati_PN = ['Dati\PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati\Grafo_{',macchinari,'}.mat'];
 
+TAB = 27;
+
 clear macchinari;
 
 %% CARICAMENTO DATI =======================================================
@@ -246,13 +248,14 @@ else
 end
 
 %__RICORRENZA______________________________________________________________
-% f_i=zeros(n_stati,1);
-% f_ok=false(n_stati,1);
-% for i=1:num_stati
+% precisione_ricorrenza=0.99;
+% f_i=zeros(num_stati_t,1);
+% f_ok=false(num_stati_t,1);
+% for i=1:num_stati_t
 %     contatore=0;
-%     U_temp=eye(num_stati);
+%     U_temp=eye(num_stati_t);
 %     while ~f_ok(i)
-%         U_temp=U_temp*U;
+%         U_temp=U_temp*U1;
 %         contatore=contatore+1;
 %         f_i(i)=f_i(i)+U_temp(i,i);
 %         U_temp(i,i)=0;
@@ -262,7 +265,7 @@ end
 %         end
 %     end
 % end
-% 
+%
 % if all(f_ok==true)
 %     fprintf("Tutti gli stati del sistema sono ricorrenti.\n\n");
 % else
@@ -300,9 +303,11 @@ for i=1:(num_stati_t)
     m(i,1)=1/lambda;
 end
 
-fprintf("I tempi di soggiorno sono:\n")
+fprintf("\n" + ...
+    "______________________________________________________________________________\n" + ...
+    "I tempi di soggiorno sono:\n")
 for i=1:length(m)
-    fprintf("Lo stato [%s] (%i) ha tempo di soggiorno: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),m(i));
+    fprintf("Lo stato [%s] (%i) ha tempo di soggiorno: %s;\n", num2str(Grafo(i).Iniziale'),In(i),duration(hours(m(i)),'format','hh:mm:ss.SSSS'));
 end
 
 %__PROBABILITÀ A REGIME____________________________________________________
@@ -311,13 +316,15 @@ for i=1:length(Y)
     PI(i,1)=(Y(i)*m(i))/sum(Y.*m);
 end
 
-fprintf("Le probabilità a regime sono:\n")
+fprintf("\n" + ...
+    "______________________________________________________________________________\n" + ...
+    "Le probabilità a regime sono:\n")
 for i=1:length(PI)
     fprintf("Lo stato [%s] (%i) ha probabilità a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),PI(i));
 end
 
 %% INDICI DI PRESTAZIONE ==================================================
-fprintf("=========== INDICI DI PRESTAZIONE ============================================")
+fprintf("\n\n=========== INDICI DI PRESTAZIONE ============================================")
 %__THROUGHPUT______________________________________________________________
 % Il throughput è il reciproco del tempo di produzione per unità di
 % prodotto. La reward function r è ottenuta moltiplicando il rate della
@@ -335,7 +342,7 @@ r=zeros(num_stati_t,1);
 end
 fprintf("\nTPU] Il throughput del sistema analizzato è pari a:\n");
 for i=1:height(PN.T)
-    fprintf("    %s%s%.4f\n",PN.T.Transizione{i},repmat(' ',1,25-length(char(PN.T.Transizione{i}))),tp(i));
+    fprintf("    %s%s%.4f\n",PN.T.Transizione{i},repmat(' ',1,TAB-length(char(PN.T.Transizione{i}))),tp(i));
 end
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
@@ -352,7 +359,7 @@ for k=1:length(PN.P)
 end
 fprintf("\nNMT] Il numero medio di token è pari a:\n");
 for i=1:length(numero_medio_token)
-    fprintf("    %s%s%.4f\n",PN.P(i),repmat(' ',1,25-length(char(PN.P(i)))),numero_medio_token(i));
+    fprintf("    %s%s%.4f\n",PN.P(i),repmat(' ',1,TAB-length(char(PN.P(i)))),numero_medio_token(i));
 end
 
 %__WIP_____________________________________________________________________
@@ -364,7 +371,7 @@ fprintf("\nWIP] Il Work In Process del sistema analizzato è pari a: %.10f pezzi\
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
 MLT=wip/min(tp(tp~=0));
-fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %.10f h (%.3f min)\n",MLT,MLT*60);
+fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %s\n",duration(hours(MLT),'format','hh:mm:ss.SSSS'));
 
 %__TEMPO MEDIO ATTESA______________________________________________________
 % Il tempo medio di attesa relativo al k-esimo posto è dato dal rapporto 
@@ -379,6 +386,10 @@ fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %.10
      end
      tempo_medio_attesa(k)=numero_medio_token(k)/tp_posti;
  end
+ fprintf("\nTMA] Il tempo medio di attesa per ogni posto è pari a:\n");
+for i=1:length(tempo_medio_attesa)
+    fprintf("    %s%s%s\n",PN.P(i),repmat(' ',1,TAB-length(char(PN.P(i)))),duration(hours(tempo_medio_attesa(i)),'format','hh:mm:ss.SSSS'));
+end
 
 %__EFFICENZA_______________________________________________________________
 % L'efficienza di un dato macchinario è dato dalla somma delle probabilità
@@ -410,7 +421,7 @@ eff_mac=rmmissing(eff_mac);
 fprintf("\nEFF] L'efficenza del sistema analizzato è pari a:\n");
 for i_eff=1:height(eff_mac)
     nome=eff_mac{i_eff,1};
-    fprintf("    %s%s%.4f\n",nome,repmat(' ',1,25-length(char(nome))),eff_mac{i_eff,2});
+    fprintf("    %s%s%.4f\n",nome,repmat(' ',1,TAB-length(char(nome))),eff_mac{i_eff,2});
 end
 
  %% Functions =============================================================
