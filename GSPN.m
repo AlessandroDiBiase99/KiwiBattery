@@ -10,8 +10,8 @@ addpath("Functions")
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
 macchinari='1,2,3,4';
-dati_PN = ['Dati\PN_{',macchinari,'}.mat'];
-dati_Grafo = ['Dati\Grafo_{',macchinari,'}.mat'];
+dati_PN = ['Dati/PN_{',macchinari,'}.mat'];
+dati_Grafo = ['Dati/Grafo_{',macchinari,'}.mat'];
 
 TAB = 27;
 
@@ -370,7 +370,17 @@ fprintf("\nWIP] Il Work In Process del sistema analizzato è pari a: %.10f pezzi\
 %__MLT_____________________________________________________________________
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
-MLT=wip/min(tp(tp~=0));
+tp_min=0;
+for i=1:length(PN.P)
+    for j=1:height(PN.T)
+        if any(tp(j)~=0) 
+            if PN.Pre(i,j)~=0
+            tp_min=min(PN.Pre(i,j)*tp(j));
+            end
+        end
+    end
+end
+MLT=wip/tp_min;
 fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %s\n",duration(hours(MLT),'format','hh:mm:ss.SSSS'));
 
 %__TEMPO MEDIO ATTESA______________________________________________________
