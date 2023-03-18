@@ -9,7 +9,7 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
-macchinari='1,2,3,4';
+macchinari='8,9,10';
 dati_PN = ['Dati\PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati\Grafo_{',macchinari,'}.mat'];
 
@@ -204,7 +204,6 @@ if loop
         " G viene effettuato attraverso l'inversione di matrice\n\n");
     G=inv(eye(num_stati_v,num_stati_v)-C);
 end
-
 % La matrice delle probabilità ridotta è così calcolata
 U1=F+E*G*D;
 
@@ -276,8 +275,8 @@ end
 % Se il sistema è irriducibile e riccorrente positivo allora esiste la
 % probabilità a regime
 Y_sym = sym('y1_',[1 num_stati_t],'real');
-equations= Y_sym==Y_sym*U1;
-Y_struct=solve([equations sum(Y_sym)==1],Y_sym);
+equations= Y_sym.'==U1*(Y_sym.');
+Y_struct=solve([equations; sum(Y_sym)==1],Y_sym);
 if isstruct(Y_struct)
     Y=vpa(struct2cell(Y_struct));
     if isempty(Y)
