@@ -3,7 +3,8 @@
 % pulita. Viene aggiunta la directory delle funzioni al spazio di
 % esecuzione Matlab.
 close all;
-clear all;
+clearvars;
+clear global;
 clc;
 addpath("Functions")
 
@@ -39,16 +40,16 @@ fprintf("La rete di petri è composta da %i posti e %i transizioni.\n",size(PN.P,
 fprintf(" - %i transizioni sono immediate;\n - %i transizioni temporizzate.\n\n",sum(PN.T.Maschera==1),sum(PN.T.Maschera==0))
 
 % Il numero di marcature raggiunte viene salvato
-n_stati=size(Grafo,2);
+n.stati=size(Grafo,2);
 
 %% CALCOLO MATRICE ADIACENZA ==============================================
 % Inizializzazione matrice adiacenze per gli stati
-A=cell(n_stati,n_stati);
+A=cell(n.stati,n.stati);
 
 % Per ogni marcatura A raggiunta verifico quali sono le marcature B
 % raggiungibili, e aggiungo l'indice della transizione nella matrice in
 % posizione (A,B)
-for id1=1:n_stati
+for id1=1:n.stati
     for k=1:height(Grafo(id1).Raggiungibili)
         id2=Grafo(id1).Raggiungibili.Marcatura(k);
         A(id1,id2)={[A{id1,id2} Grafo(id1).Raggiungibili.Transizione(k)]};
@@ -60,13 +61,13 @@ clear id1 k id2;
 
 %% CALCOLO MATRICE U ======================================================
 % Inizializzazione matrice delle probabilità
-U=zeros(n_stati,n_stati);
+U=zeros(n.stati,n.stati);
 
 % Da ogni marcatura, a ogni marcatura, considero tutte le transizioni
 % presenti, calcolando la probabilità che si verifichino sulla base delle
 % transizioni abilitate (immediate o temporizzate), dei pesi e dei rates.
-for i=1:n_stati
-    for j=1:n_stati
+for i=1:n.stati
+    for j=1:n.stati
         % Se è presente una transizione che porta dallo stato i a j
         if ~isempty(A{i,j})
             % Le transizioni sono:
@@ -120,31 +121,30 @@ for i=1:n_stati
                     u_temp(t)=rate/rate_tot;
                 end
                 U(i,j)=sum(u_temp);
-                clear u_temp
+                clear u_temp;
             end
         end
     end
 end
 
 % Le variabili di appoggio possono ora essere eliminate
-clear a_i_j i j h num probabilita_tot peso peso_tot rate rate_tot;
+clear a_i_j i j t h num probabilita_tot peso peso_tot rate rate_tot id_t_temp;
 
 % Controllo che ogni riga abbia sommatoria pari a 1. U deve essere
 % stocastica
-VerificaStocastica(U,PrecisioneU);
+U=VerificaStocastica(U,PrecisioneU);
 
 %% TRASFORMAZIONE DI COORDINATE ===========================================
 % Viene associata a ogni marcatura una variabile v, 1 se la marcatura è
 % vanishing 0 altrimenti.
-for i=1:n_stati
+v=zeros(1,n.stati);
+for i=1:n.stati
     if ~isempty(Grafo(i).Raggiungibili) && PN.T.Maschera(Grafo(i).Raggiungibili.Transizione(1))
         v(i)=1;
-    else
-        v(i)=0;
     end
 end
-fprintf("Le marcature sono %i\n",n_stati);
-fprintf(" - %i stati sono vanishing;\n - %i stati sono tangible.\n\n",sum(v),length(v)-sum(v))
+fprintf("Le marcature sono %i\n",n.stati);
+fprintf(" - %i stati sono vanishing;\n - %i stati sono tangible.\n\n",sum(v),length(v)-sum(v));
 
 % Ordino il vettore degli stati mettendo prima quelli vanishing al fine di
 % trovare la matrice di trasformazione di base
@@ -159,26 +159,28 @@ for i=1:size(U,1)
 end
 
 %% CALCOLO U' =============================================================
-n_stati_v = sum(v1);
-n_stati_t = n_stati - n_stati_v;
+n.stati_v = sum(v1);
+n.stati_t = n.stati - n.stati_v;
 %    V T
 % V |C D|
 % T |E F|;
-C = U_riordinata(            1:n_stati_v,            1:n_stati_v);
-D = U_riordinata(            1:n_stati_v,n_stati_v+1:        end);
-E = U_riordinata(n_stati_v+1:        end,            1:n_stati_v);
-F = U_riordinata(n_stati_v+1:        end,n_stati_v+1:        end);
+C = U_riordinata(            1:n.stati_v,            1:n.stati_v);
+D = U_riordinata(            1:n.stati_v,n.stati_v+1:        end);
+E = U_riordinata(n.stati_v+1:        end,            1:n.stati_v);
+F = U_riordinata(n.stati_v+1:        end,n.stati_v+1:        end);
+
+clear U_riordinata
 
 % Ricerco possibili loop tra le marcature vanishing. Se non trovo alcun
 % loop dopo aver al massimo iterato tutte le marcature vanishing allora la
 % matrice G è già calcolata. Se è presente un loop, G viene calcolata con
 % la inversione di matrice.
-C_temp=eye(n_stati_v,n_stati_v);
+C_temp=eye(n.stati_v,n.stati_v);
 G_temp=C_temp;
 loop=true;
-for k=1:n_stati_v+1
+for k=1:n.stati_v+1
    C_temp = C_temp*C;
-   if C_temp==zeros(n_stati_v,n_stati_v)
+   if C_temp==zeros(n.stati_v,n.stati_v)
        loop=false;
        fprintf("Non è presente alcun loop tra le marcature vanishing. Il " + ...
            "calcolo di G viene effettuatto attraverso la sommatoria.\n\n");
@@ -190,20 +192,20 @@ end
 if loop
     fprintf("È presente un loop  tra le marcature vanishing. Il calcolo di" + ...
         " G viene effettuato attraverso l'inversione di matrice\n\n");
-    G=inv(eye(n_stati_v,n_stati_v)-C);
+    G=inv(eye(n.stati_v,n.stati_v)-C);
 end
 
-clear C_temp G_temp loop 
+clear v v1 C_temp G_temp loop 
 
 % La matrice delle probabilità ridotta è così calcolata
 U1=F+E*G*D;
 
-VerificaStocastica(U1,PrecisioneU1);
+U1=VerificaStocastica(U1,PrecisioneU1);
 
 %% CALCOLO PROPRIETÀ =============================================
 %__PERIODICITÀ_____________________________________________________________
-U_temp=eye(n_stati_t);
-for i=1:n_stati*2
+U_temp=eye(n.stati_t);
+for i=1:n.stati*2
     U_temp=U_temp*U1;
     for j=1:size(U_temp,1)
         if U_temp(j,j)>0
@@ -229,13 +231,13 @@ fprintf("\n");
 clear U_temp p_ric idxs periodo
 
 %__IRRIDUCIBILITÀ__________________________________________________________
-U_temp=eye(n_stati_t);
-connesso_a_M0=zeros(n_stati_t,1);
-for i=1:n_stati_t
+U_temp=eye(n.stati_t);
+connesso_a_M0=zeros(n.stati_t,1);
+for i=1:n.stati_t
     U_temp=U_temp*U1;
     connesso_a_M0(U_temp(:,1)~=0)=1;
 end
-if sum(connesso_a_M0)==n_stati_t
+if sum(connesso_a_M0)==n.stati_t
     fprintf("Il sistema tangible è irriducibile.\n\n");
 else
     fprintf("Il sistema tangible è riducibile, sono presenti almeno 2 classi di comunicazione.\n\n");
@@ -271,9 +273,9 @@ clear U_temp connesso_a_M0
 %__VALORI A REGIME_________________________________________________________
 % Se il sistema è irriducibile e riccorrente positivo allora esiste la
 % probabilità a regime
-Y_sym = sym('y1_',[1 n_stati_t],'real');
-equations= Y_sym==Y_sym*U1;
-Y_struct=solve([equations sum(Y_sym)==1],Y_sym);
+Y_sym = sym('y1_',[1 n.stati_t],'real');
+equations= [Y_sym==Y_sym*U1 sum(Y_sym)==1];
+Y_struct=solve(equations ,Y_sym);
 if isstruct(Y_struct)
     Y=vpa(struct2cell(Y_struct));
     if isempty(Y)
@@ -287,12 +289,14 @@ else
     fprintf("!=== ERRORE ===!\nImpossibile determinare la soluzione Y.\n");
     return
 end
+clear Y_sym Y_struct
 
 %__TEMPI DI SOGGIORNO______________________________________________________
-for i=1:(n_stati_t)
+m=zeros(n.stati_t,1);
+for i=1:n.stati_t
     lambda=0;
-    for k=1:height(Grafo(In(n_stati_v+i)).Raggiungibili)
-        idMarcatura=In(n_stati_v+i);
+    for k=1:height(Grafo(In(n.stati_v+i)).Raggiungibili)
+        idMarcatura=In(n.stati_v+i);
         id_t_temp=Grafo(idMarcatura).Raggiungibili.Transizione(k);
         lambda=lambda+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
     end
@@ -305,9 +309,10 @@ fprintf("\n" + ...
 for i=1:length(m)
     fprintf("Lo stato [%s] (%i) ha tempo di soggiorno: %s;\n", num2str(Grafo(i).Iniziale'),In(i),duration(hours(m(i)),'format','hh:mm:ss.SSSS'));
 end
+clear i lambda id_t_temp idMarcatura;
 
 %__PROBABILITÀ A REGIME____________________________________________________
-PI=[];
+PI=zeros(length(Y),1);
 for i=1:length(Y)
     PI(i,1)=(Y(i)*m(i))/sum(Y.*m);
 end
@@ -318,20 +323,24 @@ fprintf("\n" + ...
 for i=1:length(PI)
     fprintf("Lo stato [%s] (%i) ha probabilità a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),PI(i));
 end
+clear i
 
 %% INDICI DI PRESTAZIONE ==================================================
 fprintf("\n\n=========== INDICI DI PRESTAZIONE ============================================")
+IndiciPrestazione.Transizioni = table(PN.T.Transizione,'VariableNames',"Transizione");
+IndiciPrestazione.Posti       = table(PN.P            ,'VariableNames',"Posto");
 %__THROUGHPUT______________________________________________________________
 % Il throughput è il reciproco del tempo di produzione per unità di
 % prodotto. La reward function r è ottenuta moltiplicando il rate della
 % transizione temporizzata per il numero di server attivati. Il throughput
 % della transizione k-esima è dato dalla somma delle reward function
 % moltiplicate per le probabilità a regime.
+tp=zeros(1,height(PN.T));
 for k=1:height(PN.T)
-r=zeros(n_stati_t,1);
-    for i=1+n_stati_v:(n_stati)
+r=zeros(n.stati_t,1);
+    for i=1+n.stati_v:(n.stati)
         if ismember(k,Grafo(In(i)).Raggiungibili.Transizione)
-            r(i-n_stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(In(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
+            r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(In(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
         end
     end
     tp(k)=sum(r.*PI);
@@ -354,66 +363,80 @@ if ismember('11',macchinari)
     tp(id_TP2OK)=tp(id_M11Test)*PN.T.Peso(id_TP2OK)/(PN.T.Peso(id_TP2KO)+PN.T.Peso(id_TP2OK));
 end
 
+IndiciPrestazione.Transizioni.TPU = tp.';
 fprintf("\nTPU] Il throughput del sistema analizzato è pari a:\n");
 for i=1:height(PN.T)
     fprintf("    %s%s%.4f\n",PN.T.Transizione{i},repmat(' ',1,TAB-length(char(PN.T.Transizione{i}))),tp(i));
 end
+clear k i r tp id_TP1OK id_TP1KO id_M5Test id_TP2OK id_TP2KO id_M11Test
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
 % Per ogni posto k-esimo viene calcolato il numero medio di token associato
 % al posto. Esso viene calcolato sommando il prodotto tra le probabilità a
 % regime che il sistema si trovi in quella marcatura e il numero di token
 % nel posto k-esimo
+numero_medio_token=zeros(1,length(PN.P));
 for k=1:length(PN.P)
-    r=zeros(n_stati_t,1);
-    for i=1+n_stati_v:(n_stati)
-        r(i-n_stati_v)=Grafo(In(i)).Iniziale(k);
+    r=zeros(n.stati_t,1);
+    for i=1+n.stati_v:(n.stati)
+        r(i-n.stati_v)=Grafo(In(i)).Iniziale(k);
     end
     numero_medio_token(k)=sum(r.*PI);
 end
+
+IndiciPrestazione.Posti.NumeroMedioToken=numero_medio_token.';
 fprintf("\nNMT] Il numero medio di token è pari a:\n");
 for i=1:length(numero_medio_token)
     fprintf("    %s%s%.4f\n",PN.P(i),repmat(' ',1,TAB-length(char(PN.P(i)))),numero_medio_token(i));
 end
+clear k i numero_medio_token r
 
 %__WIP_____________________________________________________________________
 % Il Work in Process è dato dalla somma del numero medio di token
-wip=sum(numero_medio_token);
-fprintf("\nWIP] Il Work In Process del sistema analizzato è pari a: %.10f pezzi\n",wip);
+WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken);
 
+IndiciPrestazione.WIP=WIP;
+fprintf("\nWIP] Il Work In Process del sistema analizzato è pari a: %.10f pezzi\n",WIP);
+clear WIP
 %__MLT_____________________________________________________________________
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
 tp_min=0;
 for i=1:length(PN.P)
     for j=1:height(PN.T)
-        if any(tp(j)~=0) 
+        if IndiciPrestazione.Transizioni.TPU(j)~=0
             if PN.Pre(i,j)~=0
-            tp_min=min(PN.Pre(i,j)*tp(j));
+                tp_min=min(PN.Pre(i,j)*IndiciPrestazione.Transizioni.TPU(j));
             end
         end
     end
 end
-MLT=wip/tp_min;
-fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %s\n",duration(hours(MLT),'format','hh:mm:ss.SSSS'));
+MLT=IndiciPrestazione.WIP/tp_min;
 
+IndiciPrestazione.MLT=MLT;
+fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %s\n",duration(hours(MLT),'format','hh:mm:ss.SSSS'));
+clear i j tp_min MLT
 %__TEMPO MEDIO ATTESA______________________________________________________
 % Il tempo medio di attesa relativo al k-esimo posto è dato dal rapporto 
 % tra il numero medio di token del posto e la somma dei throughput relativi
 % alle transizioni che depositano token nel posto.
+tempo_medio_attesa=zeros(1,length(PN.P));
  for k=1:length(PN.P)
      tp_posti=0;
      for j=1:height(PN.T)
          if PN.Post(k,j)>0
-             tp_posti=tp_posti+tp(j);
+             tp_posti=tp_posti+IndiciPrestazione.Transizioni.TPU(j);
          end
      end
-     tempo_medio_attesa(k)=numero_medio_token(k)/tp_posti;
+     tempo_medio_attesa(k)=IndiciPrestazione.Posti.NumeroMedioToken(k)/tp_posti;
  end
+
+ IndiciPrestazione.Posti.TempoMedioAttesa=duration(hours(tempo_medio_attesa)).';
  fprintf("\nTMA] Il tempo medio di attesa per ogni posto è pari a:\n");
 for i=1:length(tempo_medio_attesa)
     fprintf("    %s%s%s\n",PN.P(i),repmat(' ',1,TAB-length(char(PN.P(i)))),duration(hours(tempo_medio_attesa(i)),'format','hh:mm:ss.SSSS'));
 end
+clear tp_posti k j i tempo_medio_attesa
 
 %__EFFICENZA_______________________________________________________________
 % L'efficienza di un dato macchinario è dato dalla somma delle probabilità
@@ -429,24 +452,27 @@ for i_macc=1:height(Macchinari)
             trans_temp=trans_macc(PN.T.Maschera(trans_macc)==0);
             if ~isempty(trans_macc)
                 server_totali = sum(PN.T.Server(trans_temp));
-                for i_marc=n_stati_v+1:n_stati
+                for i_marc=n.stati_v+1:n.stati
                     server_in_lavorazione=0;
                     for t=1:length(trans_temp)
                         server_in_lavorazione=server_in_lavorazione+ServerAttivati(Grafo(In(i_marc)).Iniziale,PN.T.Server(trans_temp(t)),PN.Pre(:,trans_temp(t)));
                     end
-                    eff_marc(i_marc-n_stati_v)=PI(i_marc-n_stati_v)*server_in_lavorazione/server_totali;
+                    eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/server_totali;
                 end
                 eff_mac(i_macc,:)=table(Macchinari.Macchinario(i_macc),sum(eff_marc),'VariableNames',["Macchinario","Efficenza"]);
             end
         end
     end
 end
+
 eff_mac=rmmissing(eff_mac);
+IndiciPrestazione.Macchinari=eff_mac;
 fprintf("\nEFF] L'efficenza del sistema analizzato è pari a:\n");
 for i_eff=1:height(eff_mac)
     nome=eff_mac{i_eff,1};
     fprintf("    %s%s%.4f\n",nome,repmat(' ',1,TAB-length(char(nome))),eff_mac{i_eff,2});
 end
+clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
 
  %% Functions =============================================================
 function s_a = ServerAttivati(Marcatura,MaxServer,Input)
