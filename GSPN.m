@@ -10,7 +10,7 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
-macchinari='5,6';
+macchinari='8,9,10';
 dati_PN = ['Dati/PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati/Grafo_{',macchinari,'}.mat'];
 
@@ -148,13 +148,13 @@ fprintf(" - %i stati sono vanishing;\n - %i stati sono tangible.\n\n",sum(v),len
 
 % Ordino il vettore degli stati mettendo prima quelli vanishing al fine di
 % trovare la matrice di trasformazione di base
-[v1,In]=sort(v,'descend');
+[v1,OrdineV_T]=sort(v,'descend');
 
 % Riordino la matrice U
 U_riordinata=zeros(size(U));
 for i=1:size(U,1)
     for j=1:size(U,2)
-        U_riordinata(i,j)=U(In(i),In(j));
+        U_riordinata(i,j)=U(OrdineV_T(i),OrdineV_T(j));
     end
 end
 
@@ -295,8 +295,8 @@ clear Y_sym Y_struct
 m=zeros(n.stati_t,1);
 for i=1:n.stati_t
     lambda=0;
-    for k=1:height(Grafo(In(n.stati_v+i)).Raggiungibili)
-        idMarcatura=In(n.stati_v+i);
+    for k=1:height(Grafo(OrdineV_T(n.stati_v+i)).Raggiungibili)
+        idMarcatura=OrdineV_T(n.stati_v+i);
         id_t_temp=Grafo(idMarcatura).Raggiungibili.Transizione(k);
         lambda=lambda+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
     end
@@ -307,7 +307,7 @@ fprintf("\n" + ...
     "______________________________________________________________________________\n" + ...
     "I tempi di soggiorno sono:\n")
 for i=1:length(m)
-    fprintf("Lo stato [%s] (%i) ha tempo di soggiorno: %s;\n", num2str(Grafo(i).Iniziale'),In(i),duration(hours(m(i)),'format','hh:mm:ss.SSSS'));
+    fprintf("Lo stato [%s] (%i) ha tempo di soggiorno: %s;\n", num2str(Grafo(i).Iniziale'),OrdineV_T(i),duration(hours(m(i)),'format','hh:mm:ss.SSSS'));
 end
 clear i lambda id_t_temp idMarcatura;
 
@@ -321,7 +321,7 @@ fprintf("\n" + ...
     "______________________________________________________________________________\n" + ...
     "Le probabilità a regime sono:\n")
 for i=1:length(PI)
-    fprintf("Lo stato [%s] (%i) ha probabilità a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),In(i),PI(i));
+    fprintf("Lo stato [%s] (%i) ha probabilità a regime: %.10f;\n", num2str(Grafo(i).Iniziale'),OrdineV_T(i),PI(i));
 end
 clear i
 
@@ -339,8 +339,8 @@ tp=zeros(1,height(PN.T));
 for k=1:height(PN.T)
 r=zeros(n.stati_t,1);
     for i=1+n.stati_v:(n.stati)
-        if ismember(k,Grafo(In(i)).Raggiungibili.Transizione)
-            r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(In(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
+        if ismember(k,Grafo(OrdineV_T(i)).Raggiungibili.Transizione)
+            r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(OrdineV_T(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
         end
     end
     tp(k)=sum(r.*PI);
@@ -379,7 +379,7 @@ numero_medio_token=zeros(1,length(PN.P));
 for k=1:length(PN.P)
     r=zeros(n.stati_t,1);
     for i=1+n.stati_v:(n.stati)
-        r(i-n.stati_v)=Grafo(In(i)).Iniziale(k);
+        r(i-n.stati_v)=Grafo(OrdineV_T(i)).Iniziale(k);
     end
     numero_medio_token(k)=sum(r.*PI);
 end
@@ -393,8 +393,14 @@ clear k i numero_medio_token r
 
 %__WIP_____________________________________________________________________
 % Il Work in Process è dato dalla somma del numero medio di token
-[indx,tf] = listdlg('ListString',PN.P,'SelectionMode','multiple')
-WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken);
+[indx,tf] = listdlg('ListString',PN.P,'SelectionMode','multiple');
+if tf
+    selezionati=zeros(size(PN.P));
+    selezionati(indx)=1;
+else
+    selezionati=ones(size(PN.P));
+end
+WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken.*selezionati);
 
 IndiciPrestazione.WIP=WIP;
 fprintf("\nWIP] Il Work In Process del sistema analizzato è pari a: %.10f pezzi\n",WIP);
@@ -456,7 +462,7 @@ for i_macc=1:height(Macchinari)
                 for i_marc=n.stati_v+1:n.stati
                     server_in_lavorazione=0;
                     for t=1:length(trans_temp)
-                        server_in_lavorazione=server_in_lavorazione+ServerAttivati(Grafo(In(i_marc)).Iniziale,PN.T.Server(trans_temp(t)),PN.Pre(:,trans_temp(t)));
+                        server_in_lavorazione=server_in_lavorazione+ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(trans_temp(t)),PN.Pre(:,trans_temp(t)));
                     end
                     eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/server_totali;
                 end
@@ -474,6 +480,8 @@ for i_eff=1:height(eff_mac)
     fprintf("    %s%s%.4f\n",nome,repmat(' ',1,TAB-length(char(nome))),eff_mac{i_eff,2});
 end
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
+
+save(['Dati\IndiciPrestazione_{',macchinari,'}.mat'],"IndiciPrestazione");
 
  %% Functions =============================================================
 function s_a = ServerAttivati(Marcatura,MaxServer,Input)
