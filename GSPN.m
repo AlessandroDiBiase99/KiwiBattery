@@ -393,6 +393,7 @@ clear k i numero_medio_token r
 
 %__WIP_____________________________________________________________________
 % Il Work in Process è dato dalla somma del numero medio di token
+[indx,tf] = listdlg('ListString',PN.P,'SelectionMode','multiple')
 WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken);
 
 IndiciPrestazione.WIP=WIP;
