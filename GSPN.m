@@ -10,7 +10,7 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
-macchinari='8,9,10';
+macchinari='11,12,13';
 dati_PN = ['Dati/PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati/Grafo_{',macchinari,'}.mat'];
 
@@ -23,10 +23,10 @@ PrecisioneU1 = 65;
 % sono importati nello script, assicurando di avere i nomi corretti.
 info_PN = load(dati_PN);
 PN = info_PN.PN.Ridotta;
+Macchinari         = info_PN.PN.Macchinari;
+ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
 PN.T.Rate= round(PN.T.Rate/10,1)*10;
-
-Macchinari=info_PN.PN.Macchinari;
 
 info_Grafo = load(dati_Grafo);
 Grafo=info_Grafo.Grafo;
@@ -353,6 +353,32 @@ if ismember('5',macchinari)
     
     tp(id_TP1KO)=tp(id_M5Test)*PN.T.Peso(id_TP1KO)/(PN.T.Peso(id_TP1KO)+PN.T.Peso(id_TP1OK));
     tp(id_TP1OK)=tp(id_M5Test)*PN.T.Peso(id_TP1OK)/(PN.T.Peso(id_TP1KO)+PN.T.Peso(id_TP1OK));
+    clear id_TP1KO id_M5Test id_TP1OK
+end
+% if ismember('6',macchinari)
+%     id_M6_1 = find(PN.T.Transizione=="M6_1Lavorazione");
+%     id_M6_2 = find(PN.T.Transizione=="M6_2Lavorazione");
+%     id_ScaricamentoM6 = find(PN.T.Transizione=="ScaricamentoM6");
+%     
+%     tp(id_ScaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
+% end
+if ismember('8',macchinari)
+    id_R4 = PN.T.Transizione=="R4";
+    id_R5 = PN.T.Transizione=="R5";
+    id_R6 = PN.T.Transizione=="R6";
+    id_R7 = PN.T.Transizione=="R7";
+    id_ScaricamentoM8 = PN.T.Transizione=="ScaricamentoM8";
+    
+    tp(id_ScaricamentoM8)=tp(id_R4)+tp(id_R5)+tp(id_R6)+tp(id_R7);
+    clear id_ScaricamentoM8 id_R7 id_R6 id_R5 id_R4
+end
+if ismember('9',macchinari)
+    id_M6_1 = PN.T.Transizione=="M9_1Lavorazione";
+    id_M6_2 = PN.T.Transizione=="M9_2Lavorazione";
+    id_ScaricamentoM6 = PN.T.Transizione=="ScaricamentoM9";
+    
+    tp(id_ScaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
+    clear id_ScaricamentoM6 id_M6_2 id_M6_1
 end
 if ismember('11',macchinari)
     id_TP2OK = find(PN.T.Transizione=="TP2OK");
@@ -361,6 +387,7 @@ if ismember('11',macchinari)
     
     tp(id_TP2KO)=tp(id_M11Test)*PN.T.Peso(id_TP2KO)/(PN.T.Peso(id_TP2KO)+PN.T.Peso(id_TP2OK));
     tp(id_TP2OK)=tp(id_M11Test)*PN.T.Peso(id_TP2OK)/(PN.T.Peso(id_TP2KO)+PN.T.Peso(id_TP2OK));
+    clear id_TP2KO id_M11Test id_TP2OK
 end
 
 IndiciPrestazione.Transizioni.TPU = tp.';
@@ -368,7 +395,7 @@ fprintf("\nTPU] Il throughput del sistema analizzato è pari a:\n");
 for i=1:height(PN.T)
     fprintf("    %s%s%.4f\n",PN.T.Transizione{i},repmat(' ',1,TAB-length(char(PN.T.Transizione{i}))),tp(i));
 end
-clear k i r tp id_TP1OK id_TP1KO id_M5Test id_TP2OK id_TP2KO id_M11Test
+clear k i r tp
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
 % Per ogni posto k-esimo viene calcolato il numero medio di token associato
@@ -393,14 +420,7 @@ clear k i numero_medio_token r
 
 %__WIP_____________________________________________________________________
 % Il Work in Process è dato dalla somma del numero medio di token
-[indx,tf] = listdlg('ListString',PN.P,'SelectionMode','multiple');
-if tf
-    selezionati=zeros(size(PN.P));
-    selezionati(indx)=1;
-else
-    selezionati=ones(size(PN.P));
-end
-WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken.*selezionati);
+WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken.*ImpostazioniIndici.Tabella_WIP.DaConsiderare);
 
 IndiciPrestazione.WIP=WIP;
 fprintf("\nWIP] Il Work In Process del sistema analizzato è pari a: %.10f pezzi\n",WIP);
@@ -408,17 +428,8 @@ clear WIP
 %__MLT_____________________________________________________________________
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
-tp_min=0;
-for i=1:length(PN.P)
-    for j=1:height(PN.T)
-        if IndiciPrestazione.Transizioni.TPU(j)~=0
-            if PN.Pre(i,j)~=0
-                tp_min=min(PN.Pre(i,j)*IndiciPrestazione.Transizioni.TPU(j));
-            end
-        end
-    end
-end
-MLT=IndiciPrestazione.WIP/tp_min;
+TPU_Sistema=PN.T.Rate(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
+MLT=IndiciPrestazione.WIP/TPU_Sistema;
 
 IndiciPrestazione.MLT=MLT;
 fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %s\n",duration(hours(MLT),'format','hh:mm:ss.SSSS'));
@@ -449,27 +460,37 @@ clear tp_posti k j i tempo_medio_attesa
 % L'efficienza di un dato macchinario è dato dalla somma delle probabilità
 % a regime di ciascuna marcatura moltiplicate per il rapporto tra il numero
 % di server in lavorazione e i server totali.
-for i_macc=1:height(Macchinari)
-    if Macchinari.DaAnalizzare(i_macc)
-        posti_macc=Macchinari.Posti{i_macc};
-        trans_macc=Macchinari.Transizioni{i_macc};
-        if ~isempty(trans_macc)
-            trans_macc=mod(find(trans_macc==PN.T.Transizione),height(PN.T));
-            trans_macc=trans_macc(trans_macc~=0);
-            trans_temp=trans_macc(PN.T.Maschera(trans_macc)==0);
-            if ~isempty(trans_macc)
-                server_totali = sum(PN.T.Server(trans_temp));
-                for i_marc=n.stati_v+1:n.stati
-                    server_in_lavorazione=0;
-                    for t=1:length(trans_temp)
-                        server_in_lavorazione=server_in_lavorazione+ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(trans_temp(t)),PN.Pre(:,trans_temp(t)));
-                    end
-                    eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/server_totali;
-                end
-                eff_mac(i_macc,:)=table(Macchinari.Macchinario(i_macc),sum(eff_marc),'VariableNames',["Macchinario","Efficenza"]);
-            end
-        end
+% for i_macc=1:height(Macchinari)
+%     if Macchinari.DaAnalizzare(i_macc)
+%         posti_macc=Macchinari.Posti{i_macc};
+%         trans_macc=Macchinari.Transizioni{i_macc};
+%         if ~isempty(trans_macc)
+%             trans_macc=mod(find(trans_macc==PN.T.Transizione),height(PN.T));
+%             trans_macc=trans_macc(trans_macc~=0);
+%             trans_temp=trans_macc(PN.T.Maschera(trans_macc)==0);
+%             if ~isempty(trans_macc)
+%                 server_totali = sum(PN.T.Server(trans_temp));
+%                 for i_marc=n.stati_v+1:n.stati
+%                     server_in_lavorazione=0;
+%                     for t=1:length(trans_temp)
+%                         server_in_lavorazione=server_in_lavorazione+ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(trans_temp(t)),PN.Pre(:,trans_temp(t)));
+%                     end
+%                     eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/server_totali;
+%                 end
+%                 eff_mac(i_macc,:)=table(Macchinari.Macchinario(i_macc),sum(eff_marc),'VariableNames',["Macchinario","Efficenza"]);
+%             end
+%         end
+%     end
+% end
+
+for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
+    id_t=find(PN.T.Transizione==ImpostazioniIndici.Tabella_EFF.Transizione(i_macc));
+    for i_marc=n.stati_v+1:n.stati
+        server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t));
+        eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/PN.T.Server(id_t);
     end
+    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Macchinario(i_macc),sum(eff_marc),'VariableNames',["Macchinario","Efficenza"]);
+    clear eff_marc;
 end
 
 eff_mac=rmmissing(eff_mac);
