@@ -10,7 +10,7 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
-macchinari='11,12,13';
+macchinari='8,9,10';
 dati_PN = ['Dati/PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati/Grafo_{',macchinari,'}.mat'];
 
@@ -428,10 +428,10 @@ clear WIP
 %__MLT_____________________________________________________________________
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
-TPU_Sistema=PN.T.Rate(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
+TPU_Sistema=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
 MLT=IndiciPrestazione.WIP/TPU_Sistema;
 
-IndiciPrestazione.MLT=MLT;
+IndiciPrestazione.MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
 fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %s\n",duration(hours(MLT),'format','hh:mm:ss.SSSS'));
 clear i j tp_min MLT
 %__TEMPO MEDIO ATTESA______________________________________________________
@@ -443,7 +443,7 @@ tempo_medio_attesa=zeros(1,length(PN.P));
      tp_posti=0;
      for j=1:height(PN.T)
          if PN.Post(k,j)>0
-             tp_posti=tp_posti+IndiciPrestazione.Transizioni.TPU(j);
+             tp_posti=tp_posti+IndiciPrestazione.Transizioni.TPU(j)*PN.Post(k,j);
          end
      end
      tempo_medio_attesa(k)=IndiciPrestazione.Posti.NumeroMedioToken(k)/tp_posti;
