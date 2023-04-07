@@ -125,6 +125,11 @@ for i=1:n.stati
             end
         end
     end
+    if all(U(i,:)==0)
+        % Caso di deadlock
+        fprintf("Deadlock con la marcatura %i.\n",i);
+        U(i,i)=1;
+    end
 end
 
 % Le variabili di appoggio possono ora essere eliminate
