@@ -10,7 +10,7 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
-macchinari='8,9,10';
+macchinari='5,6';
 dati_PN = ['Dati/PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati/Grafo_{',macchinari,'}.mat'];
 
@@ -360,13 +360,13 @@ if ismember('5',macchinari)
     tp(id_TP1OK)=tp(id_M5Test)*PN.T.Peso(id_TP1OK)/(PN.T.Peso(id_TP1KO)+PN.T.Peso(id_TP1OK));
     clear id_TP1KO id_M5Test id_TP1OK
 end
-% if ismember('6',macchinari)
-%     id_M6_1 = find(PN.T.Transizione=="M6_1Lavorazione");
-%     id_M6_2 = find(PN.T.Transizione=="M6_2Lavorazione");
-%     id_ScaricamentoM6 = find(PN.T.Transizione=="ScaricamentoM6");
-%     
-%     tp(id_ScaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
-% end
+if ismember('6',macchinari)
+    id_M6_1 = find(PN.T.Transizione=="M6_1Lavorazione");
+    id_M6_2 = find(PN.T.Transizione=="M6_2Lavorazione");
+    id_ScaricamentoM6 = find(PN.T.Transizione=="ScaricamentoM6");
+    
+    tp(id_ScaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
+end
 if ismember('8',macchinari)
     id_R4 = PN.T.Transizione=="R4";
     id_R5 = PN.T.Transizione=="R5";
@@ -433,8 +433,8 @@ clear WIP
 %__MLT_____________________________________________________________________
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
-TPU_Sistema=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
-MLT=IndiciPrestazione.WIP/TPU_Sistema;
+IndiciPrestazione.TPU_Sistema=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
+MLT=IndiciPrestazione.WIP/IndiciPrestazione.TPU_Sistema;
 
 IndiciPrestazione.MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
 fprintf("\nMLT] Il Manifacturing Lead Time del sistema analizzato è pari a: %s\n",duration(hours(MLT),'format','hh:mm:ss.SSSS'));
