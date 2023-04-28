@@ -10,7 +10,7 @@ addpath("Functions")
 
 %% PARAMETRI ==============================================================
 % Nome del file generato con GestoreAnalisiPN da caricare
-macchinari='5,6';
+macchinari='1,2,3,4';
 dati_PN = ['Dati/PN_{',macchinari,'}.mat'];
 dati_Grafo = ['Dati/Grafo_{',macchinari,'}.mat'];
 
@@ -23,7 +23,7 @@ PrecisioneU1 = 65;
 % sono importati nello script, assicurando di avere i nomi corretti.
 info_PN = load(dati_PN);
 PN = info_PN.PN.Ridotta;
-Macchinari         = info_PN.PN.Macchinari;
+Macchinari         = info_PN.PN.Gruppi;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
 PN.T.Rate= round(PN.T.Rate/10,1)*10;
@@ -350,21 +350,67 @@ r=zeros(n.stati_t,1);
     end
     tp(k)=sum(r.*PI);
 end
-
+if ismember('1',macchinari)
+    id_CaricamentoM1 = find(PN.T.Transizione=="CaricamentoM1");
+    id_LavorazioneM1 = find(PN.T.Transizione=="M1Lavorazione");
+    id_ScaricamentoM1 = find(PN.T.Transizione=="ScaricamentoM1");
+    
+    tp(id_CaricamentoM1)=tp(id_LavorazioneM1);
+    tp(id_ScaricamentoM1)=tp(id_LavorazioneM1);
+    clear id_CaricamentoM1 id_M1Lavorazione id_ScaricamentoM1
+end
+if ismember('2',macchinari)
+    id_CaricamentoInfM2 = find(PN.T.Transizione=="CaricamentoInferioreM2");
+    id_CaricamentoSupM2 = find(PN.T.Transizione=="CaricamentoSuperioreM2");
+    id_LavorazioneM2 = find(PN.T.Transizione=="M2Lavorazione");
+    id_ScaricamentoM2 = find(PN.T.Transizione=="IndietreggiamentoPistone1");
+    
+    tp(id_CaricamentoInfM2)=tp(id_LavorazioneM2);
+    tp(id_CaricamentoSupM2)=tp(id_LavorazioneM2);
+    tp(id_ScaricamentoM2)=tp(id_LavorazioneM2);
+    clear id_CaricamentoInfM2 id_CaricamentoSupM2 id_M2Lavorazione id_ScaricamentoM2
+end
+if ismember('3',macchinari)
+    id_CaricamentoM3 = find(PN.T.Transizione=="CaricamentoM3");
+    id_LavorazioneM3 = find(PN.T.Transizione=="M3Lavorazione");
+    id_ScaricamentoM3 = find(PN.T.Transizione=="ScaricamentoM3");
+    
+    tp(id_CaricamentoM3)=tp(id_LavorazioneM3);
+    tp(id_ScaricamentoM3)=tp(id_LavorazioneM3);
+    clear id_CaricamentoM3 id_M3Lavorazione id_ScaricamentoM3
+end
+if ismember('4',macchinari)
+    id_CaricamentoInfM4 = find(PN.T.Transizione=="CaricamentoBatteriaM4");
+    id_CaricamentoSupM4 = find(PN.T.Transizione=="CaricamentoIndicatoreM4");
+    id_LavorazioneM4 = find(PN.T.Transizione=="M4Lavorazione");
+    id_ScaricamentoM4 = find(PN.T.Transizione=="ScaricamentoM4");
+    
+    tp(id_CaricamentoInfM4)=tp(id_LavorazioneM4);
+    tp(id_CaricamentoSupM4)=tp(id_LavorazioneM4);
+    tp(id_ScaricamentoM4)=tp(id_LavorazioneM4);
+    clear id_CaricamentoInfM4 id_CaricamentoSupM4 id_M4Lavorazione id_ScaricamentoM4
+end
 if ismember('5',macchinari)
+    id_CaricamentoM5 = find(PN.T.Transizione=="CaricamentoM5");
     id_TP1OK = find(PN.T.Transizione=="TP1OK");
     id_TP1KO = find(PN.T.Transizione=="TP1KO");
     id_M5Test = find(PN.T.Transizione=="M5Test");
     
+    tp(id_CaricamentoM5)=tp(id_M5Test);
     tp(id_TP1KO)=tp(id_M5Test)*PN.T.Peso(id_TP1KO)/(PN.T.Peso(id_TP1KO)+PN.T.Peso(id_TP1OK));
     tp(id_TP1OK)=tp(id_M5Test)*PN.T.Peso(id_TP1OK)/(PN.T.Peso(id_TP1KO)+PN.T.Peso(id_TP1OK));
     clear id_TP1KO id_M5Test id_TP1OK
 end
 if ismember('6',macchinari)
+    id_CaricamentoM6 = find(PN.T.Transizione=="CaricamentoM6");
+    id_APM6I1 = find(PN.T.Transizione=="APM6I_1");
+    id_APM6I2 = find(PN.T.Transizione=="APM6I_2");
     id_M6_1 = find(PN.T.Transizione=="M6_1Lavorazione");
     id_M6_2 = find(PN.T.Transizione=="M6_2Lavorazione");
     id_ScaricamentoM6 = find(PN.T.Transizione=="ScaricamentoM6");
-    
+    tp(id_APM6I1)=tp(id_M6_1);
+    tp(id_APM6I2)=tp(id_M6_2);
+    tp(id_CaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
     tp(id_ScaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
 end
 if ismember('8',macchinari)
@@ -494,7 +540,7 @@ for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
         server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t));
         eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/PN.T.Server(id_t);
     end
-    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Macchinario(i_macc),sum(eff_marc),'VariableNames',["Macchinario","Efficenza"]);
+    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),sum(eff_marc),'VariableNames',["Macchinario","Efficenza"]);
     clear eff_marc;
 end
 
@@ -508,14 +554,6 @@ end
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
 
 save(['Dati\IndiciPrestazione_{',macchinari,'}.mat'],"IndiciPrestazione");
-
- %% Functions =============================================================
-function s_a = ServerAttivati(Marcatura,MaxServer,Input)
-    s_a = min(Marcatura./Input);
-    if s_a>MaxServer
-        s_a=MaxServer;
-    end
-end
 
 
 

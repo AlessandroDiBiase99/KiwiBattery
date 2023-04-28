@@ -2,7 +2,7 @@ clear all;
 clc;
 addpath("Dati\");
 
-macchinari='11,12,13';
+macchinari='1,2,3,4';
 
 load(['IndiciPrestazione_{',macchinari,'}'],'IndiciPrestazione')
 
