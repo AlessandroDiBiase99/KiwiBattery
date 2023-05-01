@@ -1,13 +1,9 @@
-function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,MAX_throughput)
+function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,MAX_TPU_IN,MAX_TPU_OUT)
 %% PARAMETRI ==============================================================
 info_PN = load(['Dati/PN_{',macchinari,'}.mat']);
 PN = info_PN.PN.Ridotta;
 Macchinari         = info_PN.PN.Gruppi;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
-PN.T.Rate = round(PN.T.Rate/10,1)*10;
-RATE_SALVATI = PN.T.Rate;
-
-PN.T.Rate(PN.T.Rate>MAX_throughput) = MAX_throughput;
 PN.T.Rate = round(PN.T.Rate/10,1)*10;
 
 clear info_PN;
@@ -242,12 +238,33 @@ r=zeros(n.stati_t,1);
     end
     tp(k)=sum(r.*PI);
 end
-
 tp=SistemaThroughput(tp,macchinari,PN);
 
-IndiciPrestazione.Transizioni.TPU = tp.';
+IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
+switch string(macchinari)
+    case "1,2,3,4"
+        temp = "CaricamentoM1";
+    case "5,6"
+        temp = "CaricamentoM5";
+    case "8,9,10"
+        temp="CaricamentoM8";
+    case "11,12,13"
+        temp="CaricamentoM11";
+end
+IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==temp);
 
-clear k i r tp
+if IndiciPrestazione.TPU_OUT > MAX_TPU_OUT
+    tp=tp*MAX_TPU_OUT/IndiciPrestazione.TPU_OUT;
+end
+if IndiciPrestazione.TPU_IN > MAX_TPU_IN
+    tp=tp*MAX_TPU_IN/IndiciPrestazione.TPU_IN;
+end
+
+IndiciPrestazione.Transizioni.TPU = tp.';
+IndiciPrestazione.TPU_OUT=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
+IndiciPrestazione.TPU_IN=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==temp);
+
+clear temp k i r tp
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
 % Per ogni posto k-esimo viene calcolato il numero medio di token associato
@@ -277,20 +294,6 @@ clear WIP
 %__MLT_____________________________________________________________________
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
-
-IndiciPrestazione.TPU_OUT=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
-switch string(macchinari)
-    case "1,2,3,4"
-        temp = "CaricamentoM1";
-    case "5,6"
-        temp = "CaricamentoM5";
-    case "8,9,10"
-        temp="CaricamentoM8";
-    case "11,12,13"
-        temp="CaricamentoM11";
-end
-IndiciPrestazione.TPU_IN=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==temp);
-clear temp;
 MLT=IndiciPrestazione.WIP/IndiciPrestazione.TPU_OUT;
 
 IndiciPrestazione.MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
@@ -317,8 +320,6 @@ IndiciPrestazione.Posti.TempoMedioAttesa=duration(hours(tempo_medio_attesa)).';
 clear tp_posti k j i tempo_medio_attesa
 
 %__EFFICENZA_______________________________________________________________
-PN.T.Rate=RATE_SALVATI;
-
 for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     id_t=find(PN.T.Transizione==ImpostazioniIndici.Tabella_EFF.Transizione(i_macc));
     for i_marc=n.stati_v+1:n.stati

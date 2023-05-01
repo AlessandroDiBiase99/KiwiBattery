@@ -55,7 +55,7 @@ if ismember('5',macchinari)
     clear id_TP1KO id_M5Test id_TP1OK
 end
 if ismember('6',macchinari)
-    id_CaricamentoM6 = PN.T.Transizione=="CaricamentoM6";
+    id_CaricamentoM6 = PN.T.Transizione=="CaricamentoNM6";
     id_ANM6I = PN.T.Transizione=="A_NM6I";
     id_ANM6O = PN.T.Transizione=="A_NM6O";
     id_APM6I1 = PN.T.Transizione=="APM6I_1";
@@ -91,7 +91,7 @@ if ismember('8',macchinari)
     clear id_ScaricamentoM8 id_R7 id_R6 id_R5 id_R4
 end
 if ismember('9',macchinari)
-    id_CaricamentoM9 = PN.T.Transizione=="CaricamentoM9";
+    id_CaricamentoM9 = PN.T.Transizione=="CaricamentoNM9";
     id_ANM9I = PN.T.Transizione=="A_NM9I";
     id_ANM9O = PN.T.Transizione=="A_NM9O";
     id_APM9I1 = PN.T.Transizione=="APM9I_1";
