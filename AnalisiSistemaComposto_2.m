@@ -3,7 +3,7 @@ close all;
 clearvars;
 clear global;
 clc;
-addpath('Functions')
+addpath('Functions');
 
 TAB = 27;
 Precisione.U  = 65;
@@ -11,13 +11,13 @@ Precisione.U1 = 65;
 
 %% CALCOLO INDICI DI PRESTAZIONE
 fprintf("Gruppo 1 ->\n");
-IP1 = AnalizzaSistema( '1,2,3,4',Precisione,       +inf,+inf);
+IP1 = AnalizzaSistema_2( '1,2,3,4',Precisione,0);
 fprintf("-> Gruppo 2 ->\n");
-IP2 = AnalizzaSistema(     '5,6',Precisione,IP1.TPU_OUT,+inf);
+IP2 = AnalizzaSistema_2(     '5,6',Precisione,IP1.TPU_OUT);
 fprintf("-> Gruppo 3 ->\n");
-IP3 = AnalizzaSistema(  '8,9,10',Precisione,IP2.TPU_OUT,+inf);
+IP3 = AnalizzaSistema_2(  '8,9,10',Precisione,IP2.TPU_OUT);
 fprintf("-> Gruppo 4\n");
-IP4 = AnalizzaSistema('11,12,13',Precisione,IP3.TPU_OUT,+inf);
+IP4 = AnalizzaSistema_2('11,12,13',Precisione,IP3.TPU_OUT);
 
 fprintf("%f -> 1,2,3,4 ->%f\n " ,IP1.TPU_IN,IP1.TPU_OUT);
 fprintf("%f -> 5,6 ->%f\n "     ,IP2.TPU_IN,IP2.TPU_OUT);
@@ -26,15 +26,15 @@ fprintf("%f -> 11,12,13 ->%f\n\n ",IP4.TPU_IN,IP4.TPU_OUT);
 
 if IP4.TPU_IN < IP3.TPU_OUT 
     fprintf("<- Gruppo 3 <-\n");
-    IP3 = AnalizzaSistema(  '8,9,10',Precisione,+inf, IP4.TPU_IN);
+    IP3 = AnalizzaSistema_2(  '8,9,10',Precisione);
 end
 if IP3.TPU_IN < IP2.TPU_OUT
     fprintf("<- Gruppo 2 <-\n");
-    IP2 = AnalizzaSistema(     '5,6',Precisione,+inf, IP3.TPU_IN);
+    IP2 = AnalizzaSistema_2(     '5,6',Precisione);
 end
 if IP2.TPU_IN < IP1.TPU_OUT
     fprintf("Gruppo 1 <-\n");
-    IP1 = AnalizzaSistema( '1,2,3,4',Precisione,+inf, IP2.TPU_IN);
+    IP1 = AnalizzaSistema_2( '1,2,3,4',Precisione);
 end
 
 clear Precisione

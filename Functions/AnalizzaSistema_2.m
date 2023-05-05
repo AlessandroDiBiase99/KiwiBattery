@@ -1,6 +1,6 @@
-function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,MAX_TPU_IN,MAX_TPU_OUT)
+function IndiciPrestazione = AnalizzaSistema_2(macchinari,Precisione,TPU_INPUT)
 %% PARAMETRI ==============================================================
-info_PN = load(['Dati/PN_{',macchinari,'}.mat']);
+info_PN = load(['Dati_2/PN_{',macchinari,'}_ECong.mat']);
 PN = info_PN.PN.Ridotta;
 Macchinari         = info_PN.PN.Gruppi;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
@@ -8,7 +8,7 @@ PN.T.Rate = round(PN.T.Rate/10,1)*10;
 
 clear info_PN;
 
-info_Grafo = load(['Dati/Grafo_{',macchinari,'}.mat']);
+info_Grafo = load(['Dati_2/Grafo_{',macchinari,'}_ECong.mat']);
 Grafo=info_Grafo.Grafo;
 clear info_Grafo;
 
@@ -246,19 +246,15 @@ switch string(macchinari)
         temp = "CaricamentoM1";
     case "5,6"
         temp = "CaricamentoM5";
+        tp(PN.T.Transizione=="ScaricamentoM4")=TPU_INPUT;
     case "8,9,10"
         temp="CaricamentoM8";
+        tp(PN.T.Transizione=="ScaricamentoM7")=TPU_INPUT;
     case "11,12,13"
         temp="CaricamentoM11";
+        tp(PN.T.Transizione=="IndietreggiamentoPistone2")=TPU_INPUT;
 end
 IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==temp);
-
-if IndiciPrestazione.TPU_OUT > MAX_TPU_OUT
-    tp=tp*MAX_TPU_OUT/IndiciPrestazione.TPU_OUT;
-end
-if IndiciPrestazione.TPU_IN > MAX_TPU_IN
-    tp=tp*MAX_TPU_IN/IndiciPrestazione.TPU_IN;
-end
 
 IndiciPrestazione.Transizioni.TPU = tp.';
 IndiciPrestazione.TPU_OUT=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
@@ -336,7 +332,7 @@ IndiciPrestazione.Macchinari=eff_mac;
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
 
 %% SALVATAGGIO
-save(['Dati\IndiciPrestazione_{',macchinari,'}.mat'],"IndiciPrestazione");
+save(['Dati_2\IndiciPrestazione_{',macchinari,'}.mat'],"IndiciPrestazione");
 
 end
 
