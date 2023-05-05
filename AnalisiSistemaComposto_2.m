@@ -10,10 +10,11 @@ Precisione.U  = 65;
 Precisione.U1 = 65;
 
 %% CALCOLO INDICI DI PRESTAZIONE
-fprintf("Gruppo 1 ->\n");
-IP1 = AnalizzaSistema_2( '1,2,3,4',Precisione,0);
-fprintf("-> Gruppo 2 ->\n");
-IP2 = AnalizzaSistema_2(     '5,6',Precisione,IP1.TPU_OUT);
+% fprintf("Gruppo 1 ->\n");
+% IP1 = AnalizzaSistema_2( '1,2,3,4',Precisione,0);
+% fprintf("-> Gruppo 2 ->\n");
+% IP2 = AnalizzaSistema_2(     '5,6',Precisione,IP1.TPU_OUT);
+IP2.TPU_OUT=256;
 fprintf("-> Gruppo 3 ->\n");
 IP3 = AnalizzaSistema_2(  '8,9,10',Precisione,IP2.TPU_OUT);
 fprintf("-> Gruppo 4\n");
