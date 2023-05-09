@@ -1,6 +1,6 @@
 function M = VerificaStocastica(M,Precisione)
 
-M=round(M,Precisione);  
+M = M + (M-round(M,Precisione));  
 
 Ricalcolo_M = table(-1,{-1},'VariableNames',["SUM" "Riga"]);
 Errore_M    = [];
@@ -8,7 +8,7 @@ Errore_M    = [];
 for i=1:size(M,1)
     sum_= sum(M(i,:));
     if sum_~=1
-        primo_non_vuoto=find(M(i,:)~=0 & M(i,:)>sum(M(i,:))-1,1);
+        primo_non_vuoto=find(M(i,:)~=0,1);%& M(i,:)>sum(M(i,:))-1,1);
         M(i,primo_non_vuoto)=0;
         M(i,primo_non_vuoto)=1-sum(M(i,:));
         id=find(sum_==Ricalcolo_M.SUM);

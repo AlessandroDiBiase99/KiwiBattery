@@ -6,17 +6,18 @@ clc;
 addpath('Functions')
 
 TAB = 27;
-Precisione.U  = 65;
-Precisione.U1 = 65;
+Precisione.U  = 80;
+Precisione.U1 = 80;
+digits(70);
 soglia=0.9;
 
 %% CALCOLO INDICI DI PRESTAZIONE
 fprintf("Gruppo 1 ->\n");
-IP1 = AnalizzaSistema( 'P1',Precisione,       +inf,+inf);
+IP1 = AnalizzaSistema('P1',Precisione,       +inf,+inf);
 fprintf("-> Gruppo 2 ->\n");
-IP2 = AnalizzaSistema(     'P2',Precisione,IP1.TPU_OUT,+inf);
+IP2 = AnalizzaSistema('P2',Precisione,IP1.TPU_OUT,+inf);
 fprintf("-> Gruppo 3 ->\n");
-IP3 = AnalizzaSistema(  'P3',Precisione,IP2.TPU_OUT,+inf);
+IP3 = AnalizzaSistema('P3',Precisione,IP2.TPU_OUT,+inf);
 fprintf("-> Gruppo 4\n");
 IP4 = AnalizzaSistema('P4',Precisione,IP3.TPU_OUT,+inf);
 fprintf("-> Gruppo 5\n");
@@ -24,26 +25,26 @@ IP4 = AnalizzaSistema('P5',Precisione,IP4.TPU_OUT,+inf);
 
 fprintf("%f -> 1,2,3,4 ->%f\n " ,IP1.TPU_IN,IP1.TPU_OUT);
 fprintf("%f -> 5,6 ->%f\n "     ,IP2.TPU_IN,IP2.TPU_OUT);
-fprintf("%f -> 7 ->%f\n "  ,IP3.TPU_IN,IP3.TPU_OUT);
-fprintf("%f -> 8,9 ->%f\n "  ,IP4.TPU_IN,IP4.TPU_OUT);
+fprintf("%f -> 7 ->%f\n "       ,IP3.TPU_IN,IP3.TPU_OUT);
+fprintf("%f -> 8,9 ->%f\n "     ,IP4.TPU_IN,IP4.TPU_OUT);
 fprintf("%f -> 10,11,12,13 ->%f\n\n ",IP5.TPU_IN,IP5.TPU_OUT);
 
 if IP5.TPU_IN < soglia*IP4.TPU_OUT 
     fprintf("<- Gruppo 4 <-\n");
-    IP4 = AnalizzaSistema(  'P4',Precisione,+inf, IP5.TPU_IN);
+    IP4 = AnalizzaSistema('P4',Precisione,1000, IP5.TPU_IN);
 end
 
 if IP4.TPU_IN < soglia*IP3.TPU_OUT 
     fprintf("<- Gruppo 3 <-\n");
-    IP3 = AnalizzaSistema(  'P3',Precisione,+inf, IP4.TPU_IN);
+    IP3 = AnalizzaSistema('P3',Precisione,1000, IP4.TPU_IN);
 end
 if IP3.TPU_IN < soglia*IP2.TPU_OUT
     fprintf("<- Gruppo 2 <-\n");
-    IP2 = AnalizzaSistema(     'P2',Precisione,+inf, IP3.TPU_IN);
+    IP2 = AnalizzaSistema('P2',Precisione,1000, IP3.TPU_IN);
 end
 if IP2.TPU_IN < soglia*IP1.TPU_OUT
     fprintf("Gruppo 1 <-\n");
-    IP1 = AnalizzaSistema( 'P1',Precisione,+inf, IP2.TPU_IN);
+    IP1 = AnalizzaSistema('P1',Precisione,1000, IP2.TPU_IN);
 end
 stampa="Il rapporto tra througput in ingresso al macchinario 5 e throughput in output al macchinario 4 è uguale a:";
 disp(stampa, IP5.TPU_IN/IP4.TPU.OUT*100);

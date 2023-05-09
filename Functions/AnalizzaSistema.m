@@ -1,14 +1,13 @@
 function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,RATE_IN,RATE_OUT)
 %% PARAMETRI ==============================================================
-info_PN = load(['Dati/PN_',macchinari,'.mat']);
+info_PN = load(['Parti_v1/PN_',macchinari,'.mat']);
 PN = info_PN.PN.Ridotta;
 Macchinari         = info_PN.PN.Gruppi;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
-PN.T.Rate = round(PN.T.Rate/10,1)*10;
 
 clear info_PN;
 
-info_Grafo = load(['Dati/Grafo_',macchinari,'.mat']);
+info_Grafo = load(['Parti_v1/Grafo_',macchinari,'.mat']);
 Grafo=info_Grafo.Grafo;
 clear info_Grafo;
 
@@ -29,7 +28,7 @@ switch string(macchinari)
     PN.T.rate(PN.T.Transizione=="ScaricamentoP4")=RATE_IN;
 end
 
-
+PN.T.Rate = round(PN.T.Rate/10,1)*10;
 
 % Il numero di marcature
 n.stati=size(Grafo,2);
@@ -261,14 +260,16 @@ tp=SistemaThroughput(tp,macchinari,PN);
 
 IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
 switch string(macchinari)
-    case "1,2,3,4"
+    case "P1"
         temp = "CaricamentoM1";
-    case "5,6"
+    case "P2"
         temp = "CaricamentoM5";
-    case "8,9,10"
-        temp="CaricamentoM8";
-    case "11,12,13"
-        temp="CaricamentoM11";
+    case "P3"
+        temp = "CaricamentoM7";
+    case "P4"
+        temp = "CaricamentoM8";
+    case "P5"
+        temp="CaricamentoM10";
 end
 IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==temp);
 
