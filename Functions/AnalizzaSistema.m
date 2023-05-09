@@ -1,6 +1,6 @@
-function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,MAX_TPU_IN,MAX_TPU_OUT)
+function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,RATE_IN,RATE_OUT)
 %% PARAMETRI ==============================================================
-info_PN = load(['Dati/PN_{',macchinari,'}.mat']);
+info_PN = load(['Dati/PN_',macchinari,'.mat']);
 PN = info_PN.PN.Ridotta;
 Macchinari         = info_PN.PN.Gruppi;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
@@ -8,9 +8,28 @@ PN.T.Rate = round(PN.T.Rate/10,1)*10;
 
 clear info_PN;
 
-info_Grafo = load(['Dati/Grafo_{',macchinari,'}.mat']);
+info_Grafo = load(['Dati/Grafo_',macchinari,'.mat']);
 Grafo=info_Grafo.Grafo;
 clear info_Grafo;
+
+switch string(macchinari)
+    case "P1"
+    %Il rate della transizione "OUTPUT" deve essere uguale al RATE_OUT
+    PN.T.rate(PN.T.Transizione=="ScaricamentoM4")=RATE_OUT;
+    case "P2"
+    PN.T.rate(PN.T.Transizione=="ScaricamentoP1")=RATE_IN;
+    PN.T.rate(PN.T.Transizione=="ScaricamentoM6")=RATE_OUT;
+    case "P3"
+    PN.T.rate(PN.T.Transizione=="ScaricamentoP2")=RATE_IN;
+    PN.T.rate(PN.T.Transizione=="ScaricamentoM7")=RATE_OUT;
+    case "P4"
+    PN.T.rate(PN.T.Transizione=="ScaricamentoP3")=RATE_IN;
+    PN.T.rate(PN.T.Transizione=="ScaricamentoM9")=RATE_OUT;
+    case "P5"
+    PN.T.rate(PN.T.Transizione=="ScaricamentoP4")=RATE_IN;
+end
+
+
 
 % Il numero di marcature
 n.stati=size(Grafo,2);
@@ -253,17 +272,8 @@ switch string(macchinari)
 end
 IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==temp);
 
-if IndiciPrestazione.TPU_OUT > MAX_TPU_OUT
-    tp=tp*MAX_TPU_OUT/IndiciPrestazione.TPU_OUT;
-end
-if IndiciPrestazione.TPU_IN > MAX_TPU_IN
-    tp=tp*MAX_TPU_IN/IndiciPrestazione.TPU_IN;
-end
 
 IndiciPrestazione.Transizioni.TPU = tp.';
-IndiciPrestazione.TPU_OUT=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
-IndiciPrestazione.TPU_IN=IndiciPrestazione.Transizioni.TPU(PN.T.Transizione==temp);
-
 clear temp k i r tp
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
