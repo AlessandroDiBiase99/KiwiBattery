@@ -1,7 +1,11 @@
 function M = VerificaStocastica(M,Precisione)
-
-M = M + (M-round(M,Precisione));  
-
+%M = round(M,Precisione);
+%M = M + (M-round(M,Precisione));
+for i=1:size(M,1)
+    for j=1:size(M,2)
+        M(i,j)=floor(round(M(i,j),Precisione)*10^Precisione)/10^Precisione;
+    end
+end
 Ricalcolo_M = table(-1,{-1},'VariableNames',["SUM" "Riga"]);
 Errore_M    = [];
 
@@ -23,12 +27,12 @@ for i=1:size(M,1)
     end
 end
 if height(Ricalcolo_M)>1
-    fprintf("!=== ATTENZIONE ===!\nEseguite le correzioni automatiche dell'arrotondamento:\n");
+    fprintf("____!=== ATTENZIONE ===!____\n| Eseguite le correzioni automatiche dell'arrotondamento:\n");
     Ricalcolo_M=Ricalcolo_M(2:end,:);
     for i=1:height(Ricalcolo_M)
-        fprintf("Sommatoria ottenuta: %1$.*2$f sulle righe: %3$s\n",Ricalcolo_M.SUM(i),Precisione,array2string(Ricalcolo_M.Riga{i}));
+        fprintf("| Sommatoria ottenuta: %1$.*2$f sulle righe: %3$s\n",Ricalcolo_M.SUM(i),Precisione,array2string(Ricalcolo_M.Riga{i}));
     end
-    fprintf("\n");
+    fprintf("|--------------------------------\n\n");
 end
 if ~isempty(Errore_M)
     fprintf("!=== ERRORE ===!\nLa precisione specificata è troppo elevata. Si suggerisce di abbassarla. Righe:%s\n\n",array2string(Errore_M));

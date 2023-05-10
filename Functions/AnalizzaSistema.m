@@ -14,21 +14,21 @@ clear info_Grafo;
 switch string(macchinari)
     case "P1"
     %Il rate della transizione "OUTPUT" deve essere uguale al RATE_OUT
-    PN.T.rate(PN.T.Transizione=="ScaricamentoM4")=RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM4")=RATE_OUT;
     case "P2"
-    PN.T.rate(PN.T.Transizione=="ScaricamentoP1")=RATE_IN;
-    PN.T.rate(PN.T.Transizione=="ScaricamentoM6")=RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP1")=RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM6")=RATE_OUT;
     case "P3"
-    PN.T.rate(PN.T.Transizione=="ScaricamentoP2")=RATE_IN;
-    PN.T.rate(PN.T.Transizione=="ScaricamentoM7")=RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP2")=RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM7")=RATE_OUT;
     case "P4"
-    PN.T.rate(PN.T.Transizione=="ScaricamentoP3")=RATE_IN;
-    PN.T.rate(PN.T.Transizione=="ScaricamentoM9")=RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP3")=RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM9")=RATE_OUT;
     case "P5"
-    PN.T.rate(PN.T.Transizione=="ScaricamentoP4")=RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP4")=RATE_IN;
 end
 
-PN.T.Rate = round(PN.T.Rate/10,1)*10;
+PN.T.Rate = round(PN.T.Rate,-1);
 
 % Il numero di marcature
 n.stati=size(Grafo,2);
@@ -256,7 +256,19 @@ r=zeros(n.stati_t,1);
     end
     tp(k)=sum(r.*PI);
 end
-tp=SistemaThroughput(tp,macchinari,PN);
+switch string(macchinari)
+    case "P1"
+        macc = '1,2,3,4';
+    case "P2"
+        macc = '5,6';
+    case "P3"
+        macc = '7';
+    case "P4"
+        macc = '8,9';
+    case "P5"
+        macc = '10,11,12,13';
+end
+tp=SistemaThroughput(tp,macc,PN);
 
 IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
 switch string(macchinari)

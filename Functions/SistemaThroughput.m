@@ -75,6 +75,15 @@ if ismember('6',macchinari)
     tp(id_CaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
     tp(id_ScaricamentoM6)=tp(id_M6_1)+tp(id_M6_2);
 end
+if ismember('7',macchinari)
+    id_M7Car = PN.T.Transizione=="CaricamentoM7";
+    id_M7Lav = PN.T.Transizione=="FormazioneBatterie";
+    id_M7Sca = PN.T.Transizione=="ScaricamentoM7";
+
+    tp(id_M7Car)=tp(id_M7Lav);
+    tp(id_M7Sca)=tp(id_M7Lav);
+end
+
 if ismember('8',macchinari)
     id_CaricamentoM8 = PN.T.Transizione=="CaricamentoM8";
     id_R1 = PN.T.Transizione=="R1";
