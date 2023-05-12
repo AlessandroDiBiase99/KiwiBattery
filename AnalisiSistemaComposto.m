@@ -10,18 +10,19 @@ Precisione.U  = 20;
 Precisione.U1 = 20;
 
 soglia=0.9;
+log=0;
 
 %% CALCOLO INDICI DI PRESTAZIONE
 fprintf("Gruppo 1 ->\n");
-IP1 = AnalizzaSistema('P1',Precisione,    realmax,realmax);
+IP1 = AnalizzaSistema('P1',Precisione,log,    realmax,realmax);
 fprintf("-> Gruppo 2 ->\n");
-IP2 = AnalizzaSistema('P2',Precisione,IP1.TPU_OUT,realmax);
+IP2 = AnalizzaSistema('P2',Precisione,log,IP1.TPU_OUT,realmax);
 fprintf("-> Gruppo 3 ->\n");
-IP3 = AnalizzaSistema('P3',Precisione,IP2.TPU_OUT,realmax);
+IP3 = AnalizzaSistema('P3',Precisione,log,IP2.TPU_OUT,realmax);
 fprintf("-> Gruppo 4\n");
-IP4 = AnalizzaSistema('P4',Precisione,IP3.TPU_OUT,realmax);
+IP4 = AnalizzaSistema('P4',Precisione,log,IP3.TPU_OUT,realmax);
 fprintf("-> Gruppo 5\n");
-IP4 = AnalizzaSistema('P5',Precisione,IP4.TPU_OUT,realmax);
+IP4 = AnalizzaSistema('P5',Precisione,log,IP4.TPU_OUT,realmax);
 
 fprintf("%f -> 1,2,3,4 ->%f\n " ,IP1.TPU_IN,IP1.TPU_OUT);
 fprintf("%f -> 5,6 ->%f\n "     ,IP2.TPU_IN,IP2.TPU_OUT);

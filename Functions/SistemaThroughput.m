@@ -1,4 +1,19 @@
 function tp = SistemaThroughput(tp,macchinari,PN)
+% SistemaThroughput è una funzione che completa i valori di throughput per
+% le transizioni immediate, nota la conoscenza dei legami presenti nella
+% GSPN.
+% **INPUT**
+%   tp
+%    il vettore dei throughput con i valori relativi alle sole transizioni 
+%    temporizzate
+%   macchinari
+%    i macchinari presenti all'interno del vettore tp
+%   PN
+%    la rete di petri per individuare gli indici delle transizioni
+% **OUTPUT**
+%   tp
+%    il vettore dei throughput con tutti i valori completati
+
 if ismember('1',macchinari)
     id_CaricamentoM1 = PN.T.Transizione=="CaricamentoM1";
     id_LavorazioneM1 = find(PN.T.Transizione=="M1Lavorazione");

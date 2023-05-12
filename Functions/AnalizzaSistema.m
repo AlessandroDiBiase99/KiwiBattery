@@ -1,19 +1,55 @@
-function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,RATE_IN,RATE_OUT)
+function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,log,RATE_IN,RATE_OUT)
+% AnalizzaSistema è una funzione che calcola gli indici di prestazione dei
+% dati salvati nei specifici file nella cartella Parti_v1, rispettando i
+% parametri passati alla chiamata della funzione.
+% **INPUT**
+%   macchinari
+%    codice di riconoscimento dei macchinari da lavorare, con i quali sono
+%    anche indicati i file PN e Grafo
+%   Precisione
+%    struct con due campi: U e U1. Il primo campo serve per stabilire le
+%    cifre significative per il calcolo di U, il secondo per il calcolo di
+%    U1.
+%   log: 
+%    - 0          mostrare tutti i messaggi
+%    - 1          mostrare solo i passaggi principali
+%    - altrimenti mostrare solo i messaggi di errore
+%   RATE_IN
+%    il rate di input del sistema che deve essere rispettato
+%   RATE_OUT
+%    il rate di output del sistema che deve essere rispettato
+% **OUTPUT**
+%   IndiciPrestazione
+%    - THROUGHPUT
+%    - MLT
+%    - WIP
+%    - POSTI
+%    - TRANSIZIONI
+
 %% PARAMETRI ==============================================================
+if log<=1
+    fprintf("\n1) Caricamento PN e Grafo di %s.\n",macchinari)
+end
+
+if log==0
+    fprintf("   -> Carico Parti_v1/PN_%s.mat.\n",macchinari)
+end
 info_PN = load(['Parti_v1/PN_',macchinari,'.mat']);
 PN = info_PN.PN.Ridotta;
-Macchinari         = info_PN.PN.Gruppi;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
-clear info_PN;
-
+if log==0
+    fprintf("   -> Carico Parti_v1/Grafo_%s.mat.\n",macchinari)
+end
 info_Grafo = load(['Parti_v1/Grafo_',macchinari,'.mat']);
 Grafo=info_Grafo.Grafo;
-clear info_Grafo;
+clear info_PN info_Grafo;
 
+if log==0
+    fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
+end
 switch string(macchinari)
     case "P1"
-    %Il rate della transizione "OUTPUT" deve essere uguale al RATE_OUT
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM4")=RATE_OUT;
     case "P2"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoP1")=RATE_IN;
@@ -21,6 +57,7 @@ switch string(macchinari)
     case "P3"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoP2")=RATE_IN;
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM7")=RATE_OUT;
+    PN.T.Rate = PN.T.Rate*1000;
     case "P4"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoP3")=RATE_IN;
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM9")=RATE_OUT;
@@ -34,6 +71,10 @@ PN.T.Rate = round(PN.T.Rate,-1);
 n.stati=size(Grafo,2);
 
 %% CALCOLO MATRICE ADIACENZA ==============================================
+if log<=1
+    fprintf("\n2) Calcolo matrice di adiacenza A.\n")
+end
+
 % Inizializzazione matrice adiacenze per gli stati
 A=cell(n.stati,n.stati);
 
@@ -51,6 +92,9 @@ end
 clear id1 k id2;
 
 %% CALCOLO MATRICE U ======================================================
+if log<=1
+    fprintf("\n3) Calcolo matrice delle probabilità U.\n")
+end
 % Inizializzazione matrice delle probabilità
 U=zeros(n.stati,n.stati);
 
@@ -124,11 +168,21 @@ end
 % Le variabili di appoggio possono ora essere eliminate
 clear a_i_j i j t h num probabilita_tot peso peso_tot rate rate_tot id_t_temp;
 
+if log==0
+    fprintf("   -> Verifico la correttezza degli arrotondamenti calcolati.\n")
+end
 % Controllo che ogni riga abbia sommatoria pari a 1. U deve essere
 % stocastica
 U=VerificaStocastica(U,Precisione.U);
 
+if macchinari=='P3'
+    PN.T.Rate=PN.T.Rate/1000;
+end
+
 %% TRASFORMAZIONE DI COORDINATE ===========================================
+if log<=1
+    fprintf("\n4) Trasformazione di coordinate della matrice delle probabilità con U.\n")
+end
 % Viene associata a ogni marcatura una variabile v, 1 se la marcatura è
 % vanishing 0 altrimenti.
 v=zeros(1,n.stati);
@@ -152,9 +206,18 @@ for i=1:size(U,1)
     end
 end
 
-%% CALCOLO U' =============================================================
 n.stati_v = sum(v1);
 n.stati_t = n.stati - n.stati_v;
+
+if log==0
+    fprintf("   -> Ci sono %i marcature, %i tangible e %i vanishing.\n",n.stati,n.stati_t,n.stati_v)
+end
+
+%% CALCOLO U' =============================================================
+if log<=1
+    fprintf("\n5) Calcolo della matrice delle probabilità U ridotta.\n")
+end
+
 %    V T
 % V |C D|
 % T |E F|;
@@ -190,10 +253,19 @@ clear v v1 C_temp G_temp loop
 % La matrice delle probabilità ridotta è così calcolata
 U1=F+E*G*D;
 
+if log==0
+    fprintf("   -> Verifico la correttezza degli arrotondamenti calcolati con U1.\n")
+end
 U1=VerificaStocastica(U1,Precisione.U1);
 
-%% CALCOLO PROPRIETÀ =============================================
+%% CALCOLO PROPRIETÀ ======================================================
+if log<=1
+    fprintf("\n6) Calcolo dei valori a regime.\n")
+end
 %__VALORI A REGIME_________________________________________________________
+if log==0
+    fprintf("   -> Calcolo delle probabilità a regime nella EMC.\n")
+end
 % Se il sistema è irriducibile e riccorrente positivo allora esiste la
 % probabilità a regime
 Y_sym = sym('y1_',[1 n.stati_t],'real');
@@ -215,6 +287,9 @@ end
 clear Y_sym Y_struct
 
 %__TEMPI DI SOGGIORNO______________________________________________________
+if log==0
+    fprintf("   -> Calcolo dei tempi di soggiorno.\n")
+end
 m=zeros(n.stati_t,1);
 for i=1:n.stati_t
     lambda=0;
@@ -229,18 +304,28 @@ end
 clear i lambda id_t_temp idMarcatura;
 
 %__PROBABILITÀ A REGIME____________________________________________________
+if log==0
+    fprintf("   -> Calcolo delle probabilità a regime nella GSPN.\n")
+end
 PI=zeros(length(Y),1);
 for i=1:length(Y)
     PI(i,1)=(Y(i)*m(i))/sum(Y.*m);
 end
 
-clear i
+clear i;
 
 %% INDICI DI PRESTAZIONE ==================================================
+if log<=1
+    fprintf("\n7) Calcolo degli indici di prestazione.\n")
+end
 % fprintf("\n\n=========== INDICI DI PRESTAZIONE ============================================")
 IndiciPrestazione.Transizioni = table(PN.T.Transizione,'VariableNames',"Transizione");
 IndiciPrestazione.Posti       = table(PN.P            ,'VariableNames',"Posto");
+
 %__THROUGHPUT______________________________________________________________
+if log==0
+    fprintf("   -> Calcolo throughput.\n")
+end
 % Il throughput è il reciproco del tempo di produzione per unità di
 % prodotto. La reward function r è ottenuta moltiplicando il rate della
 % transizione temporizzata per il numero di server attivati. Il throughput
@@ -290,6 +375,9 @@ IndiciPrestazione.Transizioni.TPU = tp.';
 clear temp k i r tp
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
+if log==0
+    fprintf("   -> Calcolo numero medio token.\n")
+end
 % Per ogni posto k-esimo viene calcolato il numero medio di token associato
 % al posto. Esso viene calcolato sommando il prodotto tra le probabilità a
 % regime che il sistema si trovi in quella marcatura e il numero di token
@@ -308,6 +396,9 @@ IndiciPrestazione.Posti.NumeroMedioToken=numero_medio_token.';
 clear k i numero_medio_token r
 
 %__WIP_____________________________________________________________________
+if log==0
+    fprintf("   -> Calcolo WIP.\n")
+end
 % Il Work in Process è dato dalla somma del numero medio di token
 WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken.*ImpostazioniIndici.Tabella_WIP.DaConsiderare);
 
@@ -315,6 +406,9 @@ IndiciPrestazione.WIP=WIP;
 clear WIP
 
 %__MLT_____________________________________________________________________
+if log==0
+    fprintf("   -> Calcolo MLT.\n")
+end
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
 MLT=IndiciPrestazione.WIP/IndiciPrestazione.TPU_OUT;
@@ -324,6 +418,9 @@ IndiciPrestazione.MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
 clear i j tp_min MLT
 
 %__TEMPO MEDIO ATTESA______________________________________________________
+if log==0
+    fprintf("   -> Calcolo tempo medio di attesa.\n")
+end
 % Il tempo medio di attesa relativo al k-esimo posto è dato dal rapporto 
 % tra il numero medio di token del posto e la somma dei throughput relativi
 % alle transizioni che depositano token nel posto.
@@ -343,6 +440,9 @@ IndiciPrestazione.Posti.TempoMedioAttesa=duration(hours(tempo_medio_attesa),'for
 clear tp_posti k j i tempo_medio_attesa
 
 %__EFFICENZA_______________________________________________________________
+if log==0
+    fprintf("   -> Calcolo efficenza.\n")
+end
 for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     id_t=find(PN.T.Transizione==ImpostazioniIndici.Tabella_EFF.Transizione(i_macc));
     for i_marc=n.stati_v+1:n.stati
@@ -359,7 +459,10 @@ IndiciPrestazione.Macchinari=eff_mac;
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
 
 %% SALVATAGGIO
-save(['Dati\IndiciPrestazione_{',macchinari,'}.mat'],"IndiciPrestazione");
+if log<=1
+    fprintf("\n8) Calcolo degli indici di prestazione.\n")
+end
+save(['Parti_v1\IndiciPrestazione_',macchinari,'.mat'],"IndiciPrestazione");
 
 end
 
