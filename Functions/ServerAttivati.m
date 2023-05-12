@@ -18,10 +18,10 @@ function s_a = ServerAttivati(Marcatura,MaxServer,Input)
     if s_a>MaxServer
         s_a=MaxServer;
     end
-    if MaxServer>1
-        load('prova.mat');
-        v_sa=[v_sa s_a];
-        save('prova.mat',"v_sa");
-    end
+%     if MaxServer>1
+%         load('prova.mat');
+%         v_sa=[v_sa s_a];
+%         save('prova.mat',"v_sa");
+%     end
 end
 

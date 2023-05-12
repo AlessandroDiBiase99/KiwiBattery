@@ -31,7 +31,7 @@ for i=1:size(M,1)
         M(i,primo_non_vuoto)=0;
         M(i,primo_non_vuoto)=1-sum(M(i,:));
         id=find(sum_==Ricalcolo_M.SUM);
-        if isnan(sum)
+        if isnan(sum_)
             RicalcolaNaN=[RicalcolaNaN   i];
         elseif isempty(id)
             Ricalcolo_M(end+1,:)=table(sum_,{i});
@@ -44,18 +44,18 @@ for i=1:size(M,1)
     end
 end
 if height(Ricalcolo_M)>1
-    fprintf("____!=== ATTENZIONE ===!_____________\n| Eseguite le correzioni automatiche dell'arrotondamento:\n");
+    fprintf("   ____!=== ATTENZIONE ===!_____________\n   | Eseguite le correzioni automatiche dell'arrotondamento:\n");
     Ricalcolo_M=Ricalcolo_M(2:end,:);
     if ~isempty(RicalcolaNaN)
-         fprintf("| Sommatoria ottenuta: NaN sulle righe: %s\n",array2string(RicalcolaNaN));
+         fprintf("   | Sommatoria ottenuta: NaN sulle righe: %s\n",array2string(RicalcolaNaN));
     end
     for i=1:height(Ricalcolo_M)
-        fprintf("| Sommatoria ottenuta: %1$.*2$f sulle righe: %3$s\n",Ricalcolo_M.SUM(i),Precisione,array2string(Ricalcolo_M.Riga{i}));
+        fprintf("   | Sommatoria ottenuta: %1$.*2$f sulle righe: %3$s\n",Ricalcolo_M.SUM(i),Precisione,array2string(Ricalcolo_M.Riga{i}));
     end
-    fprintf("|____________________________________\n\n");
+    fprintf("   |____________________________________\n\n");
 end
 if ~isempty(Errore_M)
-    fprintf("____!===   ERRORE   ===!_____________\nLa precisione specificata è troppo elevata. Si suggerisce di abbassarla. Righe:%s\n\n",array2string(Errore_M));
+    fprintf("   ____!===   ERRORE   ===!_____________\n   | La precisione specificata è troppo elevata. Si suggerisce di abbassarla. Righe:%s\n   |____________________________________\n\n",array2string(Errore_M));
 end
 end
 
