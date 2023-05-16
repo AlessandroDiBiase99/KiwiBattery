@@ -14,13 +14,13 @@ function M = VerificaStocastica(M,Precisione)
 %   M
 %    la matrice corretta
 
-%M = round(M,Precisione);
-%M = M + (M-round(M,Precisione));
-for i=1:size(M,1)
-    for j=1:size(M,2)
-        M(i,j)=floor(round(M(i,j),Precisione)*10^Precisione)/10^Precisione;
-    end
-end
+M = round(M,Precisione);
+% M = M + (M-round(M,Precisione));
+% for i=1:size(M,1)
+%     for j=1:size(M,2)
+%         M(i,j)=floor(round(M(i,j),Precisione)*10^Precisione)/10^Precisione;
+%     end
+% end
 Ricalcolo_M = table(-1,{-1},'VariableNames',["SUM" "Riga"]);
 Errore_M     = [];
 RicalcolaNaN = [];

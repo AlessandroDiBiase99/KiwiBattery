@@ -57,7 +57,7 @@ switch string(macchinari)
     case "P3"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoP2")=RATE_IN;
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM7")=RATE_OUT;
-    PN.T.Rate = PN.T.Rate*1000;
+    %PN.T.Rate = PN.T.Rate*100;
     case "P4"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoP3")=RATE_IN;
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM9")=RATE_OUT;
@@ -66,6 +66,7 @@ switch string(macchinari)
 end
 
 PN.T.Rate = round(PN.T.Rate,-1);
+PN.T.Rate(3)=0.55;
 
 % Il numero di marcature
 n.stati=size(Grafo,2);
@@ -175,9 +176,9 @@ end
 % stocastica
 U=VerificaStocastica(U,Precisione.U);
 
-if macchinari=='P3'
-    PN.T.Rate=PN.T.Rate/1000;
-end
+% if macchinari=='P3'
+%     PN.T.Rate=PN.T.Rate/100;
+% end
 
 %% TRASFORMAZIONE DI COORDINATE ===========================================
 if log<=1
