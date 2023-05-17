@@ -1,4 +1,4 @@
-function IndiciPrestazione = AnalizzaSistema(macchinari,Precisione,log,RATE_IN,RATE_OUT)
+function IndiciPrestazione = AnalizzaSistema(versione,macchinari,Precisione,log,RATE_IN,RATE_OUT)
 % AnalizzaSistema è una funzione che calcola gli indici di prestazione dei
 % dati salvati nei specifici file nella cartella Parti_v1, rispettando i
 % parametri passati alla chiamata della funzione.
@@ -32,16 +32,16 @@ if log<=1
 end
 
 if log==0
-    fprintf("   -> Carico Parti_v1/PN_%s.mat.\n",macchinari)
+    fprintf("   -> Carico Parti_v%i/PN_%s.mat.\n",versione,macchinari)
 end
-info_PN = load(['Parti_v1/PN_',macchinari,'.mat']);
+info_PN = load(['Parti_v',num2str(versione),'/PN_',macchinari,'.mat']);
 PN = info_PN.PN.Ridotta;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
 if log==0
-    fprintf("   -> Carico Parti_v1/Grafo_%s.mat.\n",macchinari)
+    fprintf("   -> Carico Parti_v%i/Grafo_%s.mat.\n",versione,macchinari)
 end
-info_Grafo = load(['Parti_v1/Grafo_',macchinari,'.mat']);
+info_Grafo = load(['Parti_v',num2str(versione),'/Grafo_',macchinari,'.mat']);
 Grafo=info_Grafo.Grafo;
 clear info_PN info_Grafo;
 
@@ -50,23 +50,29 @@ if log==0
 end
 switch string(macchinari)
     case "P1"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM4")=RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM4") = RATE_OUT;
     case "P2"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP1")=RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM6")=RATE_OUT;
-    case "P3"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP2")=RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM7")=RATE_OUT;
-    %PN.T.Rate = PN.T.Rate*100;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP1") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM6") = RATE_OUT;
+    case "P3_1"
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP2") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="CaricamentoP3" ) = RATE_OUT;
+    case "P3_2"
+    PN.T.Rate(PN.T.Transizione=="CaricamentoM7" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM7") = RATE_OUT;
+    case "P3_3"
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP3") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="CaricamentoP4" ) = RATE_OUT;
     case "P4"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP3")=RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM9")=RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="CaricamentoM8" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoM9") = RATE_OUT;
     case "P5"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP4")=RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="ScaricamentoP4") = RATE_IN;
 end
 
-PN.T.Rate = round(PN.T.Rate,-1);
-PN.T.Rate(3)=0.55;
+if string(macchinari)~="P3_2"
+    PN.T.Rate = round(PN.T.Rate,-1);
+end
 
 % Il numero di marcature
 n.stati=size(Grafo,2);
@@ -167,7 +173,7 @@ for i=1:n.stati
     end
 end
 % Le variabili di appoggio possono ora essere eliminate
-clear a_i_j i j t h num probabilita_tot peso peso_tot rate rate_tot id_t_temp;
+clear A a_i_j i j t h num probabilita_tot peso peso_tot rate rate_tot id_t_temp;
 
 if log==0
     fprintf("   -> Verifico la correttezza degli arrotondamenti calcolati.\n")
@@ -345,35 +351,34 @@ end
 switch string(macchinari)
     case "P1"
         macc = '1,2,3,4';
+        nome_t_input = "CaricamentoM1";
     case "P2"
         macc = '5,6';
-    case "P3"
-        macc = '7';
+        nome_t_input = "CaricamentoM5";
+    case "P3_1"
+        macc= ' ';
+        nome_t_input= "ScaricamentoP2";
+    case "P3_2"
+        macc= '7';
+        nome_t_input= "CaricamentoM7";
+    case "P3_3"
+        macc= ' ';
+        nome_t_input= "ScaricamentoP3";
     case "P4"
         macc = '8,9';
+        nome_t_input = "CaricamentoM8";
     case "P5"
         macc = '10,11,12,13';
+        nome_t_input="CaricamentoInferioreM10";
 end
 tp=SistemaThroughput(tp,macc,PN);
 
 IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
-switch string(macchinari)
-    case "P1"
-        temp = "CaricamentoM1";
-    case "P2"
-        temp = "CaricamentoM5";
-    case "P3"
-        temp = "CaricamentoM7";
-    case "P4"
-        temp = "CaricamentoM8";
-    case "P5"
-        temp="CaricamentoM10";
-end
-IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==temp);
+IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==nome_t_input);
 
 
 IndiciPrestazione.Transizioni.TPU = tp.';
-clear temp k i r tp
+clear nome_t_input k i r tp
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
 if log==0
