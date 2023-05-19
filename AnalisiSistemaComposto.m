@@ -14,65 +14,50 @@ log=1;
 versione=3;
 
 %% CALCOLO INDICI DI PRESTAZIONE
-fprintf("Gruppo 1 ->\n");
-IP1   = AnalizzaSistema(versione,  'P1',Precisione,log,      realmax,realmax);
-fprintf("-> Gruppo 2 ->\n");
-IP2   = AnalizzaSistema(versione,  'P2',Precisione,log,  IP1.TPU_OUT,realmax);
-fprintf("-> Gruppo 3 ->\n");
-IP3_1 = AnalizzaSistema(versione,'P3_1',Precisione,log,  IP2.TPU_OUT,realmax);
-IP3_2 = AnalizzaSistema(versione,'P3_2',Precisione,log,IP3_1.TPU_OUT,realmax);
-IP3_3 = AnalizzaSistema(versione,'P3_3',Precisione,log,IP3_2.TPU_OUT,realmax);
-fprintf("-> Gruppo 4\n");
-IP4   = AnalizzaSistema(versione,  'P4',Precisione,log,IP3_3.TPU_OUT,realmax);
-fprintf("-> Gruppo 5\n");
-IP4   = AnalizzaSistema(versione,  'P5',Precisione,log,  IP4.TPU_OUT,realmax);
 
-fprintf("%f -> 1,2,3,4 ->%f\n "      ,IP1.TPU_IN,IP1.TPU_OUT);
-fprintf("%f -> 5,6 ->%f\n "          ,IP2.TPU_IN,IP2.TPU_OUT);
-fprintf("%f N6-> %f -> %f 7 %f -> %f N7-> %f\n ",IP3_1.TPU_IN,IP3_1.TPU_OUT,IP3_2.TPU_IN,IP3_2.TPU_OUT,IP3_3.TPU_IN,IP3_3.TPU_OUT);
-fprintf("%f -> 8,9 ->%f\n "          ,IP4.TPU_IN,IP4.TPU_OUT);
-fprintf("%f -> 10,11,12,13 ->%f\n\n ",IP5.TPU_IN,IP5.TPU_OUT);
+indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
+l_im=length(indice_macchinario);
+IPx = struct('index', repmat({[]}, 1, l_im));
 
-if IP5.TPU_IN < soglia*IP4.TPU_OUT 
-    fprintf("<- Gruppo 4 <-\n");
-    IP4 = AnalizzaSistema('P4',Precisione,realmax, IP5.TPU_IN);
+
+IPx(1)= AnalizzaSistema(versione,  indice_macchinario(1),Precisione,log, realmax,realmax);
+
+for i=2:l_im
+    IPx(i)= AnalizzaSistema(versione,  indice_macchinario(i),Precisione,log, IPx(i-1).TPU_OUT,realmax);
+    fprintf("Macchinario %s->\n",indice_macchinario(i));
 end
 
-if IP4.TPU_IN < soglia*IP3.TPU_OUT 
-    fprintf("<- Gruppo 3 <-\n");
-    IP3 = AnalizzaSistema('P3',Precisione,realmax, IP4.TPU_IN);
+for i=1:l_im
+    fprintf("%f -> Macchinario %s ->%f\n "      ,IPx(i).TPU_IN,indice_macchinario(i), IPx(i).TPU_OUT);
 end
-if IP3.TPU_IN < soglia*IP2.TPU_OUT
-    fprintf("<- Gruppo 2 <-\n");
-    IP2 = AnalizzaSistema('P2',Precisione,realmax, IP3.TPU_IN);
+
+for i=0:l_im-2
+if IPx(l_im-i).TPU_IN < soglia*IPx(l_im-(i+1)).TPU_OUT
+    fprintf("<- Macchinario %s <-\n",indice_macchinario(l_im-i));
+    IPx(l_im-(i+1)) = AnalizzaSistema(versione, indice_macchinario(l_im-(i+1)),Precisione,realmax, IPx(l_im-i).TPU_IN);
+    fprintf("Il rapporto tra througput in ingresso al macchinario %s e throughput in output al macchinario %s è uguale a: %f %%",indice_macchinario(l_im-i),indice_macchinario(l_im-(i+1)), (IPx(l_im-i).TPU_IN/IPx(l_im-(i+1)).TPU_OUT)*100);
 end
-if IP2.TPU_IN < soglia*IP1.TPU_OUT
-    fprintf("Gruppo 1 <-\n");
-    IP1 = AnalizzaSistema('P1',Precisione,realmax, IP2.TPU_IN);
 end
-stampa="Il rapporto tra througput in ingresso al macchinario 5 e throughput in output al macchinario 4 è uguale a:";
-disp(stampa, IP5.TPU_IN/IP4.TPU.OUT*100);
-stampa="Il rapporto tra througput in ingresso al macchinario 4 e throughput in output al macchinario 3 è uguale a:";
-disp(stampa, IP4.TPU_IN/IP3.TPU.OUT*100);
-stampa="Il rapporto tra througput in ingresso al macchinario 3 e throughput in output al macchinario 2 è uguale a:";
-disp(stampa, IP3.TPU_IN/IP2.TPU.OUT*100);
-stampa="Il rapporto tra througput in ingresso al macchinario 2 e throughput in output al macchinario 1 è uguale a:";
-disp(stampa, IP2.TPU_IN/IP1.TPU.OUT*100);
+
+
+for i=1:l_im
+    fprintf("%f -> Macchinario %s ->%f\n "      ,IPx(i).TPU_IN,indice_macchinario(i), IPx(i).TPU_OUT);
+end
 clear Precisione
 
 %% RISULTATI
-% Mancano i nastri trasportatori di collegamento e M7
-Transizioni=[IP1.Transizioni; IP2.Transizioni; IP3.Transizioni; IP4.Transizioni];
 
-Posti=[IP1.Posti; IP2.Posti; IP3.Posti; IP4.Posti];
+Transizioni=[IP1.Transizioni; IP2.Transizioni; IP3_1.Transizioni; IP3_2.Transizioni; IP3_3.Transizioni; IP4_1.Transizioni; IP4_2.Transizioni; IP5_1.Transizioni; IP5_2.Transizioni];
 
-WIP=IP1.WIP+IP2.WIP+IP3.WIP+IP4.WIP;
+Posti=[IP1.Posti; IP2.Posti; IP3_1.Posti; IP3_2.Posti; IP3_3.Posti; IP4_1.Posti; IP4_2.Posti; IP5_1.Posti; IP5_2.Posti];
 
-MLT=IP1.MLT+IP2.MLT+IP3.MLT+IP4.MLT;
+WIP=IP1.WIP+IP2.WIP+IP3_1.WIP+IP3_2.WIP+IP3_3.WIP+IP4_1.WIP+IP4_2.WIP+IP5_1.WIP+IP5_2.WIP;
 
-TPU=IP4.TPU_OUT;
+MLT=IP1.MLT+IP2.MLT+IP3_1.MLT+IP3_2.MLT+IP3_3.MLT+IP4_1.MLT+IP4_2.MLT+IP5_1.MLT+IP5_2.MLT;
 
-EFF=[IP1.Macchinari;IP2.Macchinari;IP3.Macchinari;IP4.Macchinari];
+TPU=IP5_2.TPU_OUT;
+
+EFF=[IP1.Macchinari;IP2.Macchinari; IP3_1.Macchinari; IP3_2.Macchinari; IP3_3.Macchinari; IP4_1.Macchinari; IP4_2.Macchinari; IP5_1.Macchinari; IP5_2.Macchinari];
 
 %% RAGGRUPPAMENTI
 Dati=load('Dati\PN_Configurazione2.mat','PN');

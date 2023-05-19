@@ -32,9 +32,9 @@ if log<=1
 end
 
 if log==0
-    fprintf("   -> Carico Parti_v%i/PN_%s.mat.\n",versione,macchinari)
+    fprintf("   -> Carico Parti_v%i/%s.mat.\n",versione,macchinari)
 end
-info_PN = load(['Parti_v',num2str(versione),'/PN_',macchinari,'.mat']);
+info_PN = load(['Parti_v',num2str(versione),'/',macchinari,'.mat']);
 PN = info_PN.PN.Ridotta;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
@@ -49,28 +49,46 @@ if log==0
     fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
 end
 switch string(macchinari)
-    case "P1"
+    case "M1"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM4") = RATE_OUT;
-    case "P2"
+    case "M2"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoP1") = RATE_IN;
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM6") = RATE_OUT;
-    case "P3_1"
+    case "M3"
     PN.T.Rate(PN.T.Transizione=="ScaricamentoP2") = RATE_IN;
     PN.T.Rate(PN.T.Transizione=="CaricamentoP3" ) = RATE_OUT;
-    case "P3_2"
+    case "M4"
     PN.T.Rate(PN.T.Transizione=="CaricamentoM7" ) = RATE_IN;
     PN.T.Rate(PN.T.Transizione=="ScaricamentoM7") = RATE_OUT;
-    case "P3_3"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP3") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="CaricamentoP4" ) = RATE_OUT;
-    case "P4"
-    PN.T.Rate(PN.T.Transizione=="CaricamentoM8" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM9") = RATE_OUT;
-    case "P5"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP4") = RATE_IN;
+    case "M5"
+    PN.T.Rate(PN.T.Transizione=="M4_Scaricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M5_Scaricamento" ) = RATE_OUT;
+    case "M6"
+    PN.T.Rate(PN.T.Transizione=="M5_Scaricamento" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M6_Scaricamento") = RATE_OUT;
+    case "M7_1"
+    PN.T.Rate(PN.T.Transizione=="M6_Scaricamento" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M7_Caricamento") = RATE_OUT;
+    case "M7_2"
+    PN.T.Rate(PN.T.Transizione=="M7_Caricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M7_Scaricamento") = RATE_OUT;
+    case "M7_3"
+    PN.T.Rate(PN.T.Transizione=="M7_Scaricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M8_Caricamento") = RATE_OUT;
+    case "M8"
+    PN.T.Rate(PN.T.Transizione=="M8_Caricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M8_Scaricamento") = RATE_OUT;
+    case "M9"
+    PN.T.Rate(PN.T.Transizione=="M8_Scaricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M9_Scaricamento") = RATE_OUT;
+     case "M10"
+    PN.T.Rate(PN.T.Transizione=="M9_Scaricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M10_Scaricamento") = RATE_OUT;
+    case "M11_12_13"
+    PN.T.Rate(PN.T.Transizione=="M10_Scaricamento") = RATE_IN;
 end
 
-if string(macchinari)~="P3_2"
+if string(macchinari)~="M7_2"
     PN.T.Rate = round(PN.T.Rate,-1);
 end
 
