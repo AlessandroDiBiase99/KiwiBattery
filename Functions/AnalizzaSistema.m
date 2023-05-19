@@ -34,14 +34,14 @@ end
 if log==0
     fprintf("   -> Carico Parti_v%i/%s.mat.\n",versione,macchinari)
 end
-info_PN = load(['Parti_v',num2str(versione),'/',macchinari,'.mat']);
+info_PN = load(sprintf("Parti_v%i/PN_%s.mat",versione,macchinari));
 PN = info_PN.PN.Ridotta;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
 if log==0
     fprintf("   -> Carico Parti_v%i/Grafo_%s.mat.\n",versione,macchinari)
 end
-info_Grafo = load(['Parti_v',num2str(versione),'/Grafo_',macchinari,'.mat']);
+info_Grafo = load(sprintf("Parti_v%i/Grafo_%s.mat",versione,macchinari));
 Grafo=info_Grafo.Grafo;
 clear info_PN info_Grafo;
 
@@ -367,27 +367,45 @@ r=zeros(n.stati_t,1);
     tp(k)=sum(r.*PI);
 end
 switch string(macchinari)
-    case "P1"
-        macc = '1,2,3,4';
-        nome_t_input = "CaricamentoM1";
-    case "P2"
-        macc = '5,6';
-        nome_t_input = "CaricamentoM5";
-    case "P3_1"
-        macc= ' ';
-        nome_t_input= "ScaricamentoP2";
-    case "P3_2"
-        macc= '7';
-        nome_t_input= "CaricamentoM7";
-    case "P3_3"
-        macc= ' ';
-        nome_t_input= "ScaricamentoP3";
-    case "P4"
-        macc = '8,9';
-        nome_t_input = "CaricamentoM8";
-    case "P5"
-        macc = '10,11,12,13';
+    case "M1"
+        macc = '1';
+        nome_t_input = "M1_Caricamento";
+    case "M2"
+        macc = '2';
+        nome_t_input = "M2_Caricamento";
+    case "M3"
+        macc= '3';
+        nome_t_input= "M3_Caricamento";
+    case "M4"
+        macc= '4';
+        nome_t_input= "M4_Caricamento";
+    case "M5"
+        macc= '5';
+        nome_t_input= "M5_aricamento";
+    case "M6"
+        macc = '6';
+        nome_t_input = "M6_Caricamento";
+    case "M7_1"
+        macc = '';
+        nome_t_input="M6_Scaricamento";
+    case "M7_2"
+        macc = '7';
         nome_t_input="CaricamentoInferioreM10";
+    case "M7_3"
+        macc = '';
+        nome_t_input="CaricamentoInferioreM10";
+    case "M8"
+        macc= '8';
+        nome_t_input= "CaricamentoM7";
+    case "M9"
+        macc= '9';
+        nome_t_input= "ScaricamentoP3";
+    case "M10"
+        macc = '10';
+        nome_t_input = "CaricamentoM8";
+    case "M11_12_13"
+        macc = '11,12,13';
+        nome_t_input = "CaricamentoM8";
 end
 tp=SistemaThroughput(tp,macc,PN);
 

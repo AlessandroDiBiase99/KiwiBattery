@@ -11,14 +11,13 @@ Precisione.U1 = 20;
 
 soglia=0.9;
 log=1;
-versione=3;
+versione=5;
 
 %% CALCOLO INDICI DI PRESTAZIONE
 
-indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
+indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1",'M7_2','M7_3','M8','M9','M10','M11_12_13'];
 l_im=length(indice_macchinario);
 IPx = struct('index', repmat({[]}, 1, l_im));
-
 
 IPx(1)= AnalizzaSistema(versione,  indice_macchinario(1),Precisione,log, realmax,realmax);
 
