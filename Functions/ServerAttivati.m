@@ -13,9 +13,8 @@ function s_a = ServerAttivati(Marcatura,MaxServer,Input)
 %   s_a
 %    il numero di server che risultano contemporaneamente attivi date le
 %    configurazioni presenti
-
     s_a = floor(min(Marcatura./Input));
-    if s_a>MaxServer
+    if sum(Input)==0 || s_a>MaxServer
         s_a=MaxServer;
     end
 %     if MaxServer>1

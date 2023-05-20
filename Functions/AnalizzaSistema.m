@@ -34,14 +34,14 @@ end
 if log==0
     fprintf("   -> Carico Parti_v%i/%s.mat.\n",versione,macchinari)
 end
-info_PN = load(['Parti_v',num2str(versione),'/PN_',convertStringsToChars(macchinari),'.mat']);
+info_PN = load(sprintf("Parti_v%i/PN_%s.mat",versione,macchinari));
 PN = info_PN.PN.Ridotta;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
 if log==0
     fprintf("   -> Carico Parti_v%i/Grafo_%s.mat.\n",versione,macchinari)
 end
-info_Grafo = load(['Parti_v',num2str(versione),'/Grafo_',convertStringsToChars(macchinari),'.mat']);
+info_Grafo = load(sprintf("Parti_v%i/Grafo_%s.mat",versione,macchinari));
 Grafo=info_Grafo.Grafo;
 clear info_PN info_Grafo;
 
@@ -504,7 +504,7 @@ clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome
 if log<=1
     fprintf("\n8) Calcolo degli indici di prestazione.\n")
 end
-save(['Parti_v1\IndiciPrestazione_',convertStringsToChars(macchinari),'.mat'],"IndiciPrestazione");
+save(sprintf("Parti_v%i\\IndiciPrestazione_%s.mat",versione,macchinari),"IndiciPrestazione");
 
 end
 
