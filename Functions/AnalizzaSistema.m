@@ -34,14 +34,14 @@ end
 if log==0
     fprintf("   -> Carico Parti_v%i/%s.mat.\n",versione,macchinari)
 end
-info_PN = load(['Parti_v',num2str(versione),'/',macchinari,'.mat']);
+info_PN = load(['Parti_v',num2str(versione),'/PN_',convertStringsToChars(macchinari),'.mat']);
 PN = info_PN.PN.Ridotta;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 
 if log==0
     fprintf("   -> Carico Parti_v%i/Grafo_%s.mat.\n",versione,macchinari)
 end
-info_Grafo = load(['Parti_v',num2str(versione),'/Grafo_',macchinari,'.mat']);
+info_Grafo = load(['Parti_v',num2str(versione),'/Grafo_',convertStringsToChars(macchinari),'.mat']);
 Grafo=info_Grafo.Grafo;
 clear info_PN info_Grafo;
 
@@ -50,16 +50,16 @@ if log==0
 end
 switch string(macchinari)
     case "M1"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM4") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="M1_Scaricamento") = RATE_OUT;
     case "M2"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP1") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM6") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="M1_Scaricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M2_Scaricamento") = RATE_OUT;
     case "M3"
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoP2") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="CaricamentoP3" ) = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="M2_Scaricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M3_Scaricamento" ) = RATE_OUT;
     case "M4"
-    PN.T.Rate(PN.T.Transizione=="CaricamentoM7" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="ScaricamentoM7") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="M3_Scaricamento" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="M4_Scaricamento") = RATE_OUT;
     case "M5"
     PN.T.Rate(PN.T.Transizione=="M4_Scaricamento") = RATE_IN;
     PN.T.Rate(PN.T.Transizione=="M5_Scaricamento" ) = RATE_OUT;
@@ -89,7 +89,7 @@ switch string(macchinari)
 end
 
 if string(macchinari)~="M7_2"
-    PN.T.Rate = round(PN.T.Rate,-1);
+    PN.T.Rate = round(PN.T.Rate,1);
 end
 
 % Il numero di marcature
@@ -367,27 +367,45 @@ r=zeros(n.stati_t,1);
     tp(k)=sum(r.*PI);
 end
 switch string(macchinari)
-    case "P1"
-        macc = '1,2,3,4';
-        nome_t_input = "CaricamentoM1";
-    case "P2"
-        macc = '5,6';
-        nome_t_input = "CaricamentoM5";
-    case "P3_1"
-        macc= ' ';
-        nome_t_input= "ScaricamentoP2";
-    case "P3_2"
-        macc= '7';
-        nome_t_input= "CaricamentoM7";
-    case "P3_3"
-        macc= ' ';
-        nome_t_input= "ScaricamentoP3";
-    case "P4"
-        macc = '8,9';
-        nome_t_input = "CaricamentoM8";
-    case "P5"
-        macc = '10,11,12,13';
-        nome_t_input="CaricamentoInferioreM10";
+    case "M1"
+        macc = '1';
+        nome_t_input = "M1_Caricamento";
+    case "M2"
+        macc = '2';
+        nome_t_input = "M1_Scaricamento";
+    case "M3"
+        macc= '3';
+        nome_t_input= "M2_Scaricamento";
+    case "M4"
+        macc= '4';
+        nome_t_input= "M3_Scaricamento";
+    case "M5"
+        macc= '5';
+        nome_t_input= "M4_Scaricamento";
+    case "M6"
+        macc = '6';
+        nome_t_input = "M5_Scaricamento";
+    case "M7_1"
+        macc = '7_1';
+        nome_t_input="M6_Scaricamento";
+    case "M7_2"
+    macc = '7_2';
+    nome_t_input="M7_Caricamento";
+    case "M7_3"
+    macc = '7_3';
+    nome_t_input="M7_Scaricamento";
+    case "M8"
+    macc = '8';
+    nome_t_input="M8_Caricamento";
+    case "M9"
+    macc = '9';
+    nome_t_input="M8_Scaricamento";
+    case "M10"
+    macc = '10';
+    nome_t_input="M9_Scaricamento";
+    case "M11_12_13"
+    macc = '11,12,13';
+    nome_t_input="M10_Scaricamento";
 end
 tp=SistemaThroughput(tp,macc,PN);
 
@@ -486,7 +504,7 @@ clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome
 if log<=1
     fprintf("\n8) Calcolo degli indici di prestazione.\n")
 end
-save(['Parti_v1\IndiciPrestazione_',macchinari,'.mat'],"IndiciPrestazione");
+save(['Parti_v1\IndiciPrestazione_',convertStringsToChars(macchinari),'.mat'],"IndiciPrestazione");
 
 end
 
