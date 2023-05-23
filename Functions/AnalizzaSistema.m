@@ -50,46 +50,46 @@ if log==0
 end
 switch string(macchinari)
     case "M1"
-    PN.T.Rate(PN.T.Transizione=="M1_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione1") = RATE_OUT;
     case "M2"
-    PN.T.Rate(PN.T.Transizione=="M1_Scaricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M2_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione1") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione2") = RATE_OUT;
     case "M3"
-    PN.T.Rate(PN.T.Transizione=="M2_Scaricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M3_Scaricamento" ) = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione2") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione3" ) = RATE_OUT;
     case "M4"
-    PN.T.Rate(PN.T.Transizione=="M3_Scaricamento" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M4_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione3" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione4") = RATE_OUT;
     case "M5"
-    PN.T.Rate(PN.T.Transizione=="M4_Scaricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M5_Scaricamento" ) = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione4") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione5" ) = RATE_OUT;
     case "M6"
-    PN.T.Rate(PN.T.Transizione=="M5_Scaricamento" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M6_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione5" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione6") = RATE_OUT;
     case "M7_1"
-    PN.T.Rate(PN.T.Transizione=="M6_Scaricamento" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M7_Caricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione6" ) = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione7_1") = RATE_OUT;
     case "M7_2"
-    PN.T.Rate(PN.T.Transizione=="M7_Caricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M7_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione7_1") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione7_2") = RATE_OUT;
     case "M7_3"
-    PN.T.Rate(PN.T.Transizione=="M7_Scaricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M8_Caricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione7_2") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione7") = RATE_OUT;
     case "M8"
-    PN.T.Rate(PN.T.Transizione=="M8_Caricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M8_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione7") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione8") = RATE_OUT;
     case "M9"
-    PN.T.Rate(PN.T.Transizione=="M8_Scaricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M9_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione8") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione9") = RATE_OUT;
      case "M10"
-    PN.T.Rate(PN.T.Transizione=="M9_Scaricamento") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="M10_Scaricamento") = RATE_OUT;
+    PN.T.Rate(PN.T.Transizione=="Giunzione9") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione10") = RATE_OUT;
     case "M11_12_13"
-    PN.T.Rate(PN.T.Transizione=="M10_Scaricamento") = RATE_IN;
+    PN.T.Rate(PN.T.Transizione=="Giunzione10") = RATE_IN;
 end
 
 if string(macchinari)~="M7_2"
-    PN.T.Rate = round(PN.T.Rate,1);
+    PN.T.Rate = round(PN.T.Rate,2);
 end
 
 % Il numero di marcature
@@ -370,42 +370,43 @@ switch string(macchinari)
     case "M1"
         macc = '1';
         nome_t_input = "M1_Caricamento";
+        nomegruppo="";
     case "M2"
         macc = '2';
-        nome_t_input = "M1_Scaricamento";
+        nome_t_input = "Giunzione1";
     case "M3"
         macc= '3';
-        nome_t_input= "M2_Scaricamento";
+        nome_t_input= "Giunzione2";
     case "M4"
         macc= '4';
-        nome_t_input= "M3_Scaricamento";
+        nome_t_input= "Giunzione3";
     case "M5"
         macc= '5';
-        nome_t_input= "M4_Scaricamento";
+        nome_t_input= "Giunzione4";
     case "M6"
         macc = '6';
-        nome_t_input = "M5_Scaricamento";
+        nome_t_input = "Giunzione5";
     case "M7_1"
         macc = '7_1';
-        nome_t_input="M6_Scaricamento";
+        nome_t_input="Giunzione6";
     case "M7_2"
     macc = '7_2';
-    nome_t_input="M7_Caricamento";
+    nome_t_input="Giunzione7_1";
     case "M7_3"
     macc = '7_3';
-    nome_t_input="M7_Scaricamento";
+    nome_t_input="Giunzione7_2";
     case "M8"
     macc = '8';
-    nome_t_input="M8_Caricamento";
+    nome_t_input="Giunzione7";
     case "M9"
     macc = '9';
-    nome_t_input="M8_Scaricamento";
+    nome_t_input="Giunzione8";
     case "M10"
     macc = '10';
-    nome_t_input="M9_Scaricamento";
+    nome_t_input="Giunzione9";
     case "M11_12_13"
     macc = '11,12,13';
-    nome_t_input="M10_Scaricamento";
+    nome_t_input="Giunzione10";
 end
 tp=SistemaThroughput(tp,macc,PN);
 
@@ -485,6 +486,7 @@ clear tp_posti k j i tempo_medio_attesa
 if log==0
     fprintf("   -> Calcolo efficenza.\n")
 end
+eff_mac=table();
 for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     id_t=find(PN.T.Transizione==ImpostazioniIndici.Tabella_EFF.Transizione(i_macc));
     for i_marc=n.stati_v+1:n.stati
@@ -494,8 +496,9 @@ for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),sum(eff_marc)*100,'VariableNames',["Macchinario","Efficenza"]);
     clear eff_marc;
 end
-
-eff_mac=rmmissing(eff_mac);
+if ~isempty(eff_mac)
+    eff_mac=rmmissing(eff_mac);
+end
 IndiciPrestazione.Macchinari=eff_mac;
 
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
