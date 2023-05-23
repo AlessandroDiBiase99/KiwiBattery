@@ -49,7 +49,7 @@ if log==0
     fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
 end
 switch string(macchinari)
-    case "P1"
+    case "M1_2_3"
     PN.T.Rate(PN.T.Transizione=="Giunzione3") = RATE_OUT;
     case "M2"
     PN.T.Rate(PN.T.Transizione=="Giunzione1") = RATE_IN;
@@ -371,7 +371,7 @@ r=zeros(n.stati_t,1);
     tp(k)=sum(r.*PI);
 end
 switch string(macchinari)
-    case "P1"
+    case "M1_2_3"
         macc = '1,2,3';
         nome_t_input = "M1_Caricamento";
     case "M2"
