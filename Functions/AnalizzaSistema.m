@@ -49,8 +49,8 @@ if log==0
     fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
 end
 switch string(macchinari)
-    case "M1"
-    PN.T.Rate(PN.T.Transizione=="Giunzione1") = RATE_OUT;
+    case "P1"
+    PN.T.Rate(PN.T.Transizione=="Giunzione3") = RATE_OUT;
     case "M2"
     PN.T.Rate(PN.T.Transizione=="Giunzione1") = RATE_IN;
     PN.T.Rate(PN.T.Transizione=="Giunzione2") = RATE_OUT;
@@ -81,7 +81,7 @@ switch string(macchinari)
     case "M9"
     PN.T.Rate(PN.T.Transizione=="Giunzione8") = RATE_IN;
     PN.T.Rate(PN.T.Transizione=="Giunzione9") = RATE_OUT;
-     case "M10"
+    case "M10"
     PN.T.Rate(PN.T.Transizione=="Giunzione9") = RATE_IN;
     PN.T.Rate(PN.T.Transizione=="Giunzione10") = RATE_OUT;
     case "M11_12_13"
@@ -360,17 +360,20 @@ tp=zeros(1,height(PN.T));
 for k=1:height(PN.T)
 r=zeros(n.stati_t,1);
     for i=1+n.stati_v:(n.stati)
+        try
         if ismember(k,Grafo(OrdineV_T(i)).Raggiungibili.Transizione)
             r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(OrdineV_T(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
+        end
+        catch 
+            fprintf("ao");
         end
     end
     tp(k)=sum(r.*PI);
 end
 switch string(macchinari)
-    case "M1"
-        macc = '1';
+    case "P1"
+        macc = '1,2,3';
         nome_t_input = "M1_Caricamento";
-        nomegruppo="";
     case "M2"
         macc = '2';
         nome_t_input = "Giunzione1";
