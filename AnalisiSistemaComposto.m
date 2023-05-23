@@ -58,40 +58,5 @@ for i=1:l_im
     MLT=MLT+IPx(i).MLT;
 end
 
-%% RAGGRUPPAMENTI
-
-Macchinari=Dati.PN.Gruppi(~cellfun(@isempty,Dati.PN.Gruppi.Transizioni),:);
-Nastri=Dati.PN.Gruppi(cellfun(@isempty,Dati.PN.Gruppi.Transizioni),:);
-for i=1:height(Macchinari)
-    t=Macchinari.Transizioni{i};
-    if i<10
-        s="0";
-    else
-        s="";
-    end
-    for j=1:length(t)
-        Transizioni.Gruppo(Transizioni.Transizione==t(j))=sprintf("%s%i_M",s,i); 
-    end
-    p=Macchinari.Posti{i};
-    for j=1:length(p)
-       Posti.Gruppo(Posti.Posto==p(j))=sprintf("%s%i_M",s,i); 
-    end
-end
-for i=1:height(Nastri)
-    p=Nastri.Posti{i};
-    if i<10
-        s="0";
-    else
-        s="";
-    end
-    for j=1:length(p)
-       Posti.Gruppo(Posti.Posto==p(j))=sprintf("%s%i_N",s,i); 
-    end
-end
-Transizioni=sortrows(Transizioni,"Gruppo");
-Posti=sortrows(Posti,"Gruppo");
-Transizioni=[Transizioni(:,end) Transizioni(:,1:end-1)];
-Posti=[Posti(:,end) Posti(:,1:end-1)];
-
 %% SALVATAGGIO
 save("RisultatiAnalisi.mat",'EFF','Transizioni','Posti','WIP','TPU','MLT');

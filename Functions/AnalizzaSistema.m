@@ -48,45 +48,9 @@ clear info_PN info_Grafo;
 if log==0
     fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
 end
-switch string(macchinari)
-    case "M1_2_3"
-    PN.T.Rate(PN.T.Transizione=="Giunzione3") = RATE_OUT;
-    case "M2"
-    PN.T.Rate(PN.T.Transizione=="Giunzione1") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione2") = RATE_OUT;
-    case "M3"
-    PN.T.Rate(PN.T.Transizione=="Giunzione2") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione3" ) = RATE_OUT;
-    case "M4"
-    PN.T.Rate(PN.T.Transizione=="Giunzione3" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione4") = RATE_OUT;
-    case "M5"
-    PN.T.Rate(PN.T.Transizione=="Giunzione4") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione5" ) = RATE_OUT;
-    case "M6"
-    PN.T.Rate(PN.T.Transizione=="Giunzione5" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione6") = RATE_OUT;
-    case "M7_1"
-    PN.T.Rate(PN.T.Transizione=="Giunzione6" ) = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione7_1") = RATE_OUT;
-    case "M7_2"
-    PN.T.Rate(PN.T.Transizione=="Giunzione7_1") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione7_2") = RATE_OUT;
-    case "M7_3"
-    PN.T.Rate(PN.T.Transizione=="Giunzione7_2") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione7") = RATE_OUT;
-    case "M8"
-    PN.T.Rate(PN.T.Transizione=="Giunzione7") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione8") = RATE_OUT;
-    case "M9"
-    PN.T.Rate(PN.T.Transizione=="Giunzione8") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione9") = RATE_OUT;
-    case "M10"
-    PN.T.Rate(PN.T.Transizione=="Giunzione9") = RATE_IN;
-    PN.T.Rate(PN.T.Transizione=="Giunzione10") = RATE_OUT;
-    case "M11_12_13"
-    PN.T.Rate(PN.T.Transizione=="Giunzione10") = RATE_IN;
-end
+
+PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_IN)= RATE_IN;
+PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_OUT)= RATE_OUT;
 
 if string(macchinari)~="M7_2"
     PN.T.Rate = round(PN.T.Rate,2);
@@ -370,52 +334,11 @@ r=zeros(n.stati_t,1);
     end
     tp(k)=sum(r.*PI);
 end
-switch string(macchinari)
-    case "M1_2_3"
-        macc = '1,2,3';
-        nome_t_input = "M1_Caricamento";
-    case "M2"
-        macc = '2';
-        nome_t_input = "Giunzione1";
-    case "M3"
-        macc= '3';
-        nome_t_input= "Giunzione2";
-    case "M4"
-        macc= '4';
-        nome_t_input= "Giunzione3";
-    case "M5"
-        macc= '5';
-        nome_t_input= "Giunzione4";
-    case "M6"
-        macc = '6';
-        nome_t_input = "Giunzione5";
-    case "M7_1"
-        macc = '7_1';
-        nome_t_input="Giunzione6";
-    case "M7_2"
-    macc = '7_2';
-    nome_t_input="Giunzione7_1";
-    case "M7_3"
-    macc = '7_3';
-    nome_t_input="Giunzione7_2";
-    case "M8"
-    macc = '8';
-    nome_t_input="Giunzione7";
-    case "M9"
-    macc = '9';
-    nome_t_input="Giunzione8";
-    case "M10"
-    macc = '10';
-    nome_t_input="Giunzione9";
-    case "M11_12_13"
-    macc = '11,12,13';
-    nome_t_input="Giunzione10";
-end
-tp=SistemaThroughput(tp,macc,PN);
 
-IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.T_Per_TPU));
-IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==nome_t_input);
+tp=SistemaThroughput(tp,char(macchinari),PN);
 
+IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==string(ImpostazioniIndici.TPU_IN));
+IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.TPU_OUT));
 
 IndiciPrestazione.Transizioni.TPU = tp.';
 clear nome_t_input k i r tp
@@ -457,7 +380,10 @@ if log==0
 end
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
-MLT=IndiciPrestazione.WIP/IndiciPrestazione.TPU_OUT;
+array=PN.Pre(:,PN.T.Transizione==string(ImpostazioniIndici.TPU_OUT));
+batteriePerScatto=array(array~=0);
+
+MLT=IndiciPrestazione.WIP/(IndiciPrestazione.TPU_OUT*batteriePerScatto);
 
 IndiciPrestazione.MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
 
