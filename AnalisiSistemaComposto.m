@@ -12,13 +12,13 @@ Precisione.U1 = 4;
 soglia=0.96;
 log=2;
 versione=6;
-indice_macchinario=["P1","M4","M5","M6","M7_1","M7_3","M8","M9","M10","M11_12_13"];
+indice_macchinario=["P1","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
 l_im=length(indice_macchinario);
 
 
 %% CALCOLO INDICI DI PRESTAZIONE
-fprintf(">_____Macchinario %s%s>\n",indice_macchinario(10),repmat('_',1,12-length(char(indice_macchinario(10)))));
-IPx(10)= AnalizzaSistema(versione,  indice_macchinario(10), Precisione,log, realmax,realmax);
+fprintf(">_____Macchinario %s%s>\n",indice_macchinario(11),repmat('_',1,12-length(char(indice_macchinario(11)))));
+IPx(11)= AnalizzaSistema(versione,  indice_macchinario(11), Precisione,log, realmax,realmax);
 for i=l_im-1:-1:2
 %   if IPx(i+1).TPU_IN < soglia*IPx(i).TPU_OUT
     fprintf("<_____Macchinario %s%s<\n",indice_macchinario(i),repmat('_',12-length(char(indice_macchinario(i)))));
@@ -30,7 +30,7 @@ for i=2:l_im-1
     fprintf(">_____Macchinario %s%s>\n",indice_macchinario(i),repmat('_',1,12-length(char(indice_macchinario(i)))));
     IPx(i)= AnalizzaSistema(versione,  indice_macchinario(i),Precisione,log, IPx(i-1).TPU_OUT,IPx(i+1).TPU_IN);
 end
-IPx(10)= AnalizzaSistema(versione,  indice_macchinario(10),Precisione,log, IPx(9).TPU_OUT,realmax);
+IPx(11)= AnalizzaSistema(versione,  indice_macchinario(11),Precisione,log, IPx(10).TPU_OUT,realmax);
 for i=1:l_im
     fprintf("%f -> Macchinario %s ->%f\n",IPx(i).TPU_IN,indice_macchinario(i), IPx(i).TPU_OUT);
 end
