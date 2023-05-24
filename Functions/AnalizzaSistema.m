@@ -49,8 +49,12 @@ if log==0
     fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
 end
 
+if RATE_IN>0
 PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_IN)= RATE_IN;
+end
+if RATE_OUT>0
 PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_OUT)= RATE_OUT;
+end
 
 if string(macchinari)~="M7_2"
     PN.T.Rate = round(PN.T.Rate,2);
