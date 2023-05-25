@@ -59,6 +59,13 @@ end
 if string(macchinari)~="M7_2"
     PN.T.Rate = round(PN.T.Rate,2);
 end
+if string(macchinari)=="M6"
+    ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Riempitrice elettrolito")="M6_1_Riempie$M6_2_Riempie";
+elseif string(macchinari)=="M8"
+    ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Svuotatrice elettrolito")="M8_R1$M8_R2$M8_R3$M8_R4$M8_R5$M8_R6$M8_R7";
+elseif string(macchinari)=="M9"
+    ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Rinnovatrice elettrolito")="M9_1_Rinnova$M9_2_Rinnova";
+end
 
 % Il numero di marcature
 n.stati=size(Grafo,2);
@@ -421,12 +428,19 @@ if log==0
 end
 eff_mac=table();
 for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
-    id_t=find(PN.T.Transizione==ImpostazioniIndici.Tabella_EFF.Transizione(i_macc));
-    for i_marc=n.stati_v+1:n.stati
-        server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t));
-        eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/PN.T.Server(id_t);
+    transizioni=split(ImpostazioniIndici.Tabella_EFF.Transizione(i_macc),'$');
+    eff_marc=0;
+    for i_trans=1:length(transizioni)
+        id_t=find(PN.T.Transizione==transizioni(i_trans));
+        for i_marc=n.stati_v+1:n.stati
+            server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t));
+            eff_marc=eff_marc+PI(i_marc-n.stati_v)*server_in_lavorazione/PN.T.Server(id_t);
+        end
     end
-    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),sum(eff_marc)*100,'VariableNames',["Macchinario","Efficenza"]);
+    if macchinari=="M6" || macchinari=="M9"
+        eff_marc=eff_marc/2;
+    end
+    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),eff_marc*100,'VariableNames',["Macchinario","Efficenza"]);
     clear eff_marc;
 end
 if ~isempty(eff_mac)
