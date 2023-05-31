@@ -30,10 +30,10 @@ function IndiciPrestazione = AnalizzaSistema(versione,macchinari,Precisione,log,
 if log<=1
     fprintf("\n1) Caricamento PN e Grafo di %s.\n",macchinari)
 end
-
 if log==0
     fprintf("   -> Carico Parti_v%i/%s.mat.\n",versione,macchinari)
 end
+
 info_PN = load(sprintf("Parti_v%i/PN_%s.mat",versione,macchinari));
 PN = info_PN.PN.Ridotta;
 ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
@@ -41,6 +41,7 @@ ImpostazioniIndici = info_PN.PN.ImpostazioniIndici;
 if log==0
     fprintf("   -> Carico Parti_v%i/Grafo_%s.mat.\n",versione,macchinari)
 end
+
 info_Grafo = load(sprintf("Parti_v%i/Grafo_%s.mat",versione,macchinari));
 Grafo=info_Grafo.Grafo;
 clear info_PN info_Grafo;
@@ -50,15 +51,12 @@ if log==0
 end
 
 if RATE_IN>0
-PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_IN)= RATE_IN;
+    PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_IN)= RATE_IN;
 end
 if RATE_OUT>0
-PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_OUT)= RATE_OUT;
+    PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_OUT)= RATE_OUT;
 end
 
-if string(macchinari)~="M7_2"
-    PN.T.Rate = round(PN.T.Rate,2);
-end
 if string(macchinari)=="M6"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Riempitrice elettrolito")="M6_1_Riempie$M6_2_Riempie";
 elseif string(macchinari)=="M8"
@@ -95,6 +93,7 @@ clear id1 k id2;
 if log<=1
     fprintf("\n3) Calcolo matrice delle probabilità U.\n")
 end
+
 % Inizializzazione matrice delle probabilità
 U=zeros(n.stati,n.stati);
 
@@ -175,10 +174,6 @@ end
 % stocastica
 U=VerificaStocastica(U,Precisione.U);
 
-% if macchinari=='P3'
-%     PN.T.Rate=PN.T.Rate/100;
-% end
-
 %% TRASFORMAZIONE DI COORDINATE ===========================================
 if log<=1
     fprintf("\n4) Trasformazione di coordinate della matrice delle probabilità con U.\n")
@@ -191,12 +186,17 @@ for i=1:n.stati
         v(i)=1;
     end
 end
-% fprintf("Le marcature sono %i\n",n.stati);
-% fprintf(" - %i stati sono vanishing;\n - %i stati sono tangible.\n\n",sum(v),length(v)-sum(v));
+
+n.stati_v = sum(v);
+n.stati_t = n.stati - n.stati_v;
+
+if log==0
+    fprintf("   -> Le marcature sono %i:\n      - %i stati sono vanishing;\n      - %i stati sono tangible.\n\n",n.stati,n.stati_v,n.stati_t);
+end
 
 % Ordino il vettore degli stati mettendo prima quelli vanishing al fine di
 % trovare la matrice di trasformazione di base
-[v1,OrdineV_T]=sort(v,'descend');
+[~,OrdineV_T]=sort(v,'descend');
 
 % Riordino la matrice U
 U_riordinata=zeros(size(U));
@@ -204,13 +204,6 @@ for i=1:size(U,1)
     for j=1:size(U,2)
         U_riordinata(i,j)=U(OrdineV_T(i),OrdineV_T(j));
     end
-end
-
-n.stati_v = sum(v1);
-n.stati_t = n.stati - n.stati_v;
-
-if log==0
-    fprintf("   -> Ci sono %i marcature, %i tangible e %i vanishing.\n",n.stati,n.stati_t,n.stati_v)
 end
 
 %% CALCOLO U' =============================================================
@@ -262,10 +255,12 @@ U1=VerificaStocastica(U1,Precisione.U1);
 if log<=1
     fprintf("\n6) Calcolo dei valori a regime.\n")
 end
+
 %__VALORI A REGIME_________________________________________________________
 if log==0
     fprintf("   -> Calcolo delle probabilità a regime nella EMC.\n")
 end
+
 % Se il sistema è irriducibile e riccorrente positivo allora esiste la
 % probabilità a regime
 Y_sym = sym('y1_',[1 n.stati_t],'real');
@@ -282,7 +277,7 @@ elseif length(Y_struct)==1
 else
     Y=[];
     fprintf("!=== ERRORE ===!\nImpossibile determinare la soluzione Y.\n");
-    return
+    return 
 end
 clear Y_sym Y_struct
 
@@ -290,6 +285,7 @@ clear Y_sym Y_struct
 if log==0
     fprintf("   -> Calcolo dei tempi di soggiorno.\n")
 end
+
 m=zeros(n.stati_t,1);
 for i=1:n.stati_t
     lambda=0;
@@ -307,6 +303,7 @@ clear i lambda id_t_temp idMarcatura;
 if log==0
     fprintf("   -> Calcolo delle probabilità a regime nella GSPN.\n")
 end
+
 PI=zeros(length(Y),1);
 for i=1:length(Y)
     PI(i,1)=(Y(i)*m(i))/sum(Y.*m);
@@ -318,7 +315,7 @@ clear i;
 if log<=1
     fprintf("\n7) Calcolo degli indici di prestazione.\n")
 end
-% fprintf("\n\n=========== INDICI DI PRESTAZIONE ============================================")
+
 IndiciPrestazione.Transizioni = table(PN.T.Transizione,'VariableNames',"Transizione");
 IndiciPrestazione.Posti       = table(PN.P            ,'VariableNames',"Posto");
 
@@ -326,6 +323,7 @@ IndiciPrestazione.Posti       = table(PN.P            ,'VariableNames',"Posto");
 if log==0
     fprintf("   -> Calcolo throughput.\n")
 end
+
 % Il throughput è il reciproco del tempo di produzione per unità di
 % prodotto. La reward function r è ottenuta moltiplicando il rate della
 % transizione temporizzata per il numero di server attivati. Il throughput
@@ -358,6 +356,7 @@ clear nome_t_input k i r tp
 if log==0
     fprintf("   -> Calcolo numero medio token.\n")
 end
+
 % Per ogni posto k-esimo viene calcolato il numero medio di token associato
 % al posto. Esso viene calcolato sommando il prodotto tra le probabilità a
 % regime che il sistema si trovi in quella marcatura e il numero di token
@@ -379,6 +378,7 @@ clear k i numero_medio_token r
 if log==0
     fprintf("   -> Calcolo WIP.\n")
 end
+
 % Il Work in Process è dato dalla somma del numero medio di token
 WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken.*ImpostazioniIndici.Tabella_WIP.DaConsiderare);
 
@@ -389,6 +389,7 @@ clear WIP
 if log==0
     fprintf("   -> Calcolo MLT.\n")
 end
+
 % Il Manufacturing Lead Time è stato calcolando facendo il rapporto tra il
 % WIP e il throughput minimo (diverso da zero) del sistema
 array=PN.Pre(:,PN.T.Transizione==string(ImpostazioniIndici.TPU_OUT));
@@ -404,6 +405,7 @@ clear i j tp_min MLT
 if log==0
     fprintf("   -> Calcolo tempo medio di attesa.\n")
 end
+
 % Il tempo medio di attesa relativo al k-esimo posto è dato dal rapporto 
 % tra il numero medio di token del posto e la somma dei throughput relativi
 % alle transizioni che depositano token nel posto.
@@ -426,6 +428,7 @@ clear tp_posti k j i tempo_medio_attesa
 if log==0
     fprintf("   -> Calcolo efficenza.\n")
 end
+
 eff_mac=table();
 for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     transizioni=split(ImpostazioniIndici.Tabella_EFF.Transizione(i_macc),'$');
@@ -454,6 +457,7 @@ clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome
 if log<=1
     fprintf("\n8) Calcolo degli indici di prestazione.\n")
 end
+
 save(sprintf("Parti_v%i\\IndiciPrestazione_%s.mat",versione,macchinari),"IndiciPrestazione");
 
 end
