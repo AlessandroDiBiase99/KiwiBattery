@@ -441,7 +441,7 @@ for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     if macchinari=="M6" || macchinari=="M9"
         eff_marc=eff_marc/2;
     end
-    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),eff_marc*100,'VariableNames',["Macchinario","Efficenza"]);
+    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),eff_marc*100,'VariableNames',["Macchinario","Efficienza"]);
     clear eff_marc;
 end
 if ~isempty(eff_mac)

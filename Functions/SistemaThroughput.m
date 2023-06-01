@@ -27,7 +27,7 @@ if ismember('2',macchinari)
     id_CaricamentoInfM2 = PN.T.Transizione=="M2_CaricamentoInf";
     id_CaricamentoSupM2 = PN.T.Transizione=="M2_CaricamentoSup";
     id_LavorazioneM2 = find(PN.T.Transizione=="M2_Assembla");
-    id_ScaricamentoM2 = PN.T.Transizione=="M2_IndietreggiaPistone";
+    id_ScaricamentoM2 = PN.T.Transizione=="M2_Scaricamento";
     
     tp(id_CaricamentoInfM2)=tp(id_LavorazioneM2);
     tp(id_CaricamentoSupM2)=tp(id_LavorazioneM2);
