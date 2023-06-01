@@ -316,8 +316,8 @@ if log<=1
     fprintf("\n7) Calcolo degli indici di prestazione.\n")
 end
 
-IndiciPrestazione.Transizioni = table(PN.T.Transizione,'VariableNames',"Transizione");
-IndiciPrestazione.Posti       = table(PN.P            ,'VariableNames',"Posto");
+Transizioni = table(PN.T.Transizione,'VariableNames',"Transizione");
+Posti       = table(PN.P            ,'VariableNames',"Posto");
 
 %__THROUGHPUT______________________________________________________________
 if log==0
@@ -346,10 +346,10 @@ end
 
 tp=SistemaThroughput(tp,char(macchinari),PN);
 
-IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==string(ImpostazioniIndici.TPU_IN));
-IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.TPU_OUT));
+TPU_IN=tp(PN.T.Transizione==string(ImpostazioniIndici.TPU_IN));
+TPU_OUT=tp(PN.T.Transizione==string(ImpostazioniIndici.TPU_OUT));
 
-IndiciPrestazione.Transizioni.TPU = tp.';
+Transizioni.TPU = tp.';
 clear nome_t_input k i r tp
 
 %__NUMERO MEDIO DI TOKEN___________________________________________________
@@ -369,8 +369,7 @@ for k=1:length(PN.P)
     end
     numero_medio_token(k)=sum(r.*PI);
 end
-
-IndiciPrestazione.Posti.NumeroMedioToken=numero_medio_token.';
+Posti.NumeroMedioToken=numero_medio_token.';
 
 clear k i numero_medio_token r
 
@@ -380,10 +379,7 @@ if log==0
 end
 
 % Il Work in Process è dato dalla somma del numero medio di token
-WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken.*ImpostazioniIndici.Tabella_WIP.DaConsiderare);
-
-IndiciPrestazione.WIP=WIP;
-clear WIP
+WIP=sum(Posti.NumeroMedioToken.*ImpostazioniIndici.Tabella_WIP.DaConsiderare);
 
 %__MLT_____________________________________________________________________
 if log==0
@@ -395,11 +391,11 @@ end
 array=PN.Pre(:,PN.T.Transizione==string(ImpostazioniIndici.TPU_OUT));
 batteriePerScatto=array(array~=0);
 
-MLT=IndiciPrestazione.WIP/(IndiciPrestazione.TPU_OUT*batteriePerScatto);
+MLT=WIP/(TPU_OUT*batteriePerScatto);
 
-IndiciPrestazione.MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
+MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
 
-clear i j tp_min MLT
+clear i j tp_min
 
 %__TEMPO MEDIO ATTESA______________________________________________________
 if log==0
@@ -414,13 +410,13 @@ tempo_medio_attesa=zeros(1,length(PN.P));
      tp_posti=0;
      for j=1:height(PN.T)
          if PN.Post(k,j)>0
-             tp_posti=tp_posti+IndiciPrestazione.Transizioni.TPU(j)*PN.Post(k,j);
+             tp_posti=tp_posti+Transizioni.TPU(j)*PN.Post(k,j);
          end
      end
-     tempo_medio_attesa(k)=IndiciPrestazione.Posti.NumeroMedioToken(k)/tp_posti;
+     tempo_medio_attesa(k)=Posti.NumeroMedioToken(k)/tp_posti;
  end
 
-IndiciPrestazione.Posti.TempoMedioAttesa=duration(hours(tempo_medio_attesa),'format','hh:mm:ss.SSSS').';
+Posti.TempoMedioAttesa=duration(hours(tempo_medio_attesa),'format','hh:mm:ss.SSSS').';
 
 clear tp_posti k j i tempo_medio_attesa
 
@@ -449,7 +445,7 @@ end
 if ~isempty(eff_mac)
     eff_mac=rmmissing(eff_mac);
 end
-IndiciPrestazione.Macchinari=eff_mac;
+EFF=eff_mac;
 
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
 
@@ -458,7 +454,14 @@ if log<=1
     fprintf("\n8) Calcolo degli indici di prestazione.\n")
 end
 
-save(sprintf("Parti_v%i\\IndiciPrestazione_%s.mat",versione,macchinari),"IndiciPrestazione");
+save(sprintf("Parti_v%i\\IP_%s.mat",versione,macchinari),"Transizioni","Posti","TPU_IN","TPU_OUT","WIP","MLT","EFF");
 
+IndiciPrestazione.Transizioni=Transizioni;
+IndiciPrestazione.Posti=Posti;
+IndiciPrestazione.TPU_IN=TPU_IN;
+IndiciPrestazione.TPU_OUT=TPU_OUT;
+IndiciPrestazione.WIP=WIP;
+IndiciPrestazione.MLT=MLT;
+IndiciPrestazione.EFF=EFF;
 end
 

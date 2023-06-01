@@ -5,7 +5,6 @@ clear global;
 clc;
 addpath('Functions')
 
-TAB = 27;
 Precisione.U  = 5;
 Precisione.U1 = 5;        
 soglia=0.96;
