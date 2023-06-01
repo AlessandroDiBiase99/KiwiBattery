@@ -11,7 +11,7 @@ soglia=0.96;
 log=2;
 versione=1;
 direzione="><";
-indice_macchinario=["M1","M2"];%,"M3","M4","M5","M6","M7_1","M7_3","M8","M9","M10","M11_12_13"];
+indice_macchinario=["M1","M2"]; %,"M3","M4","M5","M6","M7_1","M7_3","M8","M9","M10","M11_12_13"];
 l_im=length(indice_macchinario);
 
 %% CALCOLO INDICI DI PRESTAZIONE
@@ -77,7 +77,7 @@ TPU=IPx(l_im).TPU_OUT;
 for i=1:l_im
     Transizioni=[Transizioni; IPx(i).Transizioni];
     Posti=[Posti; IPx(i).Posti];
-    EFF=[EFF;IPx(i).Macchinari];
+    EFF=[EFF;IPx(i).EFF];
     WIP=WIP+IPx(i).WIP;
     MLT=MLT+IPx(i).MLT;
 end
@@ -88,9 +88,14 @@ if (direzione=="<>")
 else
     direzione1="ai";
 end
+save(sprintf("RisultatiAnalisi_%i_%s.mat",versione,direzione1),'EFF','Transizioni','Posti','WIP','TPU','MLT');
 %% STAMPA RISULTATI
 for i=1:l_im
-nome=sprintf("Parti_v1/IndiciPrestazione_M%i.mat",i);
+%Per stampare i risultati senza separare i macchinari
+%nome=sprintf("RisultatiAnalisi_1_ai.mat");
+
+%Per stampare i risultati separati per macchinario
+nome=sprintf("Parti_v1/IP_M%i.mat",i);
 PrintResultForLatex(i, nome);
 end
 %% FUNCTION

@@ -1,6 +1,6 @@
 function PrintResultForLatex(versione, nome)
 
-load(nome);
+IndiciPrestazione=load(nome);
 
 if ~isduration(IndiciPrestazione.MLT)
     IndiciPrestazione.MLT=hours(IndiciPrestazione.MLT);
