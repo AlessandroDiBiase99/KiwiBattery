@@ -379,7 +379,7 @@ if log==0
 end
 
 % Il Work in Process è dato dalla somma del numero medio di token
-WIP=sum(IndiciPrestazione.Posti.NumeroMedioToken.*ImpostazioniIndici.Tabella_WIP.DaConsiderare);
+WIP=sum(Posti.NumeroMedioToken.*ImpostazioniIndici.Tabella_WIP.DaConsiderare);
 
 %__MLT_____________________________________________________________________
 if log==0
@@ -391,11 +391,11 @@ end
 array=PN.Pre(:,PN.T.Transizione==string(ImpostazioniIndici.TPU_OUT));
 batteriePerScatto=array(array~=0);
 
-MLT=IndiciPrestazione.WIP/(IndiciPrestazione.TPU_OUT*batteriePerScatto);
+MLT=WIP/(TPU_OUT*batteriePerScatto);
 
 MLT=duration(hours(MLT),'format','hh:mm:ss.SSSS');
 
-clear i j tp_min MLT
+clear i j tp_min
 
 %__TEMPO MEDIO ATTESA______________________________________________________
 if log==0
@@ -410,10 +410,10 @@ tempo_medio_attesa=zeros(1,length(PN.P));
      tp_posti=0;
      for j=1:height(PN.T)
          if PN.Post(k,j)>0
-             tp_posti=tp_posti+IndiciPrestazione.Transizioni.TPU(j)*PN.Post(k,j);
+             tp_posti=tp_posti+Transizioni.TPU(j)*PN.Post(k,j);
          end
      end
-     tempo_medio_attesa(k)=IndiciPrestazione.Posti.NumeroMedioToken(k)/tp_posti;
+     tempo_medio_attesa(k)=Posti.NumeroMedioToken(k)/tp_posti;
  end
 
 Posti.TempoMedioAttesa=duration(hours(tempo_medio_attesa),'format','hh:mm:ss.SSSS').';
@@ -455,5 +455,13 @@ if log<=1
 end
 
 save(sprintf("Parti_v%i\\IP_%s.mat",versione,macchinari),"Transizioni","Posti","TPU_IN","TPU_OUT","WIP","MLT","EFF");
+
+IndiciPrestazione.Transizioni=Transizioni;
+IndiciPrestazione.Posti=Posti;
+IndiciPrestazione.TPU_IN=TPU_IN;
+IndiciPrestazione.TPU_OUT=TPU_OUT;
+IndiciPrestazione.WIP=WIP;
+IndiciPrestazione.MLT=MLT;
+IndiciPrestazione.EFF=EFF;
 end
 
