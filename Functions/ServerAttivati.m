@@ -1,4 +1,4 @@
-function s_a = ServerAttivati(Marcatura,MaxServer,Input)
+function s_a = ServerAttivati(Marcatura,MaxServer,Pre,H)
 % ServerAttivati è una funzione che restituisce il numero di server che
 % risultano attivati in base alla marcatura presente, al numero di token
 % richiesto in ingresso e il numero di server totali.
@@ -13,10 +13,15 @@ function s_a = ServerAttivati(Marcatura,MaxServer,Input)
 %   s_a
 %    il numero di server che risultano contemporaneamente attivi date le
 %    configurazioni presenti
-    s_a = floor(min(Marcatura./Input));
-    if sum(Input)==0 || s_a>MaxServer
+
+if all(H==0 | (H>0 & Marcatura<H))
+    s_a = floor(min(Marcatura./Pre));
+    if sum(Pre)==0 || s_a>MaxServer
         s_a=MaxServer;
     end
+else
+    s_a=0;
+end
 %     if MaxServer>1
 %         load('prova.mat');
 %         v_sa=[v_sa s_a];

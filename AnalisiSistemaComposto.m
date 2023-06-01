@@ -77,7 +77,7 @@ TPU=IPx(l_im).TPU_OUT;
 for i=1:l_im
     Transizioni=[Transizioni; IPx(i).Transizioni];
     Posti=[Posti; IPx(i).Posti];
-    EFF=[EFF;IPx(i).Macchinari];
+    EFF=[EFF;IPx(i).EFF];
     WIP=WIP+IPx(i).WIP;
     MLT=MLT+IPx(i).MLT;
 end
