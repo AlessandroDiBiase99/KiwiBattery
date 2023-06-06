@@ -9,10 +9,11 @@ Precisione.U  = 5;
 Precisione.U1 = 5;        
 soglia=0.96;
 log=2;
-versione=1;
+versione=10;
 direzione="><";
-indice_macchinario=["M1","M2"]; %,"M3","M4","M5","M6","M7_1","M7_3","M8","M9","M10","M11_12_13"];
+indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
 l_im=length(indice_macchinario);
+r_out2=[];
 
 %% CALCOLO INDICI DI PRESTAZIONE
 if(direzione=="<>")
@@ -44,10 +45,16 @@ elseif(direzione=="><")
     %  >>>>>>>>>>>> -> <<<<<<<<<<<<<
     fprintf(">_____Macchinario %s%s>\n",indice_macchinario(1),repmat('_',1,12-length(char(indice_macchinario(1)))));
     IPx(1) = AnalizzaSistema(versione, indice_macchinario(1),Precisione,log,0, realmax);
+    r_out(1)=realmax;
+    r_in(1)=0;
+
     for i=2:l_im-1
         fprintf(">_____Macchinario %s%s>\n",indice_macchinario(i),repmat('_',1,12-length(char(indice_macchinario(i)))));
         IPx(i)= AnalizzaSistema(versione,  indice_macchinario(i),Precisione,log, IPx(i-1).TPU_OUT,realmax);
+        r_out(i)=realmax;
+        r_in(i)=IPx(i-1).TPU_OUT;
     end
+
     fprintf(">_____Macchinario %s%s>\n",indice_macchinario(l_im),repmat('_',1,12-length(char(indice_macchinario(l_im)))));
     IPx(l_im)= AnalizzaSistema(versione,  indice_macchinario(l_im),Precisione,log, IPx(l_im-1).TPU_OUT,0);
 
@@ -59,10 +66,14 @@ elseif(direzione=="><")
         if IPx(i+1).TPU_IN < soglia*IPx(i).TPU_OUT
         fprintf("<_____Macchinario %s%s<\n",indice_macchinario(i),repmat('_',1,12-length(char(indice_macchinario(i)))));
         IPx(i) = AnalizzaSistema(versione, indice_macchinario(i),Precisione,log,IPx(i-1).TPU_OUT, IPx(i+1).TPU_IN);
+        r_out2(i)=IPx(i+1).TPU_IN;
         end
     end
+    if IPx(2).TPU_IN < soglia*IPx(1).TPU_OUT
     fprintf("<_____Macchinario %s%s<\n",indice_macchinario(1),repmat('_',1,12-length(char(indice_macchinario(1)))));
     IPx(1) = AnalizzaSistema(versione, indice_macchinario(1),Precisione,log,0, IPx(2).TPU_IN);
+    r_out2(1)=IPx(2).TPU_IN;
+    end
 end
 clear Precisione
 
@@ -89,6 +100,7 @@ else
     direzione1="ai";
 end
 save(sprintf("RisultatiAnalisi_%i_%s.mat",versione,direzione1),'EFF','Transizioni','Posti','WIP','TPU','MLT');
+save(sprintf("RateImposti_%i_%s.mat",versione,direzione1),'r_in','r_out','r_out2');
 %% STAMPA RISULTATI
 for i=1:l_im
 %Per stampare i risultati senza separare i macchinari
