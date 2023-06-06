@@ -107,7 +107,7 @@ for i=1:l_im
 %nome=sprintf("RisultatiAnalisi_1_ai.mat");
 
 %Per stampare i risultati separati per macchinario
-nome=sprintf("Parti_v1/IP_M%i.mat",i);
+nome=sprintf("Parti_v1/IP_%s.mat",indice_macchinario(i));
 PrintResultForLatex(i, nome);
 end
 %% FUNCTION

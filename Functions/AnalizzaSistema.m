@@ -57,7 +57,9 @@ if RATE_OUT>0
     PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_OUT)= RATE_OUT;
 end
 
-if string(macchinari)=="M6"
+if string(macchinari)=="M3"
+    %PN.T.Rate(PN.T.Transizione=="M3_Scalda")=PN.T.Rate(PN.T.Transizione=="M3_Scalda")*2;
+elseif string(macchinari)=="M6"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Riempitrice elettrolito")="M6_1_Riempie$M6_2_Riempie";
 elseif string(macchinari)=="M8"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Svuotatrice elettrolito")="M8_R1$M8_R2$M8_R3$M8_R4$M8_R5$M8_R6$M8_R7";
@@ -144,12 +146,12 @@ for i=1:n.stati
                 % La probabilità è pari al rate della transizione diviso la
                 % somma di tutti i rate delle transizioni abilitate
                 for t=1:length(a_i_j)
-                    rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(a_i_j(t)),PN.Pre(:,a_i_j(t)));
+                    rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(a_i_j(t)),PN.Pre(:,a_i_j(t)),PN.H(:,a_i_j(t)));
                     rate_tot=0;
                     for h=1:height(Grafo(i).Raggiungibili)
                         if PN.T.Maschera(Grafo(i).Raggiungibili.Transizione(h))==0
                             id_t_temp=Grafo(i).Raggiungibili.Transizione(h);
-                            rate_tot=rate_tot+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
+                            rate_tot=rate_tot+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp),PN.H(:,id_t_temp));
                         end
                     end
                     u_temp(t)=rate/rate_tot;
@@ -292,7 +294,7 @@ for i=1:n.stati_t
     for k=1:height(Grafo(OrdineV_T(n.stati_v+i)).Raggiungibili)
         idMarcatura=OrdineV_T(n.stati_v+i);
         id_t_temp=Grafo(idMarcatura).Raggiungibili.Transizione(k);
-        lambda=lambda+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
+        lambda=lambda+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp),PN.H(:,id_t_temp));
     end
     m(i,1)=1/lambda;
 end
@@ -335,10 +337,10 @@ r=zeros(n.stati_t,1);
     for i=1+n.stati_v:(n.stati)
         try
         if ismember(k,Grafo(OrdineV_T(i)).Raggiungibili.Transizione)
-            r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(OrdineV_T(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
+            r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(OrdineV_T(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k),PN.H(:,k));
         end
         catch 
-            fprintf("ao");
+            fprintf("   -> Problema con il calcolo dei throughput in AnalizzaSistema.m, sezione INDICI DI PRESTAZIONE, throughput.\n");
         end
     end
     tp(k)=sum(r.*PI);
@@ -432,14 +434,14 @@ for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     for i_trans=1:length(transizioni)
         id_t=find(PN.T.Transizione==transizioni(i_trans));
         for i_marc=n.stati_v+1:n.stati
-            server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t));
+            server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t),PN.H(:,id_t));
             eff_marc=eff_marc+PI(i_marc-n.stati_v)*server_in_lavorazione/PN.T.Server(id_t);
         end
     end
     if macchinari=="M6" || macchinari=="M9"
         eff_marc=eff_marc/2;
     end
-    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),eff_marc*100,'VariableNames',["Macchinario","Efficenza"]);
+    eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),eff_marc*100,'VariableNames',["Macchinario","Efficienza"]);
     clear eff_marc;
 end
 if ~isempty(eff_mac)
