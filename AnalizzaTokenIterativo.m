@@ -21,26 +21,23 @@ Impostazioni.Precisione.U1 = 5;
 Impostazioni.log=1;
 Impostazioni.RecuperoGrafo="Si";
 soglia=0.98;
+
+%% CALCOLO ITERATIVO_______________________________________________________
 Analisi_indietro=false;
 rate_out=r_out;
 if ~isempty(r_out2) && length(r_out2)>=codice_macchinario && r_out2(codice_macchinario)>0 
-rate_out=r_out2;
-Analisi_indietro=true;
+    rate_out=r_out2;
+    Analisi_indietro=true;
 end
 
-
-%rate_in=[255.5333, 268.3663, 134.4334, 267.9495, 267.9409, 200.9588, 200.9595, 3.1400, 100.4797, 100.4803, 200.9624, 100.4799];
-%rate_out=[253.5367, 134.1820, 268.8662, 267.9480, 200.9588, 200.9595, 3.1400, 100.4797, 100.4806, 200.9627, 100.4811, 90.4316];
-
-
-
-%% CALCOLO ITERATIVO_______________________________________________________
 plot_tp=Calcolo_Iterativo_PN_Grafo(versione,PN,codici(codice_macchinario),codice_macchinario,token,rate_in(codice_macchinario),rate_out(codice_macchinario),Impostazioni);
+
 if Analisi_indietro
-cerca=find(plot_tp(:,2)/rate_out(codice_macchinario)>=soglia,1,'first');
+    cerca=find(plot_tp(:,2)/rate_out(codice_macchinario)>=soglia,1,'first');
 else
-cerca=find(plot_tp(:,1)/rate_in(codice_macchinario)>=soglia,1,'first');
+    cerca=find(plot_tp(:,1)/rate_in(codice_macchinario)>=soglia,1,'first');
 end
+
 trova_token=0;
 Nome_indice=sprintf("IndiciPrestazione_M%s_%i.mat",codici(codice_macchinario),cerca);
 
