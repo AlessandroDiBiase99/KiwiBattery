@@ -144,12 +144,12 @@ for i=1:n.stati
                 % La probabilità è pari al rate della transizione diviso la
                 % somma di tutti i rate delle transizioni abilitate
                 for t=1:length(a_i_j)
-                    rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(a_i_j(t)),PN.Pre(:,a_i_j(t)));
+                    rate=PN.T.Rate(a_i_j(t))*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(a_i_j(t)),PN.Pre(:,a_i_j(t)),PN.H(:,a_i_j(t)));
                     rate_tot=0;
                     for h=1:height(Grafo(i).Raggiungibili)
                         if PN.T.Maschera(Grafo(i).Raggiungibili.Transizione(h))==0
                             id_t_temp=Grafo(i).Raggiungibili.Transizione(h);
-                            rate_tot=rate_tot+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
+                            rate_tot=rate_tot+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(i).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp),PN.H(:,id_t_temp));
                         end
                     end
                     u_temp(t)=rate/rate_tot;
@@ -295,7 +295,7 @@ for i=1:n.stati_t
     for k=1:height(Grafo(OrdineV_T(n.stati_v+i)).Raggiungibili)
         idMarcatura=OrdineV_T(n.stati_v+i);
         id_t_temp=Grafo(idMarcatura).Raggiungibili.Transizione(k);
-        lambda=lambda+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp));
+        lambda=lambda+PN.T.Rate(id_t_temp)*ServerAttivati(Grafo(idMarcatura).Iniziale,PN.T.Server(id_t_temp),PN.Pre(:,id_t_temp),PN.H(:,id_t_temp));
     end
     m(i,1)=1/lambda;
 end
@@ -335,7 +335,7 @@ for k=1:height(PN.T)
 r=zeros(n.stati_t,1);
     for i=1+n.stati_v:(n.stati)
         if ismember(k,Grafo(OrdineV_T(i)).Raggiungibili.Transizione)
-            r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(OrdineV_T(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k));
+            r(i-n.stati_v)=PN.T.Rate(k)*ServerAttivati(Grafo(OrdineV_T(i)).Iniziale,PN.T.Server(k),PN.Pre(:,k),PN.H(:,k));
         end
     end
     tp(k)=sum(r.*PI);
@@ -421,7 +421,7 @@ end
 for i_macc = 1 : height(ImpostazioniIndici.Tabella_EFF)
     id_t=find(PN.T.Transizione==ImpostazioniIndici.Tabella_EFF.Transizione(i_macc));
     for i_marc=n.stati_v+1:n.stati
-        server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t));
+        server_in_lavorazione = ServerAttivati(Grafo(OrdineV_T(i_marc)).Iniziale,PN.T.Server(id_t),PN.Pre(:,id_t),PN.H(:,id_t));
         eff_marc(i_marc-n.stati_v)=PI(i_marc-n.stati_v)*server_in_lavorazione/PN.T.Server(id_t);
     end
     eff_mac(i_macc,:)=table(ImpostazioniIndici.Tabella_EFF.Gruppo(i_macc),sum(eff_marc)*100,'VariableNames',["Macchinario","Efficenza"]);

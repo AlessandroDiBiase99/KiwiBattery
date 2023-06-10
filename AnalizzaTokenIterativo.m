@@ -9,36 +9,41 @@ codice_macchinario=2;
 PN=load(sprintf('Parti_v%i/PN_M%i.mat',versione, codice_macchinario));
 
 token.init=2;
-token.ending=15;
+token.ending=30;
 token.delta=1;
 
 Impostazioni.Precisione.U  = 5;
 Impostazioni.Precisione.U1 = 5;
-Impostazioni.log=0;
+Impostazioni.log=1;
 Impostazioni.RecuperoGrafo="Si";
 
 rate_in=[255.5333, 268.3663, 134.4334, 267.9495, 267.9409, 200.9588, 200.9595, 3.1400, 100.4797, 100.4803, 200.9624, 100.4799];
 rate_out=[253.5367, 134.1820, 268.8662, 267.9480, 200.9588, 200.9595, 3.1400, 100.4797, 100.4806, 200.9627, 100.4811, 90.4316];
-
-soglia=0.90;
+rate_in(2)=387.09;
+rate_out(2)=145.3303;
+soglia=0.98;
 
 %% CALCOLO ITERATIVO_______________________________________________________
 plot_tp=Calcolo_Iterativo_PN_Grafo(versione,PN,codice_macchinario,token,rate_in(codice_macchinario),rate_out(codice_macchinario),Impostazioni);
 cerca=find(plot_tp(:,2)/rate_out(codice_macchinario)>=soglia,1,'first');
-if ~isempty(cerca)
-   trova_token=(cerca-1)*token.delta+token.init;
-end
+
 %% PLOT
 figure
-plot(token.init:token.delta:token.ending, plot_tp(:,1), token.init:token.delta:token.ending, plot_tp(:,2))
+plot(token.init:token.delta:token.ending, plot_tp(:,1), token.init:token.delta:token.ending, plot_tp(:,2));
+legend("Throughput input","Throughput output");
+grid minor;
 figure
-a=[trova_token, token.ending];
-b=[soglia*100,soglia*100];
-area(a,b,100,'FaceColor','green','FaceAlpha',0.3,'LineStyle','none')
+plot(token.init:token.delta:token.ending, plot_tp(:,1)/rate_in(codice_macchinario)*100, token.init:token.delta:token.ending, plot_tp(:,2)/rate_out(codice_macchinario)*100)
+legend("Throughput input/Max input","Throughput output/Max output");
+ytickformat("%i\%")
+grid minor;
 hold on
-plot(token.init:token.delta:token.ending, plot_tp(:,1)/rate_in(codice_macchinario)*100, token.init:token.delta:token.ending, plot_tp(:,2)/rate_out(codice_macchinario)*100,'Color','r')
-hold on
-xline(trova_token,'-.')
-yline(soglia*100,'-.')
-hold on
-plot(trova_token, plot_tp(cerca,2)/rate_out(codice_macchinario)*100,'*','Color','b')
+if ~isempty(cerca)
+    trova_token=(cerca-1)*token.delta+token.init;
+    a=[trova_token, token.ending];
+    b=[soglia*100,soglia*100];
+    area(a,b,100,'FaceColor','green','FaceAlpha',0.3,'LineStyle','none','HandleVisibility','off')
+    plot(trova_token, plot_tp(cerca,2)/rate_out(codice_macchinario)*100,'*','Color','b','HandleVisibility','off')
+    xline(trova_token,'-.','HandleVisibility','off')
+end
+yline(soglia*100,'-.','HandleVisibility','off')

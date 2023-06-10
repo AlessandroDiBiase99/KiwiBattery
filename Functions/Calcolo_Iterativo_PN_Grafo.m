@@ -13,6 +13,7 @@ end
 for token_attuale=token.init:token.delta:token.ending
     % Elaborazione e salvataggio PN
     PN.PN.Ridotta.M0(PN.PN.Ridotta.P==sprintf("N%i_2_Capacità",codice-1))=token_attuale;
+   % PN.PN.Ridotta.M0(PN.PN.Ridotta.P==sprintf("N%i_1_Capacità",codice))=token_attuale;
     [~,~,~]=mkdir(sprintf('Parti_v%i_M%i',versione, codice));
     PN_salvato=sprintf('Parti_v%1$i_M%2$i/PN_M%2$i_%3$i.mat',versione, codice, token_attuale);
     save(PN_salvato, 'PN')
