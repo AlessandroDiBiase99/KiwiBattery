@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<place id="N7_BatteriePiene">
+<graphics>
+<position x="406.0" y="171.0"/>
+</graphics>
+<name>
+<value>N7_BatteriePiene</value>
+<graphics>
+<offset x="57.0" y="51.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N7_Capacità">
+<graphics>
+<position x="405.0" y="120.0"/>
+</graphics>
+<name>
+<value>N7_Capacità</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,128</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione7">
+<graphics>
+<position x="465.0" y="165.0"/>
+</graphics>
+<name>
+<value>Giunzione7</value>
+<graphics>
+<offset x="66.0" y="-12.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Giunzione7_2">
+<graphics>
+<position x="345.0" y="165.0"/>
+</graphics>
+<name>
+<value>Giunzione7_2</value>
+<graphics>
+<offset x="25.0" y="-8.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="BatteriePiene su N6 to CaricamentoP3" source="N7_BatteriePiene" target="Giunzione7">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="432" y="182" curvePoint="false"/>
+<arcpath id="001" x="471" y="182" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Capacità N6 to ScaricamentoP2" source="N7_Capacità" target="Giunzione7_2">
+<graphics/>
+<inscription>
+<value>Default,64</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="404" y="140" curvePoint="false"/>
+<arcpath id="001" x="362" y="172" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CaricamentoP3 to Capacità N6" source="Giunzione7" target="N7_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="472" y="172" curvePoint="false"/>
+<arcpath id="001" x="429" y="140" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="ScaricamentoP2 to BatteriePiene su N6" source="Giunzione7_2" target="N7_BatteriePiene">
+<graphics/>
+<inscription>
+<value>Default,64</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="361" y="182" curvePoint="false"/>
+<arcpath id="001" x="403" y="182" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>

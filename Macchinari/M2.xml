@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<labels x="21" y="21" width="188" height="63" border="true">
+<text>Stazione 2:
+Assemblatrice coperchio
+Input: 2 copertura1</text>
+</labels>
+<place id="M2_Base">
+<graphics>
+<position x="508.0" y="191.0"/>
+</graphics>
+<name>
+<value>M2_Base</value>
+<graphics>
+<offset x="45.00000000000002" y="38.83333333333334"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M2_BaseECopertura">
+<graphics>
+<position x="705.0" y="197.0"/>
+</graphics>
+<name>
+<value>M2_BaseECopertura</value>
+<graphics>
+<offset x="48.0" y="39.333333333333336"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M2_Copertura">
+<graphics>
+<position x="510.0" y="261.0"/>
+</graphics>
+<name>
+<value>M2_Copertura</value>
+<graphics>
+<offset x="60.666666666666714" y="39.83333333333336"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M2_DisponibileAlCarico">
+<graphics>
+<position x="510.0" y="315.0"/>
+</graphics>
+<name>
+<value>M2_DisponibileAlCarico</value>
+<graphics>
+<offset x="80.0" y="42.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M2_PistoneRiposo">
+<graphics>
+<position x="614.0" y="143.0"/>
+</graphics>
+<name>
+<value>M2_PistoneRiposo</value>
+<graphics>
+<offset x="63.0" y="-5.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N1_2">
+<graphics>
+<position x="315.0" y="190.0"/>
+</graphics>
+<name>
+<value>N1_2</value>
+<graphics>
+<offset x="29.499999999999986" y="-19.333333333333343"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N1_2_Capacità">
+<graphics>
+<position x="315.0" y="240.0"/>
+</graphics>
+<name>
+<value>N1_2_Capacità</value>
+<graphics>
+<offset x="46.49999999999999" y="42.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,10</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N2_1">
+<graphics>
+<position x="857.0" y="190.0"/>
+</graphics>
+<name>
+<value>N2_1</value>
+<graphics>
+<offset x="29.0" y="-13.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N2_1_Capacità">
+<graphics>
+<position x="855.0" y="240.0"/>
+</graphics>
+<name>
+<value>N2_1_Capacità</value>
+<graphics>
+<offset x="68.0" y="54.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione1">
+<graphics>
+<position x="240.0" y="195.0"/>
+</graphics>
+<name>
+<value>Giunzione1</value>
+<graphics>
+<offset x="49.0" y="-8.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Giunzione2">
+<graphics>
+<position x="930.0" y="195.0"/>
+</graphics>
+<name>
+<value>Giunzione2</value>
+<graphics>
+<offset x="48.0" y="-13.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M2_Assembla">
+<graphics>
+<position x="615.0" y="198.0"/>
+</graphics>
+<name>
+<value>M2_Assembla</value>
+<graphics>
+<offset x="51.0" y="-3.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M2_CaricamentoInf">
+<graphics>
+<position x="390.0" y="195.0"/>
+</graphics>
+<name>
+<value>M2_CaricamentoInf</value>
+<graphics>
+<offset x="70.0" y="-10.5"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M2_CaricamentoSup">
+<graphics>
+<position x="390.0" y="270.0"/>
+</graphics>
+<name>
+<value>M2_CaricamentoSup</value>
+<graphics>
+<offset x="41.0" y="47.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M2_Scaricamento">
+<graphics>
+<position x="780.0" y="195.0"/>
+</graphics>
+<name>
+<value>M2_Scaricamento</value>
+<graphics>
+<offset x="65.0" y="-9.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="Base con prima copertura to Indietregggiamento pistone1" source="M2_BaseECopertura" target="M2_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="731" y="207" curvePoint="false"/>
+<arcpath id="001" x="786" y="207" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Basi batterie in M2 to M2 lavorazione" source="M2_Base" target="M2_Assembla">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="534" y="203" curvePoint="false"/>
+<arcpath id="001" x="622" y="203" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Basi su nastro to Caricamento inferiore M2" source="N1_2" target="M2_CaricamentoInf">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="341" y="201" curvePoint="false"/>
+<arcpath id="001" x="397" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàNastro1 to Scaricamento" source="N1_2_Capacità" target="Giunzione1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="314" y="243" curvePoint="false"/>
+<arcpath id="001" x="256" y="211" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento inferiore M2 to Basi batterie in M2" source="M2_CaricamentoInf" target="M2_Base">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="407" y="205" curvePoint="false"/>
+<arcpath id="001" x="505" y="203" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento inferiore M2 to CapacitàNastro1" source="M2_CaricamentoInf" target="N1_2_Capacità">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="396" y="211" curvePoint="false"/>
+<arcpath id="001" x="339" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento inferiore M2 to M2 disponibile al carico" source="M2_CaricamentoInf" target="M2_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="406" y="209" curvePoint="false"/>
+<arcpath id="001" x="511" y="316" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento superiore M2 to M2 disponibile al carico" source="M2_CaricamentoSup" target="M2_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="406" y="290" curvePoint="false"/>
+<arcpath id="001" x="466" y="326" curvePoint="true"/>
+<arcpath id="002" x="507" y="326" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento superiore M2 to Prime Coperture in M2" source="M2_CaricamentoSup" target="M2_Copertura">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="407" y="273" curvePoint="false"/>
+<arcpath id="001" x="507" y="273" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Giunzione2 to N2_1_Capacità" source="Giunzione2" target="N2_1_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="936" y="212" curvePoint="false"/>
+<arcpath id="001" x="880" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Indietregggiamento pistone1 to M2 disponibile al carico" source="M2_Scaricamento" target="M2_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="786" y="214" curvePoint="false"/>
+<arcpath id="001" x="641" y="326" curvePoint="true"/>
+<arcpath id="002" x="536" y="326" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Indietregggiamento pistone1 to Pistone 1 riposo" source="M2_Scaricamento" target="M2_PistoneRiposo">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="787" y="200" curvePoint="false"/>
+<arcpath id="001" x="640" y="159" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M2_Scaricamento to N2_1" source="M2_Scaricamento" target="N2_1">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="797" y="201" curvePoint="false"/>
+<arcpath id="001" x="854" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M2 disponibile al carico to Caricamento inferiore M2" source="M2_DisponibileAlCarico" target="M2_CaricamentoInf">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="511" y="316" curvePoint="false"/>
+<arcpath id="001" x="406" y="212" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M2 disponibile al carico to Caricamento superiore M2" source="M2_DisponibileAlCarico" target="M2_CaricamentoSup">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="507" y="328" curvePoint="false"/>
+<arcpath id="001" x="446" y="316" curvePoint="true"/>
+<arcpath id="002" x="406" y="287" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M2 disponibile al carico to M2 lavorazione" source="M2_DisponibileAlCarico" target="M2_Assembla">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="532" y="315" curvePoint="false"/>
+<arcpath id="001" x="621" y="217" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M2 lavorazione to Base con prima copertura" source="M2_Assembla" target="M2_BaseECopertura">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="632" y="209" curvePoint="false"/>
+<arcpath id="001" x="702" y="209" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N2_1_Capacità to M2_Scaricamento" source="N2_1_Capacità" target="M2_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="854" y="244" curvePoint="false"/>
+<arcpath id="001" x="796" y="211" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N2_1 to Giunzione2" source="N2_1" target="Giunzione2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="883" y="202" curvePoint="false"/>
+<arcpath id="001" x="937" y="202" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pistone 1 riposo to Caricamento inferiore M2" source="M2_PistoneRiposo" target="M2_CaricamentoInf">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="611" y="157" curvePoint="false"/>
+<arcpath id="001" x="407" y="198" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Prime Coperture in M2 to Caricamento superiore M2" source="M2_Copertura" target="M2_CaricamentoSup">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="507" y="273" curvePoint="false"/>
+<arcpath id="001" x="407" y="280" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="Prime Coperture in M2 to M2 lavorazione" source="M2_Copertura" target="M2_Assembla">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="534" y="265" curvePoint="false"/>
+<arcpath id="001" x="621" y="210" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Scaricamento to Basi su nastro" source="Giunzione1" target="N1_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="257" y="201" curvePoint="false"/>
+<arcpath id="001" x="312" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>

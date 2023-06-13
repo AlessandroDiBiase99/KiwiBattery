@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<labels x="21" y="21" width="137" height="63" border="true">
+<text>Stazione 11:
+Test  pressione 2</text>
+</labels>
+<labels x="939" y="21" width="137" height="63" border="true">
+<text>Stazione 12:
+Pulitrice</text>
+</labels>
+<labels x="1125" y="21" width="137" height="62" border="true">
+<text>Stazione 13:
+Etichettatrice
+Input: 1 etichetta</text>
+</labels>
+<place id="M11_Batteria">
+<graphics>
+<position x="402.0" y="233.0"/>
+</graphics>
+<name>
+<value>M11_Batteria</value>
+<graphics>
+<offset x="46.166666666666764" y="57.66666666666667"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M11_BatteriaKO">
+<graphics>
+<position x="724.0" y="150.0"/>
+</graphics>
+<name>
+<value>M11_BatteriaKO</value>
+<graphics>
+<offset x="63.97222222222203" y="-7.0555555555555465"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M11_BatteriaOK">
+<graphics>
+<position x="726.0" y="233.0"/>
+</graphics>
+<name>
+<value>M11_BatteriaOK</value>
+<graphics>
+<offset x="59.30555555555557" y="58.527777777777786"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M11_BatteriaTestata">
+<graphics>
+<position x="553.0" y="232.0"/>
+</graphics>
+<name>
+<value>M11_BatteriaTestata</value>
+<graphics>
+<offset x="74.0" y="57.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M11_Libera">
+<graphics>
+<position x="725.0" y="197.0"/>
+</graphics>
+<name>
+<value>M11_Libera</value>
+<graphics>
+<offset x="32.916666666666586" y="-1.3888888888888822"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N10_2">
+<graphics>
+<position x="217.0" y="232.0"/>
+</graphics>
+<name>
+<value>N10_2</value>
+<graphics>
+<offset x="37.11111111111116" y="57.24999999999999"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N10_2_Capacità">
+<graphics>
+<position x="216.0" y="187.0"/>
+</graphics>
+<name>
+<value>N10_2_Capacità</value>
+<graphics>
+<offset x="61.66666666666669" y="-8.333333333333334"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,10</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N11_BatteriaTestata">
+<graphics>
+<position x="901.0" y="224.0"/>
+</graphics>
+<name>
+<value>N11_BatteriaTestata</value>
+<graphics>
+<offset x="70.91666666666663" y="-5.000000000000043"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N11_Capacità">
+<graphics>
+<position x="900.0" y="267.0"/>
+</graphics>
+<name>
+<value>N11_Capacità</value>
+<graphics>
+<offset x="55.3333333333332" y="45.000000000000014"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N12_BatteriaPulita">
+<graphics>
+<position x="1099.0" y="224.0"/>
+</graphics>
+<name>
+<value>N12_BatteriaPulita</value>
+<graphics>
+<offset x="68.22222222222223" y="-5.055555555555564"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N12_Capacità">
+<graphics>
+<position x="1100.0" y="268.0"/>
+</graphics>
+<name>
+<value>N12_Capacità</value>
+<graphics>
+<offset x="53.83333333333334" y="43.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione10">
+<graphics>
+<position x="126.0" y="226.0"/>
+</graphics>
+<name>
+<value>Giunzione10</value>
+<graphics>
+<offset x="43.9166666666667" y="47.58333333333334"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M11_Caricamento">
+<graphics>
+<position x="302.0" y="227.0"/>
+</graphics>
+<name>
+<value>M11_Caricamento</value>
+<graphics>
+<offset x="60.41666666666677" y="44.08333333333336"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M11_KO">
+<graphics>
+<position x="638.0" y="151.0"/>
+</graphics>
+<name>
+<value>M11_KO</value>
+<graphics>
+<offset x="33.611111111111114" y="-8.05555555555555"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M11_OK">
+<graphics>
+<position x="638.0" y="232.0"/>
+</graphics>
+<name>
+<value>M11_OK</value>
+<graphics>
+<offset x="41.91666666666657" y="45.694444444444485"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M11_Scaricamento">
+<graphics>
+<position x="810.0" y="229.0"/>
+</graphics>
+<name>
+<value>M11_Scaricamento</value>
+<graphics>
+<offset x="66.52777777777793" y="44.888888888888815"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M11_ScartoBatterie">
+<graphics>
+<position x="812.0" y="155.0"/>
+</graphics>
+<name>
+<value>M11_ScartoBatterie</value>
+<graphics>
+<offset x="86.16666666666679" y="-11.666666666666664"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M11_Test">
+<graphics>
+<position x="480.0" y="232.0"/>
+</graphics>
+<name>
+<value>M11_Test</value>
+<graphics>
+<offset x="40.0" y="45.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M12_Pulisce">
+<graphics>
+<position x="987.0" y="228.0"/>
+</graphics>
+<name>
+<value>M12_Pulisce</value>
+<graphics>
+<offset x="51.75" y="52.58333333333334"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M13_Etichetta">
+<graphics>
+<position x="1204.0" y="230.0"/>
+</graphics>
+<name>
+<value>M13_Etichetta</value>
+<graphics>
+<offset x="50.30555555555552" y="58.80555555555554"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="BatteriaTestata in M11 to TP2 KO" source="M11_BatteriaTestata" target="M11_KO">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="575" y="233" curvePoint="false"/>
+<arcpath id="001" x="645" y="162" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="BatteriaTestata in M11 to TP2 OK" source="M11_BatteriaTestata" target="M11_OK">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="579" y="244" curvePoint="false"/>
+<arcpath id="001" x="644" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie da pulire su nastro to Pulizia" source="N11_BatteriaTestata" target="M12_Pulisce">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="927" y="235" curvePoint="false"/>
+<arcpath id="001" x="994" y="235" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie da scartare dopo il primo test to Scarto batterie 11" source="M11_BatteriaKO" target="M11_ScartoBatterie">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="750" y="161" curvePoint="false"/>
+<arcpath id="001" x="819" y="161" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie da testare su nastro  to Lavorazione prima pressa" source="N10_2" target="M11_Caricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="243" y="244" curvePoint="false"/>
+<arcpath id="001" x="308" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie in TP2 to M11 test" source="M11_Batteria" target="M11_Test">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="428" y="244" curvePoint="false"/>
+<arcpath id="001" x="486" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie pulite to Etichettatura" source="N12_BatteriaPulita" target="M13_Etichetta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="1125" y="236" curvePoint="false"/>
+<arcpath id="001" x="1211" y="236" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie testate 1 volta to Scaricamento prima pressa" source="M11_BatteriaOK" target="M11_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="752" y="245" curvePoint="false"/>
+<arcpath id="001" x="816" y="245" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàN11 to Scaricamento M11" source="N11_Capacità" target="M11_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="898" y="273" curvePoint="false"/>
+<arcpath id="001" x="826" y="245" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàNastro11 to T39" source="N10_2_Capacità" target="Giunzione10">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="214" y="204" curvePoint="false"/>
+<arcpath id="001" x="143" y="233" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàNastro13 to Pulizia" source="N12_Capacità" target="M12_Pulisce">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="1097" y="275" curvePoint="false"/>
+<arcpath id="001" x="1003" y="245" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Etichettatura to CapacitàNastro13" source="M13_Etichetta" target="N12_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="1210" y="246" curvePoint="false"/>
+<arcpath id="001" x="1126" y="275" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Lavorazione prima pressa to Batterie da testare pronte" source="M11_Caricamento" target="M11_Batteria">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="318" y="244" curvePoint="false"/>
+<arcpath id="001" x="399" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Lavorazione prima pressa to CapacitàNastro11" source="M11_Caricamento" target="N10_2_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="309" y="234" curvePoint="false"/>
+<arcpath id="001" x="241" y="205" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M11 test to BatteriaTestata in M11" source="M11_Test" target="M11_BatteriaTestata">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="496" y="244" curvePoint="false"/>
+<arcpath id="001" x="550" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Prima pressa libera to Lavorazione prima pressa" source="M11_Libera" target="M11_Caricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="722" y="208" curvePoint="false"/>
+<arcpath id="001" x="542" y="208" curvePoint="false"/>
+<arcpath id="002" x="390" y="219" curvePoint="true"/>
+<arcpath id="003" x="319" y="234" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Primo test di carico negativo to Batterie da scartare dopo il primo test" source="M11_KO" target="M11_BatteriaKO">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="655" y="162" curvePoint="false"/>
+<arcpath id="001" x="721" y="162" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Primo test di carico positivo to Batterie testate 1 volta" source="M11_OK" target="M11_BatteriaOK">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="654" y="244" curvePoint="false"/>
+<arcpath id="001" x="723" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pulizia to Batterie pulite" source="M12_Pulisce" target="N12_BatteriaPulita">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="1004" y="235" curvePoint="false"/>
+<arcpath id="001" x="1096" y="235" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pulizia to CapacitàNastro12" source="M12_Pulisce" target="N11_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="993" y="245" curvePoint="false"/>
+<arcpath id="001" x="925" y="273" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Scaricamento M11 to BatterieTestate su N11" source="M11_Scaricamento" target="N11_BatteriaTestata">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="827" y="235" curvePoint="false"/>
+<arcpath id="001" x="898" y="235" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Scaricamento prima pressa to Prima pressa libera" source="M11_Scaricamento" target="M11_Libera">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="817" y="235" curvePoint="false"/>
+<arcpath id="001" x="751" y="213" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Scarto batterie 11 to Prima pressa libera" source="M11_ScartoBatterie" target="M11_Libera">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="818" y="171" curvePoint="false"/>
+<arcpath id="001" x="750" y="202" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T39 to Batterie da testare su nastro " source="Giunzione10" target="N10_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="142" y="243" curvePoint="false"/>
+<arcpath id="001" x="214" y="243" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>

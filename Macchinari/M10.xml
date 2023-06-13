@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<labels x="21" y="21" width="137" height="78" border="true">
+<text>Stazione 10:
+Assemblatrice secondo coperchio
+Input: 2 copertura2</text>
+</labels>
+<place id="M10_BatterieESecondaCopertura">
+<graphics>
+<position x="494.0" y="202.0"/>
+</graphics>
+<name>
+<value>M10_BatterieESecondaCopertura</value>
+<graphics>
+<offset x="98.58333333333341" y="63.999999999999986"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M10_BatterieRinnovate">
+<graphics>
+<position x="317.0" y="195.0"/>
+</graphics>
+<name>
+<value>M10_BatterieRinnovate</value>
+<graphics>
+<offset x="60.66666666666656" y="38.166666666666664"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M10_DisponibileAlCarico">
+<graphics>
+<position x="312.0" y="314.0"/>
+</graphics>
+<name>
+<value>M10_DisponibileAlCarico</value>
+<graphics>
+<offset x="83.83333333333341" y="41.74999999999998"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M10_PistoneRiposo">
+<graphics>
+<position x="423.0" y="142.0"/>
+</graphics>
+<name>
+<value>M10_PistoneRiposo</value>
+<graphics>
+<offset x="67.49999999999999" y="-7.083333333333333"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M10_SecondaCopertura">
+<graphics>
+<position x="315.0" y="254.0"/>
+</graphics>
+<name>
+<value>M10_SecondaCopertura</value>
+<graphics>
+<offset x="67.83333333333334" y="38.66666666666667"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N10_1">
+<graphics>
+<position x="672.0" y="198.0"/>
+</graphics>
+<name>
+<value>N10_1</value>
+<graphics>
+<offset x="35.0" y="-10.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N10_1_Capacità">
+<graphics>
+<position x="672.0" y="254.0"/>
+</graphics>
+<name>
+<value>N10_1_Capacità</value>
+<graphics>
+<offset x="61.0" y="40.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N9_2">
+<graphics>
+<position x="118.0" y="191.0"/>
+</graphics>
+<name>
+<value>N9_2</value>
+<graphics>
+<offset x="29.833333333333343" y="-15.749999999999986"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N9_2_Capacità">
+<graphics>
+<position x="117.0" y="234.0"/>
+</graphics>
+<name>
+<value>N9_2_Capacità</value>
+<graphics>
+<offset x="48.16666666666668" y="47.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,10</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione10">
+<graphics>
+<position x="746.0" y="204.0"/>
+</graphics>
+<name>
+<value>Giunzione10</value>
+<graphics>
+<offset x="52.0" y="-13.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Giunzione9">
+<graphics>
+<position x="50.0" y="196.0"/>
+</graphics>
+<name>
+<value>Giunzione9</value>
+<graphics>
+<offset x="46.00000000000006" y="-14.749999999999957"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M10_Assembla">
+<graphics>
+<position x="425.0" y="201.0"/>
+</graphics>
+<name>
+<value>M10_Assembla</value>
+<graphics>
+<offset x="50.0" y="-8.749999999999996"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M10_CaricamentoBase">
+<graphics>
+<position x="195.0" y="196.0"/>
+</graphics>
+<name>
+<value>M10_CaricamentoBase</value>
+<graphics>
+<offset x="87.49999999999991" y="-11.25"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M10_CaricamentoSecondaCopertura">
+<graphics>
+<position x="194.0" y="261.0"/>
+</graphics>
+<name>
+<value>M10_CaricamentoSecondaCopertura</value>
+<graphics>
+<offset x="58.83333333333334" y="61.50000000000003"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M10_Scaricamento">
+<graphics>
+<position x="597.0" y="202.0"/>
+</graphics>
+<name>
+<value>M10_Scaricamento</value>
+<graphics>
+<offset x="71.4166666666667" y="48.58333333333334"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="Batterie in M10 to M10 lavorazione" source="M10_BatterieRinnovate" target="M10_Assembla">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="343" y="207" curvePoint="false"/>
+<arcpath id="001" x="432" y="207" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="BatterieRinnovate su N9 to Caricamento inferiore M10" source="N9_2" target="M10_CaricamentoBase">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="144" y="203" curvePoint="false"/>
+<arcpath id="001" x="202" y="203" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàNastro9 to T76" source="N9_2_Capacità" target="Giunzione9">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="115" y="238" curvePoint="false"/>
+<arcpath id="001" x="66" y="212" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento inferiore M10 to Batterie in M10" source="M10_CaricamentoBase" target="M10_BatterieRinnovate">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="212" y="205" curvePoint="false"/>
+<arcpath id="001" x="314" y="206" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento inferiore M10 to CapacitàN9" source="M10_CaricamentoBase" target="N9_2_Capacità">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="201" y="213" curvePoint="false"/>
+<arcpath id="001" x="142" y="239" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento inferiore M10 to M10 disponibile al carico" source="M10_CaricamentoBase" target="M10_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="211" y="217" curvePoint="false"/>
+<arcpath id="001" x="313" y="315" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento superiore M10 to M10 disponibile al carico" source="M10_CaricamentoSecondaCopertura" target="M10_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="210" y="276" curvePoint="false"/>
+<arcpath id="001" x="310" y="319" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento superiore M10 to Seconda copertura in M10" source="M10_CaricamentoSecondaCopertura" target="M10_SecondaCopertura">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="211" y="270" curvePoint="false"/>
+<arcpath id="001" x="312" y="266" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Giunzione10 to N10_1_Capacità" source="Giunzione10" target="N10_1_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="752" y="221" curvePoint="false"/>
+<arcpath id="001" x="696" y="257" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Indietreggiamento pistone 2 to M10 disponibile al carico" source="M10_Scaricamento" target="M10_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="603" y="222" curvePoint="false"/>
+<arcpath id="001" x="471" y="326" curvePoint="true"/>
+<arcpath id="002" x="339" y="326" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Indietreggiamento pistone 2 to Pistone 2 riposo" source="M10_Scaricamento" target="M10_PistoneRiposo">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="604" y="208" curvePoint="false"/>
+<arcpath id="001" x="449" y="158" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M10_Scaricamento to N10_1" source="M10_Scaricamento" target="N10_1">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="614" y="209" curvePoint="false"/>
+<arcpath id="001" x="669" y="209" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M10 disponibile al carico to Caricamento inferiore M10" source="M10_DisponibileAlCarico" target="M10_CaricamentoBase">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="313" y="315" curvePoint="false"/>
+<arcpath id="001" x="211" y="211" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M10 disponibile al carico to Caricamento superiore M10" source="M10_DisponibileAlCarico" target="M10_CaricamentoSecondaCopertura">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="309" y="326" curvePoint="false"/>
+<arcpath id="001" x="262" y="316" curvePoint="true"/>
+<arcpath id="002" x="210" y="282" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M10 disponibile al carico to M10 lavorazione" source="M10_DisponibileAlCarico" target="M10_Assembla">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="334" y="315" curvePoint="false"/>
+<arcpath id="001" x="431" y="221" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M10 lavorazione to Batterie con seconda copertura" source="M10_Assembla" target="M10_BatterieESecondaCopertura">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="441" y="213" curvePoint="false"/>
+<arcpath id="001" x="491" y="213" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N10_1_Capacità to M10_Scaricamento" source="N10_1_Capacità" target="M10_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="671" y="257" curvePoint="false"/>
+<arcpath id="001" x="613" y="219" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N10_1 to Giunzione10" source="N10_1" target="Giunzione10">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="698" y="210" curvePoint="false"/>
+<arcpath id="001" x="753" y="211" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P61 to T39" source="M10_BatterieESecondaCopertura" target="M10_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="520" y="214" curvePoint="false"/>
+<arcpath id="001" x="603" y="215" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pistone 2 riposo to Caricamento inferiore M10" source="M10_PistoneRiposo" target="M10_CaricamentoBase">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="420" y="156" curvePoint="false"/>
+<arcpath id="001" x="212" y="199" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Seconda copertura in M10 to Caricamento superiore M10" source="M10_SecondaCopertura" target="M10_CaricamentoSecondaCopertura">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="312" y="265" curvePoint="false"/>
+<arcpath id="001" x="211" y="264" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="Seconda copertura in M10 to M10 lavorazione" source="M10_SecondaCopertura" target="M10_Assembla">
+<graphics/>
+<inscription>
+<value>Default,2</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="340" y="259" curvePoint="false"/>
+<arcpath id="001" x="431" y="214" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T76 to P104" source="Giunzione9" target="N9_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="67" y="202" curvePoint="false"/>
+<arcpath id="001" x="115" y="202" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>

@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<labels x="20" y="20" width="138" height="43" border="true">
+<text>Stazione 5:
+Test pressione</text>
+</labels>
+<place id="M5_Batteria">
+<graphics>
+<position x="274.0" y="160.0"/>
+</graphics>
+<name>
+<value>M5_Batteria</value>
+<graphics>
+<offset x="48.02380952380935" y="-20.64285714285714"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M5_BatteriaKO">
+<graphics>
+<position x="555.0" y="271.0"/>
+</graphics>
+<name>
+<value>M5_BatteriaKO</value>
+<graphics>
+<offset x="61.166666666666615" y="65.28571428571429"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M5_BatteriaOK">
+<graphics>
+<position x="552.0" y="159.0"/>
+</graphics>
+<name>
+<value>M5_BatteriaOK</value>
+<graphics>
+<offset x="68.5952380952381" y="-23.19047619047621"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M5_BatteriaTestata">
+<graphics>
+<position x="409.0" y="159.0"/>
+</graphics>
+<name>
+<value>M5_BatteriaTestata</value>
+<graphics>
+<offset x="76.0" y="-24.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M5_Libero">
+<graphics>
+<position x="526.0" y="211.0"/>
+</graphics>
+<name>
+<value>M5_Libero</value>
+<graphics>
+<offset x="44.56060606060589" y="43.66666666666667"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N4_2">
+<graphics>
+<position x="117.0" y="161.0"/>
+</graphics>
+<name>
+<value>N4_2</value>
+<graphics>
+<offset x="28.33333333333337" y="-24.47619047619048"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N4_2_Capacità">
+<graphics>
+<position x="115.0" y="204.0"/>
+</graphics>
+<name>
+<value>N4_2_Capacità</value>
+<graphics>
+<offset x="64.99999999999997" y="47.94444444444444"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,10</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N5_1">
+<graphics>
+<position x="720.0" y="159.0"/>
+</graphics>
+<name>
+<value>N5_1</value>
+<graphics>
+<offset x="30.0" y="-25.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N5_1_Capacità">
+<graphics>
+<position x="720.0" y="205.0"/>
+</graphics>
+<name>
+<value>N5_1_Capacità</value>
+<graphics>
+<offset x="60.0" y="40.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione4">
+<graphics>
+<position x="31.0" y="166.0"/>
+</graphics>
+<name>
+<value>Giunzione4</value>
+<graphics>
+<offset x="64.91666666666669" y="-8.916666666666664"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Giunzione5">
+<graphics>
+<position x="808.0" y="163.0"/>
+</graphics>
+<name>
+<value>Giunzione5</value>
+<graphics>
+<offset x="66.0" y="-10.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M5_Caricamento">
+<graphics>
+<position x="196.0" y="166.0"/>
+</graphics>
+<name>
+<value>M5_Caricamento</value>
+<graphics>
+<offset x="64.5714285714286" y="-11.380952380952387"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M5_Scaricamento">
+<graphics>
+<position x="635.0" y="163.0"/>
+</graphics>
+<name>
+<value>M5_Scaricamento</value>
+<graphics>
+<offset x="69.88095238095237" y="-11.952380952380956"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M5_ScartoBatteria">
+<graphics>
+<position x="632.0" y="266.0"/>
+</graphics>
+<name>
+<value>M5_ScartoBatteria</value>
+<graphics>
+<offset x="70.49999999999994" y="51.99999999999999"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M5_Test">
+<graphics>
+<position x="336.0" y="160.0"/>
+</graphics>
+<name>
+<value>M5_Test</value>
+<graphics>
+<offset x="39.0" y="-10.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M5_TPKO">
+<graphics>
+<position x="488.0" y="271.0"/>
+</graphics>
+<name>
+<value>M5_TPKO</value>
+<graphics>
+<offset x="42.40476190476196" y="46.66666666666667"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M5_TPOK">
+<graphics>
+<position x="486.0" y="159.0"/>
+</graphics>
+<name>
+<value>M5_TPOK</value>
+<graphics>
+<offset x="34.293650793650755" y="-10.677489177489178"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="Batteria in TP1 to M5 test" source="M5_Batteria" target="M5_Test">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="300" y="171" curvePoint="false"/>
+<arcpath id="001" x="343" y="171" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="BatteriaTestata in M5 to TP1 KO" source="M5_BatteriaTestata" target="M5_TPKO">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="429" y="183" curvePoint="false"/>
+<arcpath id="001" x="494" y="283" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="BatteriaTestata in M5 to TP1 OK" source="M5_BatteriaTestata" target="M5_TPOK">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="435" y="171" curvePoint="false"/>
+<arcpath id="001" x="492" y="171" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie da scartare to Scarto Batterie" source="M5_BatteriaKO" target="M5_ScartoBatteria">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="581" y="283" curvePoint="false"/>
+<arcpath id="001" x="638" y="283" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie da testare su nastro to Caricamento Test Pressione" source="N4_2" target="M5_Caricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="143" y="172" curvePoint="false"/>
+<arcpath id="001" x="203" y="172" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàNastro4 to Scaricamento M4" source="N4_2_Capacità" target="Giunzione4">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="113" y="210" curvePoint="false"/>
+<arcpath id="001" x="47" y="182" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento M5 to CapacitàNastro4" source="M5_Caricamento" target="N4_2_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="202" y="182" curvePoint="false"/>
+<arcpath id="001" x="140" y="209" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Giunzione5 to N5_1_Capacità" source="Giunzione5" target="N5_1_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="814" y="180" curvePoint="false"/>
+<arcpath id="001" x="745" y="210" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M5_Scaricamento to N5_1" source="M5_Scaricamento" target="N5_1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="652" y="170" curvePoint="false"/>
+<arcpath id="001" x="717" y="170" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M5 test to BatteriaTestata in M5" source="M5_Test" target="M5_BatteriaTestata">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="353" y="171" curvePoint="false"/>
+<arcpath id="001" x="406" y="171" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N5_1_Capacità to M5_Scaricamento" source="N5_1_Capacità" target="M5_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="718" y="210" curvePoint="false"/>
+<arcpath id="001" x="651" y="180" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N5_1 to Giunzione5" source="N5_1" target="Giunzione5">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="746" y="170" curvePoint="false"/>
+<arcpath id="001" x="815" y="170" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P25 to T15" source="M5_Libero" target="M5_Caricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="523" y="222" curvePoint="false"/>
+<arcpath id="001" x="398" y="222" curvePoint="false"/>
+<arcpath id="002" x="308" y="210" curvePoint="true"/>
+<arcpath id="003" x="212" y="182" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P26 to T17" source="M5_BatteriaOK" target="M5_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="578" y="170" curvePoint="false"/>
+<arcpath id="001" x="642" y="170" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Scarto Batterie to Test Pressione Libero" source="M5_ScartoBatteria" target="M5_Libero">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="639" y="273" curvePoint="false"/>
+<arcpath id="001" x="551" y="229" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T14 to P22" source="Giunzione4" target="N4_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="48" y="172" curvePoint="false"/>
+<arcpath id="001" x="114" y="172" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T15 to P24" source="M5_Caricamento" target="M5_Batteria">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="213" y="172" curvePoint="false"/>
+<arcpath id="001" x="271" y="172" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T16 to P26" source="M5_TPOK" target="M5_BatteriaOK">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="502" y="171" curvePoint="false"/>
+<arcpath id="001" x="549" y="171" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T17 to P25" source="M5_Scaricamento" target="M5_Libero">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="641" y="180" curvePoint="false"/>
+<arcpath id="001" x="551" y="217" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Test Pressione Negativo to Batterie scartate" source="M5_TPKO" target="M5_BatteriaKO">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="504" y="283" curvePoint="false"/>
+<arcpath id="001" x="552" y="283" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>
