@@ -13,6 +13,11 @@ function s_a = ServerAttivati(Marcatura,MaxServer,Pre,H)
 %   s_a
 %    il numero di server che risultano contemporaneamente attivi date le
 %    configurazioni presenti
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
 
 if all(H==0 | (H>0 & Marcatura<H))
     s_a = floor(min(Marcatura./Pre));

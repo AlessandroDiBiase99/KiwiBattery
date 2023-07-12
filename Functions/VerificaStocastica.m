@@ -13,6 +13,11 @@ function M = VerificaStocastica(M,Precisione)
 % **OUTPUT**
 %   M
 %    la matrice corretta
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
 
 M = round(M,Precisione);
 % M = M + (M-round(M,Precisione));

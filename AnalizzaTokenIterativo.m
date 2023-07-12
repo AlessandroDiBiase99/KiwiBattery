@@ -1,26 +1,63 @@
+%% ======================== ANALIZZATOKENITERATIVO ========================  
+%==============AUTHORS==============%
+%   Alessandro Di Biase             %
+%   Federico Catalini               %
+%   Luca Caponi                     %
+%===================================%
+% Questo script permette di analizzare le capacità dei buffer migliori per
+% reti di petri scomposte in sotto-gruppi. L'analisi risulta automatizzata,
+% si deve configurare correttamente l'ambiente predisponendo in una 
+% cartella Parti_v<numerointero> i files PN_<indice> e Grafo_<indice>. 
+% Le due tipologie di file possono essere facilmente realizzati grazie 
+% all'applicativo GestoreAnalisiPN. Prima di lanciare lo script bisogna 
+% eseguire AnalisiSistemaComposto, che genera i risultati necessari per la 
+% seguente analisi. In questo script specificare solo le impostazioni, 
+% sarà generata una cartella con i file PN e Grafo relativi alla migliore
+% prestazione.
 %% PREPARAZIONE WORKSPACE__________________________________________________
-clear all;
+close all;                          
+clearvars;                       
 clc;
-addpath("Functions\")
+addpath('Functions');
 
 %% IMPOSTAZIONI____________________________________________________________
-versione=10;
-load("RateImposti_1_ai.mat");
+% La cartella Parti_v<versione> da considerare:
+versione=1;
+
+% Il numero di risultato ottenuto da prendere in considerazione per i rate:
+nrisultato=1;
+
+% La precisione con la quale arrotonare le matrici U e U'
+Impostazioni.Precisione.U  = 5;
+Impostazioni.Precisione.U1 = 5;
+
+% Specificare se recuperare i grafi calcolati o analizzarli nuovamente
+Impostazioni.RecuperoGrafo="Si";
+
+% La soglia al di sotto della quale confermiamo la presenza di un collo di
+% bottiglia, dunque risulta necessario eseguire un ricalcolo all'indietro
+soglia=0.985;
+
+% Scegliere il diverso livello di log:
+% 0          -> mostrare tutti i messaggi
+% 1          -> mostrare solo i messaggi principali
+% altrimenti -> mostrare solo i messaggi di errore 
+Impostazioni.log=0;
+
+% Il vettore che contiene i diversi file da analizzare, elencati dal primo
+% all'ultimo
+indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
+
+load(sprintf("Parti_v%i_R%i/RateImposti.mat",versione,nrisultato));
 rate_in=r_in;
-macchinario_da_analizzare="2";
+macchinario_da_analizzare="M2";
 codici=["1","2","3","4","5","6","7_1","7_3","8","9","10","11_12_13"];
-codice_macchinario=find(codici==macchinario_da_analizzare);
-PN=load(sprintf('Parti_v%i/PN_M%s.mat',versione, codici(codice_macchinario)));
+codice_macchinario=find(indice_macchinario==macchinario_da_analizzare);
+PN=load(sprintf('Parti_v%i/PN_%s.mat',versione, indice_macchinario(codice_macchinario)));
 
 token.init=2;
 token.ending=30;
 token.delta=1;
-
-Impostazioni.Precisione.U  = 5;
-Impostazioni.Precisione.U1 = 5;
-Impostazioni.log=1;
-Impostazioni.RecuperoGrafo="Si";
-soglia=0.98;
 
 %% CALCOLO ITERATIVO_______________________________________________________
 Analisi_indietro=false;
@@ -30,7 +67,7 @@ if ~isempty(r_out2) && length(r_out2)>=codice_macchinario && r_out2(codice_macch
     Analisi_indietro=true;
 end
 
-plot_tp=Calcolo_Iterativo_PN_Grafo(versione,PN,codici(codice_macchinario),codice_macchinario,token,rate_in(codice_macchinario),rate_out(codice_macchinario),Impostazioni);
+plot_tp=Calcolo_Iterativo_PN_Grafo(versione,PN,indice_macchinario(codice_macchinario),codice_macchinario,token,rate_in(codice_macchinario),rate_out(codice_macchinario),Impostazioni);
 
 if Analisi_indietro
     cerca=find(plot_tp(:,2)/rate_out(codice_macchinario)>=soglia,1,'first');

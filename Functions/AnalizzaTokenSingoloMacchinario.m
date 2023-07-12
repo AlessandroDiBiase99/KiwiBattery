@@ -1,23 +1,22 @@
 function IndiciPrestazione = AnalizzaTokenSingoloMacchinario(versione, nome, codice,token_attuale,Precisione,log,RATE_IN,RATE_OUT)
-% AnalizzaSistema è una funzione che calcola gli indici di prestazione dei
-% dati salvati nei specifici file nella cartella Parti_v1, rispettando i
-% parametri passati alla chiamata della funzione.
+% IndiciPrestazione è una funzione.
 % **INPUT**
-%   macchinari
-%    codice di riconoscimento dei macchinari da lavorare, con i quali sono
-%    anche indicati i file PN e Grafo
+%   versione
+%    ...
+%   nome
+%    ...
+%   codice
+%    ...
+%   token_attuale
+%    ...
 %   Precisione
-%    struct con due campi: U e U1. Il primo campo serve per stabilire le
-%    cifre significative per il calcolo di U, il secondo per il calcolo di
-%    U1.
-%   log: 
-%    - 0          mostrare tutti i messaggi
-%    - 1          mostrare solo i passaggi principali
-%    - altrimenti mostrare solo i messaggi di errore
+%    ...
+%   log
+%    ...
 %   RATE_IN
-%    il rate di input del sistema che deve essere rispettato
+%    ...
 %   RATE_OUT
-%    il rate di output del sistema che deve essere rispettato
+%    ...
 % **OUTPUT**
 %   IndiciPrestazione
 %    - THROUGHPUT
@@ -25,27 +24,30 @@ function IndiciPrestazione = AnalizzaTokenSingoloMacchinario(versione, nome, cod
 %    - WIP
 %    - POSTI
 %    - TRANSIZIONI
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
 
 %% PARAMETRI ==============================================================
 if log<=1
-    fprintf("\n1) Caricamento PN e Grafo di PN_M%s_%i \n", nome, token_attuale)
+    fprintf("\n1) Caricamento PN e Grafo di PN_%s_%i \n", nome, token_attuale)
 end
 
 if log==0
-    fprintf("   -> Carico Parti_v%1$i_M%2$s/PN_M%2$s_%3$i.mat.\n",versione, nome, token_attuale)
+    fprintf("   -> Carico Parti_v%1$i_%2$s/PN_%2$s_%3$i.mat.\n",versione, nome, token_attuale)
 end
-info_PN = load(sprintf("Parti_v%1$i_M%2$s/PN_M%2$s_%3$i.mat",versione, nome, token_attuale));
+info_PN = load(sprintf("Parti_v%1$i_%2$s/PN_%2$s_%3$i.mat",versione, nome, token_attuale));
 PN = info_PN.PN.PN.Ridotta;
 ImpostazioniIndici = info_PN.PN.PN.ImpostazioniIndici;
 
 if log==0
-    fprintf("   -> Carico Parti_v%1$i_M%2$s/Grafo_M%2$s_%3$i.mat",versione, nome, token_attuale);
+    fprintf("   -> Carico Parti_v%1$i_%2$s/Grafo_%2$s_%3$i.mat",versione, nome, token_attuale);
 end
-info_Grafo = load(sprintf("Parti_v%1$i_M%2$s/Grafo_M%2$s_%3$i.mat",versione, nome, token_attuale));
+info_Grafo = load(sprintf("Parti_v%1$i_%2$s/Grafo_%2$s_%3$i.mat",versione, nome, token_attuale));
 Grafo=info_Grafo.Grafo;
 %clear info_PN info_Grafo;
-
-macchinari="M"+nome;
 
 if log==0
     fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
@@ -57,11 +59,11 @@ if RATE_OUT>0
     PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_OUT)= RATE_OUT;
 end
 
-if string(nome)=="6"
+if string(nome)=="M6"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Riempitrice elettrolito")="M6_1_Riempie$M6_2_Riempie";
-elseif string(nome)=="8"
+elseif string(nome)=="M8"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Svuotatrice elettrolito")="M8_R1$M8_R2$M8_R3$M8_R4$M8_R5$M8_R6$M8_R7";
-elseif string(nome)=="9"
+elseif string(nome)=="M9"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Rinnovatrice elettrolito")="M9_1_Rinnova$M9_2_Rinnova";
 end
 
@@ -173,10 +175,6 @@ end
 % Controllo che ogni riga abbia sommatoria pari a 1. U deve essere
 % stocastica
 U=VerificaStocastica(U,Precisione.U);
-
-% if macchinari=='P3'
-%     PN.T.Rate=PN.T.Rate/100;
-% end
 
 %% TRASFORMAZIONE DI COORDINATE ===========================================
 if log<=1
@@ -340,7 +338,7 @@ r=zeros(n.stati_t,1);
     end
     tp(k)=sum(r.*PI);
 end
-tp=SistemaThroughput(tp,char(macchinari),PN);
+tp=SistemaThroughput(tp,char(nome),PN);
 
 IndiciPrestazione.TPU_OUT=tp(PN.T.Transizione==ImpostazioniIndici.TPU_OUT);
 IndiciPrestazione.TPU_IN=tp(PN.T.Transizione==ImpostazioniIndici.TPU_IN);
@@ -437,7 +435,7 @@ clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc serv
 if log<=1
     fprintf("\n8) Calcolo degli indici di prestazione.\n")
 end
-save(sprintf("Parti_v%1$i_M%2$s/IndiciPrestazione_M%2$s_%3$i.mat",versione, nome, token_attuale),"IndiciPrestazione");
+save(sprintf("Parti_v%1$i_%2$s/IndiciPrestazione_%2$s_%3$i.mat",versione, nome, token_attuale),"IndiciPrestazione");
 
 end
 

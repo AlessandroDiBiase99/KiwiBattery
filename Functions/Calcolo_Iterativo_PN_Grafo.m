@@ -1,4 +1,9 @@
 function p_tp= Calcolo_Iterativo_PN_Grafo(versione,PN,nome,codice,token, RATE_IN, RATE_OUT, Impostazioni)
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
 
 Precisione=Impostazioni.Precisione;
 log=Impostazioni.log;
@@ -14,12 +19,12 @@ for token_attuale=token.init:token.delta:token.ending
     % Elaborazione e salvataggio PN
     PN.PN.Ridotta.M0(PN.PN.Ridotta.P==sprintf("N%i_2_Capacità",codice-1))=token_attuale;
     %PN.PN.Ridotta.M0(PN.PN.Ridotta.P==sprintf("N%i_1_Capacità",codice))=4;
-    [~,~,~]=mkdir(sprintf('Parti_v%i_M%s',versione, nome));
-    PN_salvato=sprintf('Parti_v%1$i_M%2$s/PN_M%2$s_%3$i.mat',versione, nome, token_attuale);
+    [~,~,~]=mkdir(sprintf('Parti_v%i_%s',versione, nome));
+    PN_salvato=sprintf('Parti_v%1$i_%2$s/PN_%2$s_%3$i.mat',versione, nome, token_attuale);
     save(PN_salvato, 'PN')
 
     % Elaborazione e salvataggio Grafo
-    if RecuperoGrafo=="No" || ~exist(sprintf("Parti_v%1$i_M%2$s/Grafo_M%2$s_%3$i.mat",versione,nome,token_attuale),'file')
+    if RecuperoGrafo=="No" || ~exist(sprintf("Parti_v%1$i_%2$s/Grafo_%2$s_%3$i.mat",versione,nome,token_attuale),'file')
         list=PN.PN.Ridotta.M0;
         list_todo=PN.PN.Ridotta.M0;
 
@@ -77,18 +82,18 @@ for token_attuale=token.init:token.delta:token.ending
 
         end
         %PN.Grafo=Grafo;
-        Grafo_salvato=sprintf('Parti_v%1$i_M%2$s/Grafo_M%2$s_%3$i.mat',versione, nome, token_attuale);
+        Grafo_salvato=sprintf('Parti_v%1$i_%2$s/Grafo_%2$s_%3$i.mat',versione, nome, token_attuale);
         save(Grafo_salvato, 'Grafo')
 
         if log==0
-            fprintf("   -> Lo script ha salvato il Grafo di M%s_%i.\n", nome,token_attuale);
+            fprintf("   -> Lo script ha salvato il Grafo di %s_%i.\n", nome,token_attuale);
         end
     else
         if log==0
-            fprintf("   -> Grafo di M%s_%i già presente, non è stato ricalcolato.\n",nome,token_attuale);
+            fprintf("   -> Grafo di %s_%i già presente, non è stato ricalcolato.\n",nome,token_attuale);
         end
     end
-    indice_macchinario=[indice_macchinario; string(sprintf('M%s_%i',nome, token_attuale))];
+    indice_macchinario=[indice_macchinario; string(sprintf('%s_%i',nome, token_attuale))];
 end
 
 %% CALCOLO INDICI DI PRESTAZIONE

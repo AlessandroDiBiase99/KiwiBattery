@@ -1,4 +1,9 @@
 function PrintResultForLatex(versione, nome)
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
 
 fprintf("\n\n|_=_=_=_=_=_=_=_=_=_=_=_=_=_=__LATEX TEXT__=_=_=_=_=_=_=_=_=_=_=_=_=_=_|\n\n");
 

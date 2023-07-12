@@ -1,4 +1,10 @@
 function VisualizzaGrafo(Grafo,T)
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
+
 figure;
 plot(1,-1,'o','Color','black');
 text(1.02,-0.9,array2string(Grafo(1).Iniziale));

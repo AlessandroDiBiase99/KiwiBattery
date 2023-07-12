@@ -1,6 +1,6 @@
 function IndiciPrestazione = AnalizzaSistema(versione,macchinari,Precisione,log,RATE_IN,RATE_OUT)
 % AnalizzaSistema è una funzione che calcola gli indici di prestazione dei
-% dati salvati nei specifici file nella cartella Parti_v1, rispettando i
+% dati salvati nei specifici file nella cartella Parti_v<versione>, rispettando i
 % parametri passati alla chiamata della funzione.
 % **INPUT**
 %   macchinari
@@ -25,6 +25,11 @@ function IndiciPrestazione = AnalizzaSistema(versione,macchinari,Precisione,log,
 %    - WIP
 %    - POSTI
 %    - TRANSIZIONI
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
 
 %% PARAMETRI ==============================================================
 if log<=1
@@ -231,16 +236,22 @@ C_temp=eye(n.stati_v,n.stati_v);
 G_temp=C_temp;
 loop=true;
 for k=1:n.stati_v+1
-   C_temp = C_temp*C;
-   if C_temp==zeros(n.stati_v,n.stati_v)
-       loop=false;
-       G=G_temp;
-       break;
-   end
-   G_temp=G_temp+C^k;
+    C_temp = C_temp*C;
+    if C_temp==zeros(n.stati_v,n.stati_v)
+        loop=false;
+        G=G_temp;
+        if log==0
+            fprintf("   -> Calcolo di G classico, non è presente alcun loop tra le marcture vanishing.\n")
+        end
+        break;
+    end
+    G_temp=G_temp+C^k;
 end
 if loop
     G=inv(eye(n.stati_v,n.stati_v)-C);
+    if log==0
+        fprintf("   -> Calcolo di G con inversione, è presente un loop tra le marcture vanishing.\n")
+    end
 end
 
 clear v v1 C_temp G_temp loop 
@@ -411,8 +422,11 @@ tempo_medio_attesa=zeros(1,length(PN.P));
  for k=1:length(PN.P)
      tp_posti=0;
      for j=1:height(PN.T)
-         if PN.Post(k,j)>0
-             tp_posti=tp_posti+Transizioni.TPU(j)*PN.Post(k,j);
+         %if PN.Post(k,j)>0
+         %    tp_posti=tp_posti+Transizioni.TPU(j)*PN.Post(k,j);
+         %end
+         if PN.Pre(k,j)>0
+             tp_posti=tp_posti+Transizioni.TPU(j)*PN.Pre(k,j);
          end
      end
      tempo_medio_attesa(k)=Posti.NumeroMedioToken(k)/tp_posti;
@@ -451,13 +465,10 @@ EFF=eff_mac;
 
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
 
-%% SALVATAGGIO
+%% RESTITUZIONE
 if log<=1
     fprintf("\n8) Calcolo degli indici di prestazione.\n")
 end
-
-save(sprintf("Parti_v%i\\IP_%s.mat",versione,macchinari),"Transizioni","Posti","TPU_IN","TPU_OUT","WIP","MLT","EFF");
-
 IndiciPrestazione.Transizioni=Transizioni;
 IndiciPrestazione.Posti=Posti;
 IndiciPrestazione.TPU_IN=TPU_IN;

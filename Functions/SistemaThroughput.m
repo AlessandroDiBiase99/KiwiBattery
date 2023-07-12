@@ -13,6 +13,11 @@ function tp = SistemaThroughput(tp,macchinari,PN)
 % **OUTPUT**
 %   tp
 %    il vettore dei throughput con tutti i valori completati
+%
+% Authors:
+%    - Caponi Luca
+%    - Catalini Federico
+%    - Di Biase Alessandro
 
 if ismember('1',macchinari)
     id_CaricamentoM1 = PN.T.Transizione=="M1_Caricamento";
