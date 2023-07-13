@@ -1,31 +1,34 @@
-function IndiciPrestazione = AnalizzaTokenSingoloMacchinario(versione, nome, codice,token_attuale,Precisione,log,RATE_IN,RATE_OUT)
-% IndiciPrestazione è una funzione.
-% **INPUT**
-%   versione
-%    ...
-%   nome
-%    ...
-%   codice
-%    ...
-%   token_attuale
-%    ...
-%   Precisione
-%    ...
-%   log
-%    ...
-%   RATE_IN
-%    ...
-%   RATE_OUT
-%    ...
-% **OUTPUT**
-%   IndiciPrestazione
-%    - THROUGHPUT
-%    - MLT
-%    - WIP
-%    - POSTI
-%    - TRANSIZIONI
+function IndiciPrestazione = AnalizzaTokenSingoloMacchinario(versione, nome, token_attuale,Precisione,log,RATE_IN,RATE_OUT)
+% IndiciPrestazione è una funzione che calcola gli indici di prestazione 
+% dei dati salvati nei specifici file nella cartella Parti_v<versione>, 
+% rispettando i parametri passati alla chiamata della funzione
 %
-% Authors:
+% INPUT:
+%    - versione:
+%      versione dei dati da analizzare
+%    - nome:
+%      nome del gruppo da analizzare
+%    - token_attuale:
+%      numero di token assegnati al buffer
+%    - Precisione:
+%      precisione per il calcolo delle matrici U e U1
+%    - log:
+%      > 0          mostrare tutti i messaggi
+%      > 1          mostrare solo i passaggi principali
+%      > altrimenti mostrare solo i messaggi di errore
+%    - RATE_IN:
+%      rate imposto alla giunzione di input
+%    - RATE_OUT:
+%      rate imposto alla giunzione di output
+% OUTPUT:
+%    - IndiciPrestazione:
+%      > THROUGHPUT
+%      > MLT
+%      > WIP
+%      > POSTI
+%      > TRANSIZIONI
+%
+% AUTHORS:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro
@@ -34,7 +37,6 @@ function IndiciPrestazione = AnalizzaTokenSingoloMacchinario(versione, nome, cod
 if log<=1
     fprintf("\n1) Caricamento PN e Grafo di PN_%s_%i \n", nome, token_attuale)
 end
-
 if log==0
     fprintf("   -> Carico Parti_v%1$i_%2$s/PN_%2$s_%3$i.mat.\n",versione, nome, token_attuale)
 end
@@ -59,6 +61,7 @@ if RATE_OUT>0
     PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_OUT)= RATE_OUT;
 end
 
+% Parte personalizzata per ottenere i risultati desiderati con l'efficienza
 if string(nome)=="M6"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Riempitrice elettrolito")="M6_1_Riempie$M6_2_Riempie";
 elseif string(nome)=="M8"
@@ -66,7 +69,6 @@ elseif string(nome)=="M8"
 elseif string(nome)=="M9"
     ImpostazioniIndici.Tabella_EFF.Transizione(ImpostazioniIndici.Tabella_EFF.Gruppo=="Rinnovatrice elettrolito")="M9_1_Rinnova$M9_2_Rinnova";
 end
-
 
 % Il numero di marcature
 n.stati=size(Grafo,2);
@@ -430,12 +432,5 @@ eff_mac=rmmissing(eff_mac);
 IndiciPrestazione.Macchinari=eff_mac;
 
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc server_totali server_in_lavorazione t
-
-%% SALVATAGGIO
-if log<=1
-    fprintf("\n8) Calcolo degli indici di prestazione.\n")
-end
-save(sprintf("Parti_v%1$i_%2$s/IndiciPrestazione_%2$s_%3$i.mat",versione, nome, token_attuale),"IndiciPrestazione");
-
 end
 

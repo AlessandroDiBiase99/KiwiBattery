@@ -46,7 +46,7 @@ direzione="><";
 
 % Il vettore che contiene i diversi file da analizzare, elencati dal primo
 % all'ultimo
-indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
+indice_macchinario=["M1","M2","M11_12_13"];%,"M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
 
 %% CALCOLO INDICI DI PRESTAZIONE___________________________________________
 % Inizializzo i parametri utili per l'esecuzione
@@ -133,7 +133,7 @@ fprintf(fid,"Soglia: %.4f\n",soglia);
 fprintf(fid,"Log: %i\n",log);
 fclose(fid);
 
-% Stampa dei 
+% Salvataggio delle prestazioni dei singoli macchinari 
 Transizioni_=[];
 Posti_=[];
 EFF_=[];
@@ -154,29 +154,21 @@ for i=1:l_im
     MLT_=MLT_ + MLT;
     save(sprintf("Parti_v%i_R%i/IP_%s.mat",versione,n,indice_macchinario(i)),"Transizioni","Posti","TPU_IN","TPU_OUT","WIP","MLT","EFF");
 end
+
+% Salvataggio delle prestazioni dell'intero sistema
 Transizioni = Transizioni_;
 Posti = Posti_;
 EFF = EFF_;
 WIP = WIP_;
 MLT = MLT_;
-clear Transizioni_ Posti_  EFF_ WIP_ MLT_;
-
-TPU=IPx(l_im).TPU_OUT;
-
+TPU = IPx(l_im).TPU_OUT;
 save(sprintf("Parti_v%i_R%i/RisultatiAnalisiCompleta.mat",versione,n),'EFF','Transizioni','Posti','WIP','TPU','MLT');
 save(sprintf("Parti_v%i_R%i/RateImposti.mat",versione,n),'r_in','r_out','r_out2');
 
-%% STAMPA RISULTATI________________________________________________________
+clear Transizioni_ Posti_  EFF_ WIP_ MLT_;
+
+%% STAMPA LATEX____________________________________________________________
 for i=1:l_im
-%Per stampare i risultati senza separare i macchinari
-%nome=sprintf("RisultatiAnalisi_1_ai.mat");
-
-%Per stampare i risultati separati per macchinario
-nome=sprintf("Parti_v1/IP_%s.mat",indice_macchinario(i));
-PrintResultForLatex(i, nome);
-end
-
-%% FUNCTION________________________________________________________________
-function StampaRiga(verso,macchinario)
-    fprintf("%s_____Macchinario %s%s%s\n",verso,macchinario,repmat('_',1,12-length(char(macchinario))));
+    nome=sprintf("Parti_v1/IP_%s.mat",indice_macchinario(i));
+    PrintResultForLatex(i, nome);
 end

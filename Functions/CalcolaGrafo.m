@@ -5,20 +5,28 @@ function [list,Grafo] = CalcolaGrafo(list_todo,list,Grafo,C,maschera_trans,Pre,H
 % siano calcolate nuove marcature queste vengono analizzate richiamando
 % ciclicamente la funzione.
 %
-% Input:
-%    - M_ini: marcatura attuale
-%    - list: lista di stati già raggiunti
-%    - Ragg: lista di dati degli stati già raggiunti
-%    - C: matrice di combinazione (Post-Pre)
-%    - maschera_trans: maschera per distinguere le transizioni immediate e
-%      temporizzate
-%    - Pre: matrice Pre
-%    - H: matrice degli archi inibitori
-% Output:
-%    - list: lista di stati raggiunti
-%    - Ragg: dati relativi agli stati raggiunti
+% INPUT:
+%    - M_ini:
+%      marcatura attuale
+%    - list:
+%      lista di stati già raggiunti
+%    - Ragg:
+%      lista di dati degli stati già raggiunti
+%    - C:
+%      matrice di combinazione (Post-Pre)
+%    - maschera_trans:
+%      maschera per distinguere le transizioni immediate e temporizzate
+%    - Pre: 
+%      matrice Pre
+%    - H: 
+%      matrice degli archi inibitori
+% OUTPUT:
+%    - list:
+%      lista di stati raggiunti
+%    - Ragg:
+%      dati relativi agli stati raggiunti
 %
-% Authors:
+% AUTHORS:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

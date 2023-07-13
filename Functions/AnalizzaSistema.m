@@ -2,31 +2,32 @@ function IndiciPrestazione = AnalizzaSistema(versione,macchinari,Precisione,log,
 % AnalizzaSistema è una funzione che calcola gli indici di prestazione dei
 % dati salvati nei specifici file nella cartella Parti_v<versione>, rispettando i
 % parametri passati alla chiamata della funzione.
-% **INPUT**
-%   macchinari
-%    codice di riconoscimento dei macchinari da lavorare, con i quali sono
-%    anche indicati i file PN e Grafo
-%   Precisione
-%    struct con due campi: U e U1. Il primo campo serve per stabilire le
-%    cifre significative per il calcolo di U, il secondo per il calcolo di
-%    U1.
-%   log: 
-%    - 0          mostrare tutti i messaggi
-%    - 1          mostrare solo i passaggi principali
-%    - altrimenti mostrare solo i messaggi di errore
-%   RATE_IN
-%    il rate di input del sistema che deve essere rispettato
-%   RATE_OUT
-%    il rate di output del sistema che deve essere rispettato
-% **OUTPUT**
-%   IndiciPrestazione
-%    - THROUGHPUT
-%    - MLT
-%    - WIP
-%    - POSTI
-%    - TRANSIZIONI
 %
-% Authors:
+% INPUT:
+%    - macchinari:
+%      codice di riconoscimento dei macchinari da lavorare, con i quali sono
+%      anche indicati i file PN e Grafo
+%    - Precisione:
+%      struct con due campi: U e U1. Il primo campo serve per stabilire le
+%      cifre significative per il calcolo di U, il secondo per il calcolo di
+%      U1.
+%    - log: 
+%      > 0          mostrare tutti i messaggi
+%      > 1          mostrare solo i passaggi principali
+%      > altrimenti mostrare solo i messaggi di errore
+%    - RATE_IN:
+%      il rate di input del sistema che deve essere rispettato
+%    - RATE_OUT:
+%      il rate di output del sistema che deve essere rispettato
+% OUTPUT:
+%    - IndiciPrestazione:
+%      > THROUGHPUT
+%      > MLT
+%      > WIP
+%      > POSTI
+%      > TRANSIZIONI
+%
+% AUTHORS:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

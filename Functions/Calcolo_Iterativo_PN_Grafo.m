@@ -104,7 +104,7 @@ end
 l_im=length(indice_macchinario);
 
 for i=1:l_im
-    IPx(i)= AnalizzaTokenSingoloMacchinario(versione, nome, codice,token.init+token.delta*(i-1), Precisione,log, RATE_IN,RATE_OUT);
+    IPx(i)= AnalizzaTokenSingoloMacchinario(versione, nome, token.init+token.delta*(i-1), Precisione,log, RATE_IN,RATE_OUT);
     if log==0
         fprintf("Macchinario %s->\n",indice_macchinario(i));
     end
