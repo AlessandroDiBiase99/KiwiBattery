@@ -54,6 +54,8 @@ Grafo=info_Grafo.Grafo;
 if log==0
     fprintf("   -> Adeguo i rate di input e output con i parametri passati.\n")
 end
+% Se i rate passati come parametro sono 0 allora mantengo i rate di
+% default, se i rate passati sono diversi da zero allora li assegno
 if RATE_IN>0
     PN.T.Rate(PN.T.Transizione==ImpostazioniIndici.TPU_IN)= RATE_IN;
 end

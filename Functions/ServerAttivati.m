@@ -20,18 +20,20 @@ function s_a = ServerAttivati(Marcatura,MaxServer,Pre,H)
 %    - Catalini Federico
 %    - Di Biase Alessandro
 
+% Se la marcatura non inibisce la transizione
 if all(H==0 | (H>0 & Marcatura<H))
+    % Calcolo quante volte potrebbe essere abilitata la transizione in base
+    % alla marcatura presente
     s_a = floor(min(Marcatura./Pre));
+    % Se il numero di server che possono essere attivati supera il numero
+    % massimo alloea si assegna il valore massimo che può assumere
     if sum(Pre)==0 || s_a>MaxServer
         s_a=MaxServer;
     end
 else
+    % Se la marcatura inibisce la transizione allora non è attivo alcun
+    % server
     s_a=0;
 end
-%     if MaxServer>1
-%         load('prova.mat');
-%         v_sa=[v_sa s_a];
-%         save('prova.mat',"v_sa");
-%     end
 end
 

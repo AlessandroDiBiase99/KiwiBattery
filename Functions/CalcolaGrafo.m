@@ -77,6 +77,7 @@ if size(list_todo,2)>0
     end
     Grafo(ismember(list',M_ini',"rows"))=Marcatura;
 
+    % Tolgo la marcatura dalla lista di quelle che sono ancora da esplorare
     if size(list_todo,2)>=2
         list_todo=list_todo(:,2:end);
     else

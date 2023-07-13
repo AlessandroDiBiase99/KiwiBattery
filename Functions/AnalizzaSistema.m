@@ -466,7 +466,7 @@ EFF=eff_mac;
 
 clear eff_marc eff_mac i_macc i_marc i_eff trans_macc trans_temp posti_macc nome server_totali server_in_lavorazione t
 
-%% RESTITUZIONE
+%% RISULTATO_______________________________________________________________
 if log<=1
     fprintf("\n8) Calcolo degli indici di prestazione.\n")
 end

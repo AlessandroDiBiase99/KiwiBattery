@@ -20,16 +20,18 @@ function M = VerificaStocastica(M,Precisione)
 %    - Catalini Federico
 %    - Di Biase Alessandro
 
+% Arrotondo all precisione specificata
 M = round(M,Precisione);
-% M = M + (M-round(M,Precisione));
-% for i=1:size(M,1)
-%     for j=1:size(M,2)
-%         M(i,j)=floor(round(M(i,j),Precisione)*10^Precisione)/10^Precisione;
-%     end
-% end
+
+% Creo la struttura dati per avere una stampa più pulita
 Ricalcolo_M = table(-1,{-1},'VariableNames',["SUM" "Riga"]);
 Errore_M     = [];
 RicalcolaNaN = [];
+
+% Per ogni riga verifico che la sommatoria corrisponda a 1. Se così non
+% fosse si somma la differenza alla prima cella non nulla e si inserisce il
+% numero di riga nella tabella, associato al valore ottenuto. Bisogna fare
+% un riconoscimento dei NaN perche per MATLAB NaN ~= NaN
 for i=1:size(M,1)
     sum_= sum(M(i,:));
     if sum_~=1
@@ -45,10 +47,13 @@ for i=1:size(M,1)
             Ricalcolo_M.Riga(id)={[Ricalcolo_M.Riga{id} i]};
         end
     end
+    % Se l'errore persiste si segnala
     if sum(M(i,:))~=1
         Errore_M=[Errore_M i];
     end
 end
+% Stampo i messaggi all'utente per avvisarlo delle incorrettezze risolte, o
+% degli errori che persistono
 if height(Ricalcolo_M)>1
     fprintf("   ____!=== ATTENZIONE ===!_____________\n   | Eseguite le correzioni automatiche dell'arrotondamento:\n");
     Ricalcolo_M=Ricalcolo_M(2:end,:);
