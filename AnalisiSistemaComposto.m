@@ -49,11 +49,11 @@ direzione="><";
 indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
 
 %% CALCOLO INDICI DI PRESTAZIONE___________________________________________
+% Inizializzo i parametri utili per l'esecuzione
 l_im=length(indice_macchinario);
 r_out2=[];
 
-if(direzione=="<>")
-    % <<<<<<<<<<<<< -> >>>>>>>>>>>>
+if(direzione=="<>") % <<<<<<<<<<<<< -> >>>>>>>>>>>>________________________
     fprintf("<_____Macchinario %s%s<\n",indice_macchinario(l_im),repmat('_',1,12-length(char(indice_macchinario(l_im)))));
     IPx(l_im)= AnalizzaSistema(versione,  indice_macchinario(l_im), Precisione,log, realmax,0);
     for i=l_im-1:-1:2
@@ -77,8 +77,8 @@ if(direzione=="<>")
     for i=1:l_im
         fprintf("%f -> Macchinario %s ->%f\n",IPx(i).TPU_IN,indice_macchinario(i), IPx(i).TPU_OUT);
     end
-elseif(direzione=="><")
-    %  >>>>>>>>>>>> -> <<<<<<<<<<<<<
+
+elseif(direzione=="><") % >>>>>>>>>>>> -> <<<<<<<<<<<<<____________________
     fprintf(">_____Macchinario %s%s>\n",indice_macchinario(1),repmat('_',1,12-length(char(indice_macchinario(1)))));
     IPx(1) = AnalizzaSistema(versione, indice_macchinario(1),Precisione,log,0, realmax);
     r_out(1)=realmax;
@@ -112,50 +112,34 @@ elseif(direzione=="><")
     end
 end
 
-%% RISULTATI_______________________________________________________________
-Transizioni=[];
-Posti=[];
-EFF=[];
-WIP=0;
-MLT=0;
-TPU=IPx(l_im).TPU_OUT;
-
-for i=1:l_im
-    Transizioni=[Transizioni; IPx(i).Transizioni];
-    Posti=[Posti; IPx(i).Posti];
-    EFF=[EFF;IPx(i).EFF];
-    WIP=WIP+IPx(i).WIP;
-    MLT=MLT+IPx(i).MLT;
-end
-
 %% SALVATAGGIO_____________________________________________________________
 if (direzione=="<>")
-    direzione1="ia";
-    direzione2= "(prima indietro, poi avanti)";
+    direzione1= "prima indietro, poi avanti";
 else
-    direzione1="ai";
-    direzione2= "(prima avanti, poi indietro)";
+    direzione1= "prima avanti, poi indietro";
 end
 d = dir(sprintf("Parti_v%i_R*",versione));
-n=length(d)+1;
+n = length(d)+1;
 mkdir(sprintf("Parti_v%i_R%i",versione,n));
 
+% Stampa del file di supporto per rintracciare l'origine dei dati
 fid = fopen(sprintf("Parti_v%i_R%i/ConfigurazioniAnalisi.txt",versione,n),'w');
 fprintf(fid,"Versione analizzata: %i\n",versione);
 fprintf(fid,"Elementi presenti: %s\n",array2string(indice_macchinario));
-fprintf(fid,"Direzione di analisi: %s %s\n",direzione,direzione2);
+fprintf(fid,"Direzione di analisi: %s (%s)\n",direzione,direzione1);
 fprintf(fid,"Precisione arrotondamento U: %i\n",Precisione.U);
 fprintf(fid,"Precisione arrotondamento U': %i\n",Precisione.U1);
 fprintf(fid,"Soglia: %.4f\n",soglia);
 fprintf(fid,"Log: %i\n",log);
 fclose(fid);
 
-Transizioni_=Transizioni;
-Posti_=Posti;
-EFF_=EFF;
-WIP_=WIP;
-MLT_=MLT;
-for i=1:length(IPx)
+% Stampa dei 
+Transizioni_=[];
+Posti_=[];
+EFF_=[];
+WIP_=0;
+MLT_=0;
+for i=1:l_im
     Transizioni=IPx(i).Transizioni;
     Posti=IPx(i).Posti;
     TPU_IN=IPx(i).TPU_IN;
@@ -163,14 +147,22 @@ for i=1:length(IPx)
     WIP=IPx(i).WIP;
     MLT=IPx(i).MLT;
     EFF=IPx(i).EFF;
+    Transizioni_=[Transizioni_; Transizioni];
+    Posti_=[Posti_; Posti];
+    EFF_=[EFF_; EFF];
+    WIP_=WIP_ + WIP;
+    MLT_=MLT_ + MLT;
     save(sprintf("Parti_v%i_R%i/IP_%s.mat",versione,n,indice_macchinario(i)),"Transizioni","Posti","TPU_IN","TPU_OUT","WIP","MLT","EFF");
 end
-Transizioni=Transizioni_;
-Posti=Posti_;
-EFF=EFF_;
-WIP=WIP_;
-MLT=MLT_;
+Transizioni = Transizioni_;
+Posti = Posti_;
+EFF = EFF_;
+WIP = WIP_;
+MLT = MLT_;
 clear Transizioni_ Posti_  EFF_ WIP_ MLT_;
+
+TPU=IPx(l_im).TPU_OUT;
+
 save(sprintf("Parti_v%i_R%i/RisultatiAnalisiCompleta.mat",versione,n),'EFF','Transizioni','Posti','WIP','TPU','MLT');
 save(sprintf("Parti_v%i_R%i/RateImposti.mat",versione,n),'r_in','r_out','r_out2');
 
