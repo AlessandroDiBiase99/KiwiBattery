@@ -1,0 +1,7 @@
+Versione analizzata: 1
+Elementi presenti: [ M1, M2, M3, M4, M5, M6, M7_1, M7_2, M7_3, M8, M9, M10, M11_12_13]
+Direzione di analisi: >< (prima avanti, poi indietro)
+Precisione arrotondamento U: 5
+Precisione arrotondamento U': 5
+Soglia: 0.9850
+Log: 0
