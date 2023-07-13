@@ -1,6 +1,6 @@
 function [list,Grafo] = CalcolaGrafo(list_todo,list,Grafo,C,maschera_trans,Pre,H)
-% Calcola_Marc_Ragg è una funzione che calcola tutte le marcature
-% raggiungibile dalla marcatura iniziale indicata. La funzione calcola
+% CalcolaGrafo è una funzione che calcola tutte le marcature
+% raggiungibili dalla marcatura iniziale indicata. La funzione calcola
 % inizialemte le transizioni abilitate, e le conseguenti marcature. Qualora
 % siano calcolate nuove marcature queste vengono analizzate richiamando
 % ciclicamente la funzione.
@@ -26,7 +26,7 @@ function [list,Grafo] = CalcolaGrafo(list_todo,list,Grafo,C,maschera_trans,Pre,H
 %    - Ragg:
 %      dati relativi agli stati raggiunti
 %
-% AUTHORS:
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

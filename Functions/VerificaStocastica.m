@@ -5,16 +5,17 @@ function M = VerificaStocastica(M,Precisione)
 % a sistemare i valori della matrice al fine di rendere la sommatoria pari
 % a 1. Gli arrotondamenti sono effettuati in base alla Precisione passata
 % come parametro.
-% **INPUT**
-%   M
-%    la matrice che deve essere verificata
-%   Precisione
-%    il numero di cifre significative da considerare con i calcoli
-% **OUTPUT**
-%   M
-%    la matrice corretta
 %
-% Authors:
+% INPUT:
+%    - M:
+%      la matrice che deve essere verificata.
+%    - Precisione:
+%      il numero di cifre significative da considerare con i calcoli.
+% OUTPUT:
+%    - M:
+%      la matrice corretta.
+%
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

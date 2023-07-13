@@ -28,7 +28,7 @@ function IndiciPrestazione = AnalizzaTokenSingoloMacchinario(versione, nome, tok
 %      > POSTI
 %      > TRANSIZIONI
 %
-% AUTHORS:
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

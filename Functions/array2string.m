@@ -3,12 +3,12 @@ function s=array2string(array)
 %
 % INPUT:
 %    - array:
-%      array di 
+%      array di numeri
 % OUTPUT:
 %    - s:
 %      stringa correttamente formata: [...]
 %
-% AUTHORS:
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

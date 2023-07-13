@@ -1,20 +1,22 @@
 function tp = SistemaThroughput(tp,macchinari,PN)
 % SistemaThroughput è una funzione che completa i valori di throughput per
 % le transizioni immediate, nota la conoscenza dei legami presenti nella
-% GSPN.
-% **INPUT**
-%   tp
-%    il vettore dei throughput con i valori relativi alle sole transizioni 
-%    temporizzate
-%   macchinari
-%    i macchinari presenti all'interno del vettore tp
-%   PN
-%    la rete di petri per individuare gli indici delle transizioni
-% **OUTPUT**
-%   tp
-%    il vettore dei throughput con tutti i valori completati
+% GSPN. Questa funzione risulta specifica per la rete di Petri realizzata,
+% è da aggiornare ad ogni modifica apportata alla rete.
+% 
+% INPUT:
+%    - tp:
+%      il vettore dei throughput con i valori relativi alle sole 
+%      transizioni temporizzate.
+%    - macchinari:
+%      i macchinari presenti all'interno del vettore tp.
+%    - PN:
+%      la rete di petri per individuare gli indici delle transizioni.
+% OUTPUT:
+%    - tp:
+%      il vettore dei throughput con tutti i valori completati.
 %
-% Authors:
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

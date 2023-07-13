@@ -1,6 +1,35 @@
 function p_tp= Calcolo_Iterativo_PN_Grafo(versione,PN,nome,codice,token, RATE_IN, RATE_OUT, Impostazioni)
+% Calcolo_Iterativo_PN_Grafo è una funzione per calcolare il grafo di
+% raggiungibilità e consecutivamente gli indici di prestazione variando il
+% numero di token sul buffer.
 %
-% Authors:
+% INPUT:
+%    - versione: 
+%      la versione da analizzare
+%    - PN:
+%      la struttura dati contenente tutte le informazioni della rete di
+%      Petri.
+%    - nome: 
+%      il nome del gruppo
+%    - codice:
+%      il codice del buffer da modificare
+%    - token:
+%      struttura che descrive il token iniziale, quello finale, e
+%      l'incremento ad ogni di token ad ogni iterazioni.
+%    - RATE_IN:
+%      il rate da imporre alla transizione di ingresso.
+%    - RATE_OUT:
+%      il rate da imporre alla transizione di uscita.
+%    - Impostazioni:
+%      impostazioni contenenti le precisioni per l'arrotondamento della
+%      matrice U e U1, il livello di log, la possibilità di recuperare il
+%      grafo se già calcolato.
+% OUTPUT:
+%    - p_tp:
+%      array con i valori di throughput della transizione di ingresso e di
+%      uscita
+%
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

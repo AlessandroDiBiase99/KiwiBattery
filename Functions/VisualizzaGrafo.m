@@ -1,6 +1,20 @@
 function VisualizzaGrafo(Grafo,T)
-%
-% Authors:
+% VisualizzaGrafo è una funzione che permette di visualizzare graficamente
+% il grafo di raggiungibilità realizzato. Per ogni stato si crea un nodo, e
+% si creano archi rivolti verso i nuovi nodi che saranno posizionati sempre
+% al di sotto. Se si deve tornare a uno stato già esistente si crea un arco
+% rivolto verso il nodo associato, nella stessa riga o nelle righe
+% superiori. Si stampa anche lo stato associato al nodo e la transizione
+% che permette di cambiare stato.
+% 
+% INPUT:
+%    - Grafo:
+%      il grafo di raggiungibilità determinato. 
+%    - T:
+%      il vettore che contiene il nome delle transizioni per inserire le
+%      etichette corrette.
+% 
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro

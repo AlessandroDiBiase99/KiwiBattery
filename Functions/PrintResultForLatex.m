@@ -1,21 +1,33 @@
 function PrintResultForLatex(versione, nome)
+% PrintResultForLatex è una funzione per stampare gli indici di prestazione
+% risultanti su tabelle formattate in latex.
 %
-% Authors:
+% INPUT:
+%    - versione:
+%      la versione da analizzare.
+%    - nome:
+%      il nome del file da dove estrapolare i risultati.
+%
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro
 
+% Stampo l'intestazione
 fprintf("\n\n|_=_=_=_=_=_=_=_=_=_=_=_=_=_=__LATEX TEXT__=_=_=_=_=_=_=_=_=_=_=_=_=_=_|\n\n");
 
+% Carico il file
 IndiciPrestazione=load(nome);
 
+% Verifico che non ci siano dubplicati, e che il tempo sia correttamente
+% formattato
 IndiciPrestazione.Transizioni=RemoveDuplicate(IndiciPrestazione.Transizioni);
 IndiciPrestazione.EFF=RemoveDuplicate(IndiciPrestazione.EFF);
-
 if ~isduration(IndiciPrestazione.MLT)
     IndiciPrestazione.MLT=hours(IndiciPrestazione.MLT);
 end
 
+% Stampa dei dati
 fprintf("Throughput\n" + ...
     "\\begin{longtabu}[H]{|c|c|}\n" + ...
     "\\hline\n"+...
@@ -78,6 +90,7 @@ fprintf("Il throughput di input sistema è: %.4f\\\\\n" + ...
 
 clear t p m tpu nmt tma eff;
 
+%% FUNZIONI________________________________________________________________
     function stringa=check(testo)
         stringa = strrep(testo,"_","\_");
     end

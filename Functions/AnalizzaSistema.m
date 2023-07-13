@@ -27,7 +27,7 @@ function IndiciPrestazione = AnalizzaSistema(versione,macchinari,Precisione,log,
 %      > POSTI
 %      > TRANSIZIONI
 %
-% AUTHORS:
+% AUTORI:
 %    - Caponi Luca
 %    - Catalini Federico
 %    - Di Biase Alessandro
