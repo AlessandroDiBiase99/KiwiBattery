@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<labels x="20" y="20" width="223" height="63" border="true">
+<text>Stazione 1:
+Assemblatrice piastre
+Input: 2 celle, 1 contenitore</text>
+</labels>
+<place id="M1_Base">
+<graphics>
+<position x="394.0" y="189.0"/>
+</graphics>
+<name>
+<value>M1_Base</value>
+<graphics>
+<offset x="40.49999999999997" y="-24.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M1_ContenitoreECelle">
+<graphics>
+<position x="219.0" y="189.0"/>
+</graphics>
+<name>
+<value>M1_ContenitoreECelle</value>
+<graphics>
+<offset x="70.66666666666666" y="-26.66666666666667"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M1_Libero">
+<graphics>
+<position x="315.0" y="240.0"/>
+</graphics>
+<name>
+<value>M1_Libero</value>
+<graphics>
+<offset x="44.54545454545449" y="40.90909090909091"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N1_1">
+<graphics>
+<position x="575.0" y="189.0"/>
+</graphics>
+<name>
+<value>N1_1</value>
+<graphics>
+<offset x="33.0" y="-26.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N1_1_Capacità">
+<graphics>
+<position x="576.0" y="236.0"/>
+</graphics>
+<name>
+<value>N1_1_Capacità</value>
+<graphics>
+<offset x="62.0" y="44.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione1">
+<graphics>
+<position x="657.0" y="194.0"/>
+</graphics>
+<name>
+<value>Giunzione1</value>
+<graphics>
+<offset x="52.0" y="-13.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M1_Assembla">
+<graphics>
+<position x="311.0" y="190.0"/>
+</graphics>
+<name>
+<value>M1_Assembla</value>
+<graphics>
+<offset x="57.0" y="-13.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M1_Caricamento">
+<graphics>
+<position x="120.0" y="195.0"/>
+</graphics>
+<name>
+<value>M1_Caricamento</value>
+<graphics>
+<offset x="61.33333333333331" y="-14.166666666666668"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M1_Scaricamento">
+<graphics>
+<position x="485.0" y="195.0"/>
+</graphics>
+<name>
+<value>M1_Scaricamento</value>
+<graphics>
+<offset x="67.0" y="-13.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="Giunzione1 to N1_1_Capacità" source="Giunzione1" target="N1_1_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="663" y="211" curvePoint="false"/>
+<arcpath id="001" x="601" y="241" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M1_Scaricamento to N1_1" source="M1_Scaricamento" target="N1_1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="502" y="201" curvePoint="false"/>
+<arcpath id="001" x="572" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N1_1_Capacità to M1_Scaricamento" source="N1_1_Capacità" target="M1_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="574" y="242" curvePoint="false"/>
+<arcpath id="001" x="501" y="211" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N1_1 to Giunzione1" source="N1_1" target="Giunzione1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="601" y="201" curvePoint="false"/>
+<arcpath id="001" x="664" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P0 to T2" source="M1_Base" target="M1_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="420" y="201" curvePoint="false"/>
+<arcpath id="001" x="492" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P1 to T1" source="M1_ContenitoreECelle" target="M1_Assembla">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="245" y="201" curvePoint="false"/>
+<arcpath id="001" x="318" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P2 to T0" source="M1_Libero" target="M1_Caricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="312" y="248" curvePoint="false"/>
+<arcpath id="001" x="136" y="211" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T0 to P1" source="M1_Caricamento" target="M1_ContenitoreECelle">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="137" y="201" curvePoint="false"/>
+<arcpath id="001" x="216" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T1 to P0" source="M1_Assembla" target="M1_Base">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="328" y="201" curvePoint="false"/>
+<arcpath id="001" x="391" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T2 to P2" source="M1_Scaricamento" target="M1_Libero">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="491" y="211" curvePoint="false"/>
+<arcpath id="001" x="341" y="248" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>

@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<labels x="20" y="20" width="257" height="62" border="true">
+<text>Stazione 4:
+Assemblatrice indicatore stato di carica
+Input: 1 indicatore stato di carica</text>
+</labels>
+<place id="M4_BaseEMontante">
+<graphics>
+<position x="383.0" y="180.0"/>
+</graphics>
+<name>
+<value>M4_BaseEMontante</value>
+<graphics>
+<offset x="75.83333333333336" y="-22.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M4_BatteriaEIndicatore">
+<graphics>
+<position x="570.0" y="185.0"/>
+</graphics>
+<name>
+<value>M4_BatteriaEIndicatore</value>
+<graphics>
+<offset x="77.0" y="-24.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M4_DisponibileAlCarico">
+<graphics>
+<position x="383.0" y="316.0"/>
+</graphics>
+<name>
+<value>M4_DisponibileAlCarico</value>
+<graphics>
+<offset x="82.72727272727258" y="39.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M4_Indicatore">
+<graphics>
+<position x="382.0" y="232.0"/>
+</graphics>
+<name>
+<value>M4_Indicatore</value>
+<graphics>
+<offset x="56.50000000000002" y="41.999999999999986"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N3_2">
+<graphics>
+<position x="160.0" y="175.0"/>
+</graphics>
+<name>
+<value>N3_2</value>
+<graphics>
+<offset x="25.166666666666742" y="-13.666666666666679"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N3_2_Capacità">
+<graphics>
+<position x="161.0" y="221.0"/>
+</graphics>
+<name>
+<value>N3_2_Capacità</value>
+<graphics>
+<offset x="42.16666666666665" y="42.333333333333336"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,10</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N4_1">
+<graphics>
+<position x="742.0" y="184.0"/>
+</graphics>
+<name>
+<value>N4_1</value>
+<graphics>
+<offset x="31.0" y="-24.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N4_1_Capacità">
+<graphics>
+<position x="743.0" y="240.0"/>
+</graphics>
+<name>
+<value>N4_1_Capacità</value>
+<graphics>
+<offset x="77.0" y="46.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione3">
+<graphics>
+<position x="76.0" y="181.0"/>
+</graphics>
+<name>
+<value>Giunzione3</value>
+<graphics>
+<offset x="61.0" y="-9.0"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Giunzione4">
+<graphics>
+<position x="814.0" y="189.0"/>
+</graphics>
+<name>
+<value>Giunzione4</value>
+<graphics>
+<offset x="54.0" y="-11.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M4_Assembla">
+<graphics>
+<position x="492.0" y="186.0"/>
+</graphics>
+<name>
+<value>M4_Assembla</value>
+<graphics>
+<offset x="47.833333333333336" y="-7.606060606060602"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M4_CaricamentoBatteria">
+<graphics>
+<position x="256.0" y="181.0"/>
+</graphics>
+<name>
+<value>M4_CaricamentoBatteria</value>
+<graphics>
+<offset x="87.0" y="-12.166666666666666"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M4_CaricamentoIndicatore">
+<graphics>
+<position x="258.0" y="241.0"/>
+</graphics>
+<name>
+<value>M4_CaricamentoIndicatore</value>
+<graphics>
+<offset x="81.33333333333333" y="44.83333333333335"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M4_Scaricamento">
+<graphics>
+<position x="653.0" y="190.0"/>
+</graphics>
+<name>
+<value>M4_Scaricamento</value>
+<graphics>
+<offset x="74.66666666666669" y="-9.166666666666664"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="Base e Montante su nastro to Caricamento M3" source="N3_2" target="M4_CaricamentoBatteria">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="186" y="187" curvePoint="false"/>
+<arcpath id="001" x="263" y="187" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàNastro3 to Scaricamento M3" source="N3_2_Capacità" target="Giunzione3">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="159" y="226" curvePoint="false"/>
+<arcpath id="001" x="92" y="197" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento M4 to CapacitàNastro3" source="M4_CaricamentoBatteria" target="N3_2_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="262" y="197" curvePoint="false"/>
+<arcpath id="001" x="186" y="227" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento M4 to M4 disponibile al carico" source="M4_CaricamentoBatteria" target="M4_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="272" y="198" curvePoint="false"/>
+<arcpath id="001" x="384" y="317" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Componenti caricate to Caricamento M4" source="M4_BaseEMontante" target="M4_CaricamentoBatteria">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="380" y="191" curvePoint="false"/>
+<arcpath id="001" x="273" y="184" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="Giunzione4 to N4_1_Capacità" source="Giunzione4" target="N4_1_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="820" y="206" curvePoint="false"/>
+<arcpath id="001" x="767" y="243" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M4_Scaricamento to N4_1" source="M4_Scaricamento" target="N4_1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="670" y="196" curvePoint="false"/>
+<arcpath id="001" x="739" y="196" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M4 disponibile al carico to M4 lavorazione" source="M4_DisponibileAlCarico" target="M4_Assembla">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="404" y="316" curvePoint="false"/>
+<arcpath id="001" x="498" y="205" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M4 disponibile al carico to T18" source="M4_DisponibileAlCarico" target="M4_CaricamentoIndicatore">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="380" y="328" curvePoint="false"/>
+<arcpath id="001" x="321" y="311" curvePoint="true"/>
+<arcpath id="002" x="274" y="258" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N4_1_Capacità to M4_Scaricamento" source="N4_1_Capacità" target="M4_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="741" y="244" curvePoint="false"/>
+<arcpath id="001" x="669" y="206" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N4_1 to Giunzione4" source="N4_1" target="Giunzione4">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="768" y="196" curvePoint="false"/>
+<arcpath id="001" x="821" y="196" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P19 to T13" source="M4_BaseEMontante" target="M4_Assembla">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="409" y="191" curvePoint="false"/>
+<arcpath id="001" x="499" y="191" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P20 to T12" source="M4_DisponibileAlCarico" target="M4_CaricamentoBatteria">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="384" y="317" curvePoint="false"/>
+<arcpath id="001" x="272" y="201" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P21 to T14" source="M4_BatteriaEIndicatore" target="M4_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="596" y="196" curvePoint="false"/>
+<arcpath id="001" x="660" y="196" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P34 to M4 lavorazione" source="M4_Indicatore" target="M4_Assembla">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="407" y="238" curvePoint="false"/>
+<arcpath id="001" x="498" y="198" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P34 to T18" source="M4_Indicatore" target="M4_CaricamentoIndicatore">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="379" y="244" curvePoint="false"/>
+<arcpath id="001" x="275" y="244" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="Scaricamento Terminale Accensione to Base e Montante su nastro" source="Giunzione3" target="N3_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="93" y="187" curvePoint="false"/>
+<arcpath id="001" x="157" y="187" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T12 to P19" source="M4_CaricamentoBatteria" target="M4_BaseEMontante">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="273" y="191" curvePoint="false"/>
+<arcpath id="001" x="380" y="191" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T13 to P21" source="M4_Assembla" target="M4_BatteriaEIndicatore">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="509" y="197" curvePoint="false"/>
+<arcpath id="001" x="567" y="197" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T14 to P20" source="M4_Scaricamento" target="M4_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="659" y="206" curvePoint="false"/>
+<arcpath id="001" x="527" y="327" curvePoint="true"/>
+<arcpath id="002" x="409" y="327" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T18 to M4 disponibile al carico" source="M4_CaricamentoIndicatore" target="M4_DisponibileAlCarico">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="271" y="261" curvePoint="false"/>
+<arcpath id="001" x="381" y="320" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T18 to P34" source="M4_CaricamentoIndicatore" target="M4_Indicatore">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="275" y="251" curvePoint="false"/>
+<arcpath id="001" x="379" y="244" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>

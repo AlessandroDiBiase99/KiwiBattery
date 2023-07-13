@@ -1,6 +1,6 @@
 # KiwiBattery
-Description of a battery production system
-## Folder and subfolder
+Descrizione di un sistema di produzione di batterie.
+## File e cartelle
 In particolare, i file principali da considerare sono:
 - **GestoreAnalisiPN.mlapp**  
 È l'interfaccia grafica presentata in sezione SubSec:gestoreanalisipn, per agevolare l'acquisizione dei dati da Pipe v3.4, una loro eventuale modifica, il calcolo del grafo di raggiungibilità e la creazione di strutture dati utili per l'elaborazione matematica dei parametri.
@@ -32,3 +32,49 @@ Cartella contenente le funzioni utilizzate nei diversi script:
   Questa funzione, inglobata anch'essa nella Matlab app GestoreAnalisiPN, permette di calcolare tutte le marcature raggiungibile da una marcatura iniziale indicata. Vengono calcolate le transizioni abilitate e le conseguenti marcature. Qualora siano calcolate nuove marcature queste vengono analizzate richiamando ciclicamente la funzione.
   - **VisualizzaGrafo.m**  
   Questa funzione, inglobata anch'essa nella Matlab app GestoreAnalisiPN, permette di rappresentare graficamente a schermo il grafo di raggiungibilità che è stato calcolato.
+- **Macchinari**  
+Cartella contenente i file '.xml' da visionare in PIPE v3.4:
+  - **M1**  
+  Stazione 1: assemblatrice di piastre;
+  - **M2**  
+  Stazione 2: assemblatrice prima copertura;
+  - **M3**  
+  Stazione 3: terminale di accensione;
+  - **M4**  
+  Stazione 4: assemblatrice dell'indicatore di stato di carica; 
+  - **M5**  
+  Stazione 5: primo test di pressione;
+  - **M6**  
+  Stazione 6: riempitrice elettrolito; 
+  - **M7_1**  
+  Stazione 7: buffer per raccogliere il flusso di batterie in gruppi da 64;
+  - **M7_2**  
+  Stazione 7: postazione di carica; 
+  - **M7_3**  
+  Stazione 7: buffer per disporre le batterie singolarmente sul nastro, dai gruppi di 64 batterie; 
+  - **M8**  
+  Stazione 8: svuotatrice elettrolito;
+  - **M9**  
+  Stazione 9: rinnovatrice elettrolito;
+  - **M10**  
+  Stazione 10: assemblatrice seconda copertura;
+  - **M11_12_13**  
+  Stazione 11: secondo test pressione;
+  Stazione 12: pulitrice;
+  Stazione 13: etichettatrice.
+- **Parti_v1**  
+In questa cartella sono i presenti i file relativi al sistema originario, disponendo per ogni stazione:
+  - **Grafo_** *Mx*  
+  File contenente la struttura che descrive il grafo di raggiungibilità della stazione con codice *Mx*
+  - **IP_** *Mx*  
+  File contenente gli indici di prestazione calcolati relativi alla stazione con codice *Mx*
+  - **PN_** *Mx*  
+  File contenente i posti, le transizioni, le matrici Pre, Post, C e H, E le impostazioni utili per il calcolo degli indici di prestazione della stazione con codice *Mx*
+- **Parti_v2**  
+In questa cartella sono i presenti i file relativi al sistema modificato. Nella stazione 3 è stato aggiunto un secondo macchinario, in M3 sono dunque ora presenti due server, con lo scopo di aumentare la capacità produttiva dell'intero sistema. Analogamente a **Parti_v1**, per ogni stazione è presente:
+  - **Grafo_** *Mx*  
+  File contenente la struttura che descrive il grafo di raggiungibilità della stazione con codice *Mx*
+  - **IP_** *Mx*  
+  File contenente gli indici di prestazione calcolati relativi alla stazione con codice *Mx*
+  - **PN_** *Mx*  
+  File contenente i posti, le transizioni, le matrici Pre, Post, C e H, E le impostazioni utili per il calcolo degli indici di prestazione della stazione con codice *Mx*

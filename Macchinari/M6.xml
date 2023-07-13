@@ -1,0 +1,1056 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<labels x="20" y="20" width="152" height="44" border="true">
+<text>Stazione 6:
+Riempitrice elettrolito</text>
+</labels>
+<place id="M6_1_BatteriaPiena">
+<graphics>
+<position x="577.0" y="147.0"/>
+</graphics>
+<name>
+<value>M6_1_BatteriaPiena</value>
+<graphics>
+<offset x="82.5" y="58.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_1_BatteriaVuota">
+<graphics>
+<position x="437.0" y="147.0"/>
+</graphics>
+<name>
+<value>M6_1_BatteriaVuota</value>
+<graphics>
+<offset x="56.66666666666657" y="57.33333333333332"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_1_Libera">
+<graphics>
+<position x="503.0" y="104.0"/>
+</graphics>
+<name>
+<value>M6_1_Libera</value>
+<graphics>
+<offset x="48.66666666666663" y="-3.333333333333332"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_2_BatteriaPiena">
+<graphics>
+<position x="575.0" y="282.0"/>
+</graphics>
+<name>
+<value>M6_2_BatteriaPiena</value>
+<graphics>
+<offset x="84.33333333333334" y="61.49999999999999"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_2_BatteriaVuota">
+<graphics>
+<position x="441.0" y="281.0"/>
+</graphics>
+<name>
+<value>M6_2_BatteriaVuota</value>
+<graphics>
+<offset x="55.666666666666714" y="61.999999999999964"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_2_Libera">
+<graphics>
+<position x="504.0" y="239.0"/>
+</graphics>
+<name>
+<value>M6_2_Libera</value>
+<graphics>
+<offset x="54.333333333333314" y="-6.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_NastroInput1">
+<graphics>
+<position x="289.0" y="142.0"/>
+</graphics>
+<name>
+<value>M6_NastroInput1</value>
+<graphics>
+<offset x="6.166666666666657" y="35.33333333333334"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_NastroInput2">
+<graphics>
+<position x="289.0" y="276.0"/>
+</graphics>
+<name>
+<value>M6_NastroInput2</value>
+<graphics>
+<offset x="52.16666666666667" y="64.66666666666667"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_NastroOutput1">
+<graphics>
+<position x="741.0" y="146.0"/>
+</graphics>
+<name>
+<value>M6_NastroOutput1</value>
+<graphics>
+<offset x="131.33333333333334" y="15.416666666666664"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="M6_NastroOutput2">
+<graphics>
+<position x="742.0" y="277.0"/>
+</graphics>
+<name>
+<value>M6_NastroOutput2</value>
+<graphics>
+<offset x="61.583333333333314" y="63.83333333333334"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N5_2">
+<graphics>
+<position x="104.0" y="132.0"/>
+</graphics>
+<name>
+<value>N5_2</value>
+<graphics>
+<offset x="26.69696969696973" y="-25.464646464646464"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N5_2_Capacità">
+<graphics>
+<position x="101.0" y="177.0"/>
+</graphics>
+<name>
+<value>N5_2_Capacità</value>
+<graphics>
+<offset x="59.75252525252536" y="43.242424242424235"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,10</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N6_1">
+<graphics>
+<position x="894.0" y="272.0"/>
+</graphics>
+<name>
+<value>N6_1</value>
+<graphics>
+<offset x="32.0" y="-12.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="N6_1_Capacità">
+<graphics>
+<position x="895.0" y="308.0"/>
+</graphics>
+<name>
+<value>N6_1_Capacità</value>
+<graphics>
+<offset x="67.0" y="45.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,4</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Giunzione5">
+<graphics>
+<position x="31.0" y="136.0"/>
+</graphics>
+<name>
+<value>Giunzione5</value>
+<graphics>
+<offset x="43.880952380952365" y="-15.952380952380956"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Giunzione6">
+<graphics>
+<position x="991.0" y="276.0"/>
+</graphics>
+<name>
+<value>Giunzione6</value>
+<graphics>
+<offset x="48.0" y="42.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_1_AvanzaPistoneInput">
+<graphics>
+<position x="367.0" y="142.0"/>
+</graphics>
+<name>
+<value>M6_1_AvanzaPistoneInput</value>
+<graphics>
+<offset x="60.58333333333342" y="-24.166666666666657"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_1_AvanzaPistoneOutput">
+<graphics>
+<position x="652.0" y="142.0"/>
+</graphics>
+<name>
+<value>M6_1_AvanzaPistoneOutput</value>
+<graphics>
+<offset x="86.08333333333329" y="-13.666666666666664"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_1_Riempie">
+<graphics>
+<position x="501.0" y="148.0"/>
+</graphics>
+<name>
+<value>M6_1_Riempie</value>
+<graphics>
+<offset x="60.33333333333337" y="42.33333333333334"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_2_AvanzaPistoneInput">
+<graphics>
+<position x="367.0" y="277.0"/>
+</graphics>
+<name>
+<value>M6_2_AvanzaPistoneInput</value>
+<graphics>
+<offset x="78.66666666666669" y="-5.666666666666675"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_2_AvanzaPistoneOutput">
+<graphics>
+<position x="652.0" y="277.0"/>
+</graphics>
+<name>
+<value>M6_2_AvanzaPistoneOutput</value>
+<graphics>
+<offset x="88.50000000000001" y="-9.833333333333332"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_2_Riempie">
+<graphics>
+<position x="503.0" y="282.0"/>
+</graphics>
+<name>
+<value>M6_2_Riempie</value>
+<graphics>
+<offset x="65.00000000000009" y="43.74999999999998"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>true</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_AvanzaNastroInput">
+<graphics>
+<position x="289.0" y="207.0"/>
+</graphics>
+<name>
+<value>M6_AvanzaNastroInput</value>
+<graphics>
+<offset x="0.3333333333333286" y="30.833333333333343"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_AvanzaNastroOutput">
+<graphics>
+<position x="742.0" y="202.0"/>
+</graphics>
+<name>
+<value>M6_AvanzaNastroOutput</value>
+<graphics>
+<offset x="163.0" y="21.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_Caricamento">
+<graphics>
+<position x="181.0" y="137.0"/>
+</graphics>
+<name>
+<value>M6_Caricamento</value>
+<graphics>
+<offset x="64.33333333333326" y="-19.499999999999993"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="M6_Scaricamento">
+<graphics>
+<position x="802.0" y="277.0"/>
+</graphics>
+<name>
+<value>M6_Scaricamento</value>
+<graphics>
+<offset x="68.63888888888913" y="43.16666666666674"/>
+</graphics>
+</name>
+<orientation>
+<value>180</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="A_NM6I to NM6I_2" source="M6_AvanzaNastroInput" target="M6_NastroInput2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="295" y="223" curvePoint="false"/>
+<arcpath id="001" x="299" y="273" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="A_NM6O to NM6O_2" source="M6_AvanzaNastroOutput" target="M6_NastroOutput2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="748" y="218" curvePoint="false"/>
+<arcpath id="001" x="752" y="274" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Batterie Testate su Nastro to T25" source="N5_2" target="M6_Caricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="130" y="143" curvePoint="false"/>
+<arcpath id="001" x="188" y="143" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="CapacitàNastro5 to Scaricamento M5" source="N5_2_Capacità" target="Giunzione5">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="99" y="181" curvePoint="false"/>
+<arcpath id="001" x="47" y="153" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Caricamento NM6 to NM6I_1" source="M6_Caricamento" target="M6_NastroInput1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="197" y="153" curvePoint="false"/>
+<arcpath id="001" x="286" y="153" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Giunzione6 to N6_1_Capacità" source="Giunzione6" target="N6_1_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="997" y="293" curvePoint="false"/>
+<arcpath id="001" x="921" y="315" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M6_2 batteria riempita to Secondo avanzamento pistone 2" source="M6_2_BatteriaPiena" target="M6_2_AvanzaPistoneOutput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="601" y="293" curvePoint="false"/>
+<arcpath id="001" x="658" y="293" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M6_2 batteria su nastro to Secondo avanzamento pistone 2" source="M6_NastroOutput2" target="M6_2_AvanzaPistoneOutput">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="739" y="289" curvePoint="false"/>
+<arcpath id="001" x="668" y="293" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="M6_2 in lavorazione to M6_2 batteria riempita" source="M6_2_Riempie" target="M6_2_BatteriaPiena">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="520" y="293" curvePoint="false"/>
+<arcpath id="001" x="572" y="293" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M6_2 libera to Primo avanzamento pistone 2" source="M6_2_Libera" target="M6_2_AvanzaPistoneInput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="501" y="254" curvePoint="false"/>
+<arcpath id="001" x="384" y="283" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M6_3 batteria riempita to Secondo avanzamento pistone 3" source="M6_1_BatteriaPiena" target="M6_1_AvanzaPistoneOutput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="603" y="158" curvePoint="false"/>
+<arcpath id="001" x="658" y="158" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M6_3 batteria su nastro to Secondo avanzamento pistone 3" source="M6_NastroOutput1" target="M6_1_AvanzaPistoneOutput">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="738" y="158" curvePoint="false"/>
+<arcpath id="001" x="668" y="158" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="M6_3 in lavorazione to M6_3 batteria riempita" source="M6_1_Riempie" target="M6_1_BatteriaPiena">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="518" y="159" curvePoint="false"/>
+<arcpath id="001" x="574" y="159" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M6_3 libera to Primo avanzamento pistone 3" source="M6_1_Libera" target="M6_1_AvanzaPistoneInput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="500" y="119" curvePoint="false"/>
+<arcpath id="001" x="384" y="148" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="M6_Scaricamento to N6_1" source="M6_Scaricamento" target="N6_1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="819" y="283" curvePoint="false"/>
+<arcpath id="001" x="891" y="283" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N6_1_Capacità to M6_Scaricamento" source="N6_1_Capacità" target="M6_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="892" y="315" curvePoint="false"/>
+<arcpath id="001" x="818" y="293" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="N6_1 to Giunzione6" source="N6_1" target="Giunzione6">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="920" y="283" curvePoint="false"/>
+<arcpath id="001" x="998" y="283" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="NM6I_1 to Caricamento NM6" source="M6_NastroInput1" target="M6_Caricamento">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="286" y="152" curvePoint="false"/>
+<arcpath id="001" x="198" y="143" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="NM6I_2 to A_NM6I" source="M6_NastroInput2" target="M6_AvanzaNastroInput">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="302" y="273" curvePoint="false"/>
+<arcpath id="001" x="305" y="224" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="NM6O_1 to A_NM6O" source="M6_NastroOutput1" target="M6_AvanzaNastroOutput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="753" y="172" curvePoint="false"/>
+<arcpath id="001" x="753" y="208" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="NM6O_2 to A_NM6O" source="M6_NastroOutput2" target="M6_AvanzaNastroOutput">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="755" y="274" curvePoint="false"/>
+<arcpath id="001" x="758" y="219" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="NM6O_2 to Caricamento M7" source="M6_NastroOutput2" target="M6_Scaricamento">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="768" y="288" curvePoint="false"/>
+<arcpath id="001" x="809" y="288" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P36 to T23" source="M6_NastroInput2" target="M6_2_AvanzaPistoneInput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="315" y="288" curvePoint="false"/>
+<arcpath id="001" x="374" y="288" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P37 to T21" source="M6_NastroInput1" target="M6_AvanzaNastroInput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="300" y="168" curvePoint="false"/>
+<arcpath id="001" x="300" y="213" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P37 to T24" source="M6_NastroInput1" target="M6_1_AvanzaPistoneInput">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="315" y="153" curvePoint="false"/>
+<arcpath id="001" x="374" y="153" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P39 to M6_2 in lavorazione" source="M6_2_BatteriaVuota" target="M6_2_Riempie">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="467" y="293" curvePoint="false"/>
+<arcpath id="001" x="510" y="293" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="P40 to M6_3 in lavorazione" source="M6_1_BatteriaVuota" target="M6_1_Riempie">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="463" y="159" curvePoint="false"/>
+<arcpath id="001" x="508" y="159" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Secondo avanzamento pistone 2 to M6_2 batteria su nastro" source="M6_2_AvanzaPistoneOutput" target="M6_NastroOutput2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="669" y="283" curvePoint="false"/>
+<arcpath id="001" x="739" y="287" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Secondo avanzamento pistone 2 to M6_2 libera" source="M6_2_AvanzaPistoneOutput" target="M6_2_Libera">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="659" y="283" curvePoint="false"/>
+<arcpath id="001" x="530" y="254" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Secondo avanzamento pistone 3 to M6_3 batteria su nastro" source="M6_1_AvanzaPistoneOutput" target="M6_NastroOutput1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="669" y="148" curvePoint="false"/>
+<arcpath id="001" x="738" y="156" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Secondo avanzamento pistone 3 to M6_3 libera" source="M6_1_AvanzaPistoneOutput" target="M6_1_Libera">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="659" y="148" curvePoint="false"/>
+<arcpath id="001" x="529" y="119" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T17 to P27" source="Giunzione5" target="N5_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="48" y="143" curvePoint="false"/>
+<arcpath id="001" x="101" y="143" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T23 to P39" source="M6_2_AvanzaPistoneInput" target="M6_2_BatteriaVuota">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="383" y="293" curvePoint="false"/>
+<arcpath id="001" x="438" y="293" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T24 to P40" source="M6_1_AvanzaPistoneInput" target="M6_1_BatteriaVuota">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="383" y="158" curvePoint="false"/>
+<arcpath id="001" x="434" y="158" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="T25 to CapacitàNastro5" source="M6_Caricamento" target="N5_2_Capacità">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="187" y="153" curvePoint="false"/>
+<arcpath id="001" x="126" y="182" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>
