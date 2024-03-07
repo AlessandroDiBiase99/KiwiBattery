@@ -21,7 +21,7 @@ addpath('Functions');
 
 %% IMPOSTAZIONI____________________________________________________________
 % La cartella Parti_v<versione> da considerare:
-versione=1;
+versione=2;
 
 % La precisione con la quale arrotonare le matrici U e U'
 Precisione.U  = 5;
@@ -46,7 +46,7 @@ direzione="><";
 
 % Il vettore che contiene i diversi file da analizzare, elencati dal primo
 % all'ultimo
-indice_macchinario=["M1","M2","M11_12_13"];%,"M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
+indice_macchinario=["M1","M2","M3","M4","M5","M6","M7_1","M7_2","M7_3","M8","M9","M10","M11_12_13"];
 
 %% CALCOLO INDICI DI PRESTAZIONE___________________________________________
 % Inizializzo i parametri utili per l'esecuzione
@@ -169,6 +169,6 @@ clear Transizioni_ Posti_  EFF_ WIP_ MLT_;
 
 %% STAMPA LATEX____________________________________________________________
 for i=1:l_im
-    nome=sprintf("Parti_v1/IP_%s.mat",indice_macchinario(i));
+    nome=sprintf("Parti_v%i_R2/IP_%s.mat",versione,indice_macchinario(i));
     PrintResultForLatex(i, nome);
 end
